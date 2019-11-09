@@ -3,6 +3,7 @@
   const TerserPlugin = require('terser-webpack-plugin');
   const workboxPlugin = require('workbox-webpack-plugin');
   const WebpackPwaManifest = require('webpack-pwa-manifest');
+  const CopyPlugin = require('copy-webpack-plugin');
 
   module.exports = merge(common, {
     mode: 'production',
@@ -38,7 +39,7 @@
         icons: [{
           src: 'src/favicon.png',
           sizes: [192, 512]
-        },]
+        }, ]
       }),
       new workboxPlugin.GenerateSW({
         swDest: 'sw.js',
@@ -46,6 +47,9 @@
         clientsClaim: true,
         skipWaiting: true,
         cacheId: 'kazi’s-stuff'
-      })
+      }),
+      new CopyPlugin([
+        'src/netlify.toml'
+      ]),
     ],
   });

@@ -1,6 +1,5 @@
 [[headers]]
   for = "./index.html"
-
   [headers.values]
     cache-control = public,
     max-age=0,
@@ -8,7 +7,6 @@
 
 [[headers]]
   for = "./sw.js"
-
   [headers.values]
     cache-control = public,
     max-age=0,
@@ -16,16 +14,7 @@
 
 [[headers]]
   for = "/[\.json]/"
-
   [headers.values]
     cache-control = public,
     max-age=0,
     must-revalidate'''
-
-[[headers]]
-  for = "/(?:(?:(?:[\.woff])|(?:[\.woff2])|(?:[\.jpg])|(?:[\.png])))/"
-
-  [headers.values]
-    cache-control = public,
-    max-age=31536000,
-    immutable'''

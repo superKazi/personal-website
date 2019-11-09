@@ -23,7 +23,7 @@
     must-revalidate'''
 
 [[headers]]
-  for = "/[\.woff][\.woff2][\.jpg][\.png]/"
+  for = "/(?:(?:(?:[\.woff])|(?:[\.woff2])|(?:[\.jpg])|(?:[\.png])))/"
 
   [headers.values]
     cache-control = public,

@@ -39,7 +39,8 @@
         orientation: "portrait-primary",
         icons: [{
           src: 'src/favicon.png',
-          sizes: [192, 512]
+          sizes: [192, 512],
+          ios: true
         }, ]
       }),
       new workboxPlugin.GenerateSW({

@@ -34,7 +34,8 @@
         name: 'Kazi Elman Awal',
         short_name: 'Kazi',
         description: 'Journalist, designer, developer Kazi Elman Awal’s website',
-        background_color: '#ffffff',
+        background_color: '#C6FFDD',
+        theme_color: '#C6FFDD',
         orientation: "portrait-primary",
         icons: [{
           src: 'src/favicon.png',

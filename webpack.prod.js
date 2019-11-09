@@ -37,6 +37,7 @@
         background_color: '#C6FFDD',
         theme_color: '#C6FFDD',
         orientation: "portrait-primary",
+        ios: true,
         icons: [{
           src: 'src/favicon.png',
           sizes: [192, 512],

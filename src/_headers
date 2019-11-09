@@ -1,0 +1,40 @@
+./index.html
+  Cache-Control: public
+  Cache-Control: max-age=0
+  Cache-Control: must-revalidate
+# another path:
+./sw.js
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=0
+  Cache-Control: must-revalidate
+# another path:
+./*.json
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=0
+  Cache-Control: must-revalidate
+# another path:
+./*.jpg
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable
+# another path:
+./*.png
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable
+# another path:
+./*.woff
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable
+# another path:
+./*.woff2
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable

@@ -49,7 +49,7 @@
         cacheId: 'kazi’s-stuff'
       }),
       new CopyPlugin([
-        'src/netlify.toml'
+        'src/_headers'
       ]),
     ],
   });

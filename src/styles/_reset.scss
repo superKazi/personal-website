@@ -1,0 +1,36 @@
+@import "~rfs/scss";
+
+@font-face {
+  font-family: 'Radial';
+  font-display: fallback;
+  src: url('../fonts/Radial-Semibold.woff2') format('woff2'),
+    url('../fonts/Radial-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+html {
+  font-size: 20px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+p, {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100%;
+  font-family: 'Radial', Helvetica, sans-serif;
+  font-kerning: normal;
+  font-variant-ligatures: normal;
+  text-rendering: optimizeLegibility;
+  line-height: 1.2;
+}

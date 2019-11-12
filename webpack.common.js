@@ -3,6 +3,7 @@
     CleanWebpackPlugin
   } = require('clean-webpack-plugin');
   const HtmlWebpackPlugin = require('html-webpack-plugin');
+  const PreloadWebpackPlugin = require('preload-webpack-plugin');
 
   module.exports = {
     entry: {
@@ -22,6 +23,9 @@
         },
         title: 'Kazi Elman Awal',
         favicon: './src/favicon.png',
+      }),
+      new PreloadWebpackPlugin({
+        fileBlacklist: [/\.map/, /\.json/],
       }),
     ],
     module: {

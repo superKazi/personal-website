@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "mini-debounce": "1.0.6",
-    "rfs": "9.0.0"
+    "rfs": "9.0.2"
   }
 }

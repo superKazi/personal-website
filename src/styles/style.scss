@@ -19,21 +19,22 @@ h1 {
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
 
-  @include padding(1rem);
+  @include padding(1.618rem);
   overflow: hidden;
 
   display: grid;
+  @include rfs(.382rem, grid-gap);
   grid-template-columns: .382fr 1fr max-content;
   grid-template-rows: 4.236fr max-content 2.618fr auto;
 
   animation: woo 30s ease-in-out infinite;
 
-  @media (min-width: 2000px) {
-    @include padding(2.027rem);
+  @media (max-width: 330px) {
+    @include padding(.382rem);
   }
 
-  @media (max-width: 325px) {
-    @include padding(.307rem);
+  @media (min-width: 2000px) {
+    @include padding(2.618rem);
   }
 }
 
@@ -59,15 +60,15 @@ h1 {
   justify-self: start;
   align-self: end;
 
-  @include font-size(4.624rem);
+  @include font-size(4.236rem);
   line-height: 1;
 
   @media (max-width: 485px) {
-    @include font-size(2.027rem);
+    @include font-size(1.618rem);
   }
 
   @media (min-width: 2000px) {
-    @include font-size(6.583rem);
+    @include font-size(6.854rem);
   }
 }
 
@@ -92,21 +93,17 @@ h1 {
   grid-column: 3/-1;
   grid-row: 4/-1;
 
-  @include font-size(1.424rem);
+  @include font-size(1.618rem);
 
   @media (max-width: 485px) {
     justify-self: end;
     align-self: end;
     text-align: right;
     
-    @include font-size(.889rem);
-  }
-
-  @media (max-width: 325px) {
-    @include font-size(.493rem);
+    @include font-size(1rem);
   }
 
   @media (min-width: 2000px) {
-    @include font-size(2.887rem);
+    @include font-size(2.618rem);
   }
 }

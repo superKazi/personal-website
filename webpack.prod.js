@@ -1,6 +1,8 @@
   const merge = require('webpack-merge');
   const common = require('./webpack.common.js');
   const TerserPlugin = require('terser-webpack-plugin');
+  const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+  const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
   const workboxPlugin = require('workbox-webpack-plugin');
   const WebpackPwaManifest = require('webpack-pwa-manifest');
   const CopyPlugin = require('copy-webpack-plugin');
@@ -18,6 +20,32 @@
             presets: ['@babel/preset-env', 'minify']
           }
         }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ],
       }],
     },
     optimization: {
@@ -30,6 +58,10 @@
       ],
     },
     plugins: [
+      new MiniCssExtractPlugin(),
+      new StyleExtHtmlWebpackPlugin({
+        minify: true
+      }),
       new WebpackPwaManifest({
         name: 'Kazi Elman Awal',
         short_name: 'Kazi',

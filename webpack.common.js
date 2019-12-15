@@ -1,10 +1,21 @@
   const path = require('path');
   const { CleanWebpackPlugin } = require('clean-webpack-plugin');
   const HtmlWebpackPlugin = require('html-webpack-plugin');
+  const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
   module.exports = {
     entry: {
       app: './src/index.js',
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(png|jpe?g|gif|woff|woff2|eot|ttf|otf)$/,
+          use: [
+            'file-loader',
+          ],
+        },
+      ],
     },
     plugins: [
       new CleanWebpackPlugin(),
@@ -21,40 +32,10 @@
         title: 'Kazi Elman Awal',
         favicon: './src/favicon.png',
       }),
+      new ScriptExtHtmlWebpackPlugin({
+        defaultAttribute: 'async'
+      }),
     ],
-    module: {
-      rules: [{
-          test: /\.s[ac]ss$/i,
-          use: [
-            'style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true
-              }
-            }
-          ],
-        },
-        {
-          test: /\.(png|jpe?g|gif|woff|woff2|eot|ttf|otf)$/,
-          use: [
-            'file-loader',
-          ],
-        },
-      ],
-    },
     output: {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'dist'),

@@ -18,24 +18,23 @@ h1 {
   width: 100vw;
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
+  overflow: hidden;
 
   @include padding(1.618rem);
-  overflow: hidden;
+
+  @media (min-width: 1280px) {
+    @include padding(2.618rem);
+  }
+  @media (min-width: 1920px) {
+    @include padding(4.236rem);
+  }
 
   display: grid;
   @include rfs(.382rem, grid-gap);
-  grid-template-columns: .382fr 1fr max-content;
+  grid-template-columns: max-content 1fr max-content;
   grid-template-rows: 4.236fr max-content 2.618fr auto;
 
   animation: woo 30s ease-in-out infinite;
-
-  @media (max-width: 330px) {
-    @include padding(.382rem);
-  }
-
-  @media (min-width: 2000px) {
-    @include padding(2.618rem);
-  }
 }
 
 @keyframes woo {
@@ -57,35 +56,25 @@ h1 {
 }
 
 #kazi, #elman-awal{
-  justify-self: start;
-  align-self: end;
+  grid-row: 2/3;
 
   @include font-size(4.236rem);
   line-height: 1;
 
-  @media (max-width: 485px) {
-    @include font-size(1.618rem);
-  }
-
-  @media (min-width: 2000px) {
+  @media (min-width: 1920px) {
     @include font-size(6.854rem);
   }
 }
 
-#kazi {
-  grid-row: 2/3;
-}
-
 #elman-awal {
-  margin-left: -.05em;
-
   grid-column: 3/-1;
-  grid-row: 2/3;
+  justify-self: end;
 
   white-space: nowrap;
 
-  @media (max-width: 485px) {
-    justify-self: end;
+  @media (min-width: 485px) {
+    justify-self: initial;
+    margin-left: -.05em;
   }
 }
 
@@ -93,17 +82,15 @@ h1 {
   grid-column: 3/-1;
   grid-row: 4/-1;
 
-  @include font-size(1.618rem);
+  @include font-size(1rem);
+  text-align: right;
 
-  @media (max-width: 485px) {
-    justify-self: end;
-    align-self: end;
-    text-align: right;
-    
-    @include font-size(1rem);
+  @media (min-width: 485px) {
+    @include font-size(1.618rem);
+    text-align: initial;
   }
 
-  @media (min-width: 2000px) {
+  @media (min-width: 1920px) {
     @include font-size(2.618rem);
   }
 }

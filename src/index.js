@@ -21,8 +21,8 @@
   wb.addEventListener('installed', event => {
     if (event.isUpdate) {
       notyf.success({
-        message: 'Hiya! My website’s seen some changes since you last visited. Refresh to get the latest and greatest.',
-        duration: 5000,
+        message: 'Hiya! My website has changed at least a teeny bit since you last visited. Refresh to get the latest version.',
+        duration: 10000,
         icon: false,
         backgroundColor: 'black',
         ripple: true,

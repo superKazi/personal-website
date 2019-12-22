@@ -22,7 +22,7 @@
         }
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.(css|scss)$/i,
         use: [
           {
             loader: MiniCssExtractPlugin.loader
@@ -78,10 +78,20 @@
       }),
       new workboxPlugin.GenerateSW({
         swDest: 'sw.js',
-        exclude: [/\.jpg$/, /\.png$/],
+        exclude: [/\.jpg$/, /\.jpeg$/, /\.png$/],
         clientsClaim: true,
         skipWaiting: true,
-        cacheId: 'kazi’s-stuff'
+        cacheId: 'kazi’s-stuff',
+        runtimeCaching:[{
+          urlPattern: /\.(?:jpg|jpeg|png)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'kazi’s-images',
+            expiration: {
+              maxEntries: 5,
+            },
+          },
+        }]
       }),
       new CopyPlugin([
         'src/_headers'

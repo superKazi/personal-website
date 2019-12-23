@@ -30,7 +30,7 @@
           'referrer': 'no-referrer',
         },
         title: 'Kazi Elman Awal',
-        favicon: './src/favicon.png',
+        favicon: './src/favicon.jpg',
       }),
       new ScriptExtHtmlWebpackPlugin({
         defaultAttribute: 'async'

@@ -20,13 +20,10 @@ h1 {
   height: calc(var(--vh, 1vh) * 100);
   overflow: hidden;
 
-  @include padding(1.618rem);
+  @include padding(1rem);
 
-  @media (min-width: 1280px) {
+  @media (min-width: 485px) {
     @include padding(2.618rem);
-  }
-  @media (min-width: 1920px) {
-    @include padding(4.236rem);
   }
 
   display: grid;
@@ -58,11 +55,11 @@ h1 {
 #kazi, #elman-awal{
   grid-row: 2/3;
 
-  @include font-size(4.236rem);
+  @include font-size(6.854rem);
   line-height: 1;
 
-  @media (min-width: 1920px) {
-    @include font-size(6.854rem);
+  @media (min-width: 485px) {
+    @include font-size(11.089rem);
   }
 }
 
@@ -74,7 +71,7 @@ h1 {
 
   @media (min-width: 485px) {
     justify-self: initial;
-    margin-left: -.05em;
+    margin-left: -.0333em;
   }
 }
 
@@ -86,11 +83,7 @@ h1 {
   text-align: right;
 
   @media (min-width: 485px) {
-    @include font-size(1.618rem);
-    text-align: initial;
-  }
-
-  @media (min-width: 1920px) {
     @include font-size(2.618rem);
+    text-align: initial;
   }
 }

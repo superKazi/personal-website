@@ -71,7 +71,7 @@
         orientation: "portrait-primary",
         ios: true,
         icons: [{
-          src: 'src/favicon.jpg',
+          src: 'src/favicon.png',
           sizes: [192, 512],
           ios: true
         }, ]

@@ -11,7 +11,6 @@
         {
           test:  /\.(sa|sc|c)ss$/i,
           use: [
-            'style-loader',
             {
               loader: MiniCssExtractPlugin.loader,
               options: {

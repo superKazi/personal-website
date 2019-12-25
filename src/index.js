@@ -1,5 +1,4 @@
  import './styles/style.scss';
- import '../node_modules/notyf/notyf.min.css';
  import { debounce } from 'mini-debounce';
  import { Workbox } from 'workbox-window';
  import { Notyf } from 'notyf';

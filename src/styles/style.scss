@@ -29,7 +29,7 @@ h1 {
   display: grid;
   @include rfs(.382rem, grid-gap);
   grid-template-columns: max-content 1fr max-content;
-  grid-template-rows: 4.236fr max-content 2.618fr auto;
+  grid-template-rows: 1.618fr max-content 1fr auto;
 
   animation: woo 30s ease-in-out infinite;
 }

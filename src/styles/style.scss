@@ -55,11 +55,11 @@ h1 {
 #kazi, #elman-awal{
   grid-row: 2/3;
 
-  @include font-size(6.854rem);
+  @include font-size(6.192rem);
   line-height: 1;
 
   @media (min-width: 485px) {
-    @include font-size(11.089rem);
+    @include font-size(12.839rem);
   }
 }
 
@@ -83,8 +83,17 @@ h1 {
   text-align: right;
 
   @media (min-width: 485px) {
-    @include font-size(2.618rem);
+    @include font-size(2.488rem);
     text-align: initial;
+  }
+  @media (min-width: 768px) {
+    @include font-size(2.986rem);
+  }
+  @media (min-width: 1024px) {
+    @include font-size(3.583rem);
+  }
+  @media (min-width: 1920px) {
+    @include font-size(4.3rem);
   }
 }
 

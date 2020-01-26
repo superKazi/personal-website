@@ -25,9 +25,9 @@ if ("serviceWorker" in navigator) {
       notyf.success({
         message:
           "Hiya! My website has changed at least a teeny bit since you last visited. Refresh to get the latest version.",
-        duration: 10000,
+        duration: 8000,
         icon: false,
-        backgroundColor: "black",
+        backgroundColor: "#0c0c0c",
         ripple: true
       });
     }

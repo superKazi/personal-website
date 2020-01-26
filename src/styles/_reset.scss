@@ -1,9 +1,9 @@
 $rfs-breakpoint: 4000px;
-@import '~rfs/scss';
+@import "~rfs/scss";
 
 @font-face {
-  font-family: 'Radio Grotesk';
-  src: url('../fonts/RadioGrotesk-Bold.woff2') format('woff2');
+  font-family: "Radio Grotesk";
+  src: url("../fonts/RadioGrotesk-Bold.woff2") format("woff2");
   font-display: fallback;
 }
 
@@ -26,7 +26,7 @@ p {
 
 body {
   min-height: 100%;
-  font-family: 'Radio Grotesk', Helvetica, sans-serif;
+  font-family: "Radio Grotesk", Helvetica, sans-serif;
   font-kerning: normal;
   text-rendering: geometricPrecision;
   line-height: 1.2;

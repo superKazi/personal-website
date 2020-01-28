@@ -99,6 +99,6 @@ module.exports = merge(common, {
         }
       ]
     }),
-    new CopyPlugin(["src/_headers"])
+    new CopyPlugin(["src/_headers", "src/_redirects"])
   ]
 });

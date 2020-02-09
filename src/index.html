@@ -1,39 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- Design inspired by/stolen from: https://www.typographicposters.com/posters/tomasz-berezowski/594953641abbcb141757b303 -->
 
-<!-- Design inspired by/stolen from: https://www.typographicposters.com/posters/tomasz-berezowski/594953641abbcb141757b303 -->
+  <head>
+    <meta name="charset" content="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#C6FFDD" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
 
-<head>
-  <meta name="charset" content="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-  <meta name="theme-color" content="#C6FFDD">
-  <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta property="og:title" content="Kazi’s Website" />
+    <meta property="og:image" content="<%= require('./og.jpg') %>" />
+    <meta property="og:image:alt" content="Kazi’s face" />
+    <meta property="og:description" content="Some proof that Kazi can code" />
 
-  <meta property="og:title" content="Kazi’s Website">
-  <meta property="og:image" content="<%= require('./og.jpg') %>">
-  <meta property="og:image:alt" content="Kazi’s face">
-  <meta property="og:description" content="Some proof that Kazi can code">
+    <meta name="twitter:title" content="Kazi’s Website" />
+    <meta name="twitter:image" content="<%= require('./og.jpg') %>" />
+    <meta name="twitter:image:alt" content="Kazi’s face" />
+    <meta name="twitter:description" content="Some proof that Kazi can code" />
 
-  <meta name="twitter:title" content="Kazi’s Website">
-  <meta name="twitter:image" content="<%= require('./og.jpg') %>">
-  <meta name="twitter:image:alt" content="Kazi’s face">
-  <meta name="twitter:description" content="Some proof that Kazi can code">
+    <link rel="canonical" href="https://kazielmanawal.me" />
+  </head>
 
-  <link rel="canonical" href="https://kazielmanawal.me">
-</head>
-
-<body>
-  <h1>Kazi Elman Awal</h1>
-  <main class="poster">
-    <p aria-hidden="true" id="kazi">Kazi</p>
-    <p aria-hidden="true" id="elman-awal">Elman Awal</p>
-    <section class="work">
-      <p class="w-p">Designer/Developer at</p>
-      <p class="w-p">The San Francisco Chronicle.</p>
-      <p class="w-p">Previously, THE CITY</p>
-      <p class="w-p">and The Washington Post.</p>
-    </section>
-  </main>
-</body>
-
+  <body>
+    <main>
+      <h1>Kazi Elman Awal</h1>
+      <article id="poster">
+        <button
+          arial-label="Show list of links to work examples"
+          type="button"
+          id="open"
+        >
+          &#8594;
+        </button>
+        <p aria-hidden="true" id="kazi">Kazi</p>
+        <p aria-hidden="true" id="elman-awal">Elman Awal</p>
+        <p id="description">
+          Designer/Developer at <br />
+          The San Francisco Chronicle. <br />
+          Previously, THE CITY <br />
+          and The Washington Post. <br />
+        </p>
+      </article>
+      <article id="work">
+        <div id="work-nav-container">
+          <h2>Work<br />Examples</h2>
+          <button
+            arial-label="Hide list of work example links"
+            type="button"
+            id="close"
+          >
+            &#8592;
+          </button>
+        </div>
+        <ul>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://projects.sfchronicle.com/2020/25-must-eats/"
+              >25 Must-eat Bay Area Dishes for 2020</a
+            >
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://projects.sfchronicle.com/class-of-2020/fall/"
+              >Class of 2020: What’s it like to come of age in the Bay Area
+              today?</a
+            >
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://projects.sfchronicle.com/2019/kincade-fire-origin/"
+              >A Spark on Burned Mountain</a
+            >
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://projects.sfchronicle.com/2019/the-fishermans-secret/"
+              >The Fisherman’s Secret: A modern-day treasure hunt</a
+            >
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://thecity.nyc/2019/08/aoc-makes-a-bronx-census-push-amid-fears-of-lost-house-seats.html"
+              >AOC Makes a Bronx Census Push Amid Fears of Lost House Seats</a
+            >
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://thecity.nyc/2019/06/early-intervention-services-scarce-in-many-neighborhoods.html"
+              >Little and Late Help for the Youngest New Yorkers</a
+            >
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.washingtonpost.com/graphics/2018/local/suicide-and-stress-among-police-officers-involved-in-shootings/"
+              >Months after a fatal police shooting, a young officer turns his
+              gun on himself</a
+            >
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.washingtonpost.com/graphics/2018/world/reports-of-hate-crime-cases-have-spiked-in-india/"
+              >Lynch mobs, “cow vigilantes” and Whatsapp: What hate looks like
+              in India</a
+            >
+          </li>
+        </ul>
+      </article>
+    </main>
+  </body>
 </html>

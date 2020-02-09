@@ -1,5 +1,6 @@
 $rfs-breakpoint: 4000px;
 @import "~rfs/scss";
+@import "animations";
 
 @font-face {
   font-family: "Radio Grotesk";
@@ -17,17 +18,87 @@ html {
   box-sizing: border-box;
 }
 
+*::after:focus:not(:focus-visible),
+*::before:focus:not(:focus-visible),
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body,
 h1,
-p {
+h2,
+p,
+ul {
   margin: 0;
   padding: 0;
 }
 
 body {
-  min-height: 100%;
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+
   font-family: "Radio Grotesk", Helvetica, sans-serif;
   font-kerning: normal;
+  font-variant-ligatures: normal;
   text-rendering: geometricPrecision;
   line-height: 1.2;
+
+  animation: woo 30s ease-in-out infinite;
+}
+
+button {
+  display: inline-block;
+  @include padding(0 0 0.236rem 0);
+  margin: 0;
+
+  font: inherit;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+
+  cursor: pointer;
+
+  border: 1px solid black;
+  background: transparent;
+  appearance: none;
+
+  transition: all 250ms ease-in-out;
+}
+
+button:hover,
+button:focus {
+  filter: invert(1);
+}
+
+button:focus {
+  outline: 1px solid black;
+  @include rfs(0.335rem, outline-offset);
+}
+
+button:active {
+  transform: scale(0.833);
+}
+
+%plain-list {
+  list-style: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E");
+  padding-left: 0;
+}
+
+%visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  margin: -1px;
+  white-space: nowrap;
 }

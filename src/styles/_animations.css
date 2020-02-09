@@ -1,0 +1,29 @@
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.833);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes woo {
+  0% {
+    background: #c6ffdd;
+  }
+
+  33% {
+    background: #fbd786;
+  }
+
+  66% {
+    background: #f7797d;
+  }
+
+  100% {
+    background: #c6ffdd;
+  }
+}

@@ -67,8 +67,9 @@ button {
   border: 1px solid black;
   background: transparent;
   appearance: none;
-
-  transition: all 250ms ease-in-out;
+  transition-property: transform, filter;
+  transition-duration: 250ms;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 button:hover,

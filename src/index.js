@@ -35,28 +35,49 @@ window.addEventListener(
   }, 300)
 );
 
-const openButton = document.querySelector("#open");
-const closeButton = document.querySelector("#close");
+const workButton = document.querySelector("#show-work");
+const posterButton = document.querySelector("#show-poster");
 const poster = document.querySelector("#poster");
 const work = document.querySelector("#work");
 
 let clickCount = false;
 
-openButton.onclick = () => {
-  if (!clickCount) {
-    poster.setAttribute("style", "transform: translateX(100%); opacity:0;");
-    work.setAttribute("style", "transform: translateX(0); opacity:1;");
-    clickCount = !clickCount;
-  }
-};
+poster.onmouseenter = hintBrowser;
+work.onmouseenter = hintBrowser;
 
-closeButton.onclick = () => {
-  if (clickCount) {
-    poster.setAttribute("style", "transform: translateX(0%); opacity:1;");
-    work.setAttribute("style", "transform: translateX(-100%); opacity:1;");
+poster.ontransitionend = removeHint;
+work.ontransitionend = removeHint;
+
+workButton.onclick = showWork;
+posterButton.onclick = showPoster;
+
+function showWork() {
+  if (!clickCount) {
+    poster.style.transform = "translateX(100%)";
+    poster.style.opacity = "0";
+    work.style.transform = "translateX(0)";
+    work.style.opacity = "1";
     clickCount = !clickCount;
   }
-};
+}
+
+function showPoster() {
+  if (clickCount) {
+    poster.style.transform = "translateX(0)";
+    poster.style.opacity = "1";
+    work.style.transform = "translateX(-100%)";
+    work.style.opacity = "0";
+    clickCount = !clickCount;
+  }
+}
+
+function hintBrowser() {
+  this.style.willChange = "transform, opacity";
+}
+
+function removeHint() {
+  this.style.willChange = "auto";
+}
 
 // polite console
 console.log(

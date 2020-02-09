@@ -4,6 +4,7 @@ main {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  contain: content;
 }
 
 h1 {
@@ -22,6 +23,7 @@ article {
   transition-property: transform, opacity;
   transition-duration: 250ms;
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, opacity;
 
   @include padding(1rem);
 
@@ -62,8 +64,8 @@ h2 {
 
 #kazi,
 #elman-awal,
-#open,
-#close,
+#show-work,
+#show-poster,
 h2 {
   @include font-size(6.192rem);
 
@@ -128,7 +130,7 @@ li {
   opacity: 0;
 }
 
-#open {
+#show-work {
   grid-column: 1 / 2;
   grid-row: 1 / 2;
   align-self: start;

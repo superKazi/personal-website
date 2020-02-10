@@ -43,7 +43,7 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "dependencies": {
-    "focus-trap": "^5.1.0",
+    "focus-trap": "5.1.0",
     "mini-debounce": "1.0.6",
     "notyf": "3.1.0",
     "rfs": "9.0.2",

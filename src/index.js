@@ -2,6 +2,7 @@ import "./styles/style.scss";
 import { debounce } from "mini-debounce";
 import { Workbox } from "workbox-window";
 import { Notyf } from "notyf";
+import * as createFocusTrap from "focus-trap";
 
 // service worker code
 if ("serviceWorker" in navigator) {
@@ -39,6 +40,9 @@ const workButton = document.querySelector("#show-work");
 const posterButton = document.querySelector("#show-poster");
 const poster = document.querySelector("#poster");
 const work = document.querySelector("#work");
+const focusTrap = createFocusTrap(work, {
+  escapeDeactivates: false
+});
 
 let clickCount = false;
 
@@ -58,6 +62,7 @@ function showWork() {
     work.style.transform = "translateX(0)";
     work.style.opacity = "1";
     clickCount = !clickCount;
+    focusTrap.activate();
   }
 }
 
@@ -68,6 +73,7 @@ function showPoster() {
     work.style.transform = "translateX(-100%)";
     work.style.opacity = "0";
     clickCount = !clickCount;
+    focusTrap.deactivate();
   }
 }
 

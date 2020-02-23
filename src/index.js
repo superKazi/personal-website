@@ -46,14 +46,8 @@ const focusTrap = createFocusTrap(work, {
 
 let clickCount = false;
 
-poster.onmouseenter = hintBrowser;
-work.onmouseenter = hintBrowser;
-
-poster.ontransitionend = removeHint;
-work.ontransitionend = removeHint;
-
-workButton.onclick = showWork;
-posterButton.onclick = showPoster;
+workButton.addEventListener("click", showWork);
+posterButton.addEventListener("click", showPoster);
 
 function showWork() {
   if (!clickCount) {
@@ -75,14 +69,6 @@ function showPoster() {
     clickCount = !clickCount;
     focusTrap.deactivate();
   }
-}
-
-function hintBrowser() {
-  this.style.willChange = "transform, opacity";
-}
-
-function removeHint() {
-  this.style.willChange = "auto";
 }
 
 // polite console

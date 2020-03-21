@@ -27,3 +27,87 @@
     background: #c6ffdd;
   }
 }
+
+@keyframes enterWork {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes exitWork {
+  0% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes enterPoster {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes exitPoster {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+
+.enterwork {
+  animation-name: enterWork;
+  animation-duration: 400ms;
+}
+
+.exitwork {
+  animation-name: exitWork;
+}
+
+.enterposter {
+  animation-name: enterPoster;
+  animation-duration: 550ms;
+}
+
+.exitposter {
+  animation-name: exitPoster;
+}
+
+.exitwork,
+.exitposter {
+  animation-duration: 250ms;
+}
+
+.enterwork,
+.enterposter {
+  animation-delay: 50ms;
+}
+
+.enterwork,
+.exitwork,
+.enterposter,
+.exitposter {
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation-direction: forwards;
+  animation-fill-mode: both;
+  animation-play-state: running;
+  animation-iteration-count: 1;
+}

@@ -20,10 +20,6 @@ article {
 
   background: transparent;
 
-  transition-property: transform, opacity;
-  transition-duration: 350ms;
-  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
   @include padding(1rem);
 
   @media (min-width: 485px) {
@@ -32,6 +28,24 @@ article {
 }
 
 button {
+  display: inline-block;
+  @include padding(0 0 0.236rem 0);
+  margin: 0;
+
+  font: inherit;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+
+  cursor: pointer;
+
+  border: 1px solid black;
+  background: transparent;
+  appearance: none;
+  transition-property: transform, color, border-color;
+  transition-duration: 100ms;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
   animation: pulsate 2000ms cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   @include rfs(8.916rem, width);
   @include rfs(6.192rem, height);
@@ -41,6 +55,21 @@ button {
     @include rfs(18.488rem, width);
     @include rfs(12.839rem, height);
   }
+}
+
+button:hover,
+button:focus {
+  color: white;
+  border-color: white;
+}
+
+button:focus {
+  outline: 1px solid white;
+  @include rfs(0.335rem, outline-offset);
+}
+
+button:active {
+  transform: scale(0.833);
 }
 
 #poster {

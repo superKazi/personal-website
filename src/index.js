@@ -51,10 +51,10 @@ posterButton.addEventListener("click", showPoster);
 
 function showWork() {
   if (!clickCount) {
-    poster.style.transform = "translateX(100%)";
-    poster.style.opacity = "0";
-    work.style.transform = "translateX(0)";
-    work.style.opacity = "1";
+    poster.classList.add("exitposter");
+    poster.classList.remove("enterposter");
+    work.classList.add("enterwork");
+    work.classList.remove("exitwork");
     clickCount = !clickCount;
     focusTrap.activate();
   }
@@ -62,10 +62,10 @@ function showWork() {
 
 function showPoster() {
   if (clickCount) {
-    poster.style.transform = "translateX(0)";
-    poster.style.opacity = "1";
-    work.style.transform = "translateX(-100%)";
-    work.style.opacity = "0";
+    poster.classList.remove("exitposter");
+    poster.classList.add("enterposter");
+    work.classList.remove("enterwork");
+    work.classList.add("exitwork");
     clickCount = !clickCount;
     focusTrap.deactivate();
   }

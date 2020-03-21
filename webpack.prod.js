@@ -18,7 +18,29 @@ module.exports = merge(common, {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "minify"]
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  useBuiltIns: "usage",
+                  targets: {
+                    browsers: [
+                      "Chrome >= 60",
+                      "ChromeAndroid >= 80",
+                      "Safari >= 10.1",
+                      "iOS >= 10.3",
+                      "Firefox >= 54",
+                      "FirefoxAndroid >= 68",
+                      "Edge >= 15",
+                      "Opera >= 48",
+                      "Android >= 80",
+                      "Samsung >= 8.2"
+                    ]
+                  }
+                }
+              ],
+              "minify"
+            ]
           }
         }
       },

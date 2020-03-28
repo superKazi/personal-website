@@ -97,6 +97,7 @@ module.exports = merge(common, {
       skipWaiting: true,
       cleanupOutdatedCaches: true,
       sourcemap: true,
+      inlineWorkboxRuntime: true,
       babelPresetEnvTargets: [
         "Chrome >= 61",
         "ChromeAndroid >= 80",

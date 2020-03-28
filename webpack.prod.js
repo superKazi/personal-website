@@ -95,6 +95,20 @@ module.exports = merge(common, {
       exclude: [/\.jpg$/, /\.jpeg$/, /\.png$/],
       clientsClaim: true,
       skipWaiting: true,
+      cleanupOutdatedCaches: true,
+      sourcemap: true,
+      babelPresetEnvTargets: [
+        "Chrome >= 61",
+        "ChromeAndroid >= 80",
+        "Safari >= 11",
+        "iOS >= 11",
+        "Firefox >= 60",
+        "FirefoxAndroid >= 68",
+        "Edge >= 16",
+        "Opera >= 48",
+        "Android >= 80",
+        "Samsung >= 8.2"
+      ],
       cacheId: "kazi’s-stuff",
       runtimeCaching: [
         {

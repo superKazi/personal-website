@@ -9,7 +9,7 @@ if ("serviceWorker" in navigator) {
   const wb = new Workbox("/sw.js");
   const notyf = new Notyf();
 
-  wb.addEventListener("installed", event => {
+  wb.addEventListener("installed", (event) => {
     if (event.isUpdate) {
       notyf.success({
         message:
@@ -17,7 +17,7 @@ if ("serviceWorker" in navigator) {
         duration: 8000,
         icon: false,
         backgroundColor: "#0c0c0c",
-        ripple: true
+        ripple: true,
       });
     }
   });
@@ -41,7 +41,7 @@ const posterButton = document.querySelector("#show-poster");
 const poster = document.querySelector("#poster");
 const work = document.querySelector("#work");
 const focusTrap = createFocusTrap(work, {
-  escapeDeactivates: false
+  escapeDeactivates: false,
 });
 
 let clickCount = false;

@@ -14,38 +14,38 @@ module.exports = merge(common, {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              hmr: process.env.NODE_ENV === "development"
-            }
+              hmr: process.env.NODE_ENV === "development",
+            },
           },
           {
             loader: "css-loader",
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: "postcss-loader",
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: "sass-loader",
             options: {
-              sourceMap: true
-            }
-          }
-        ]
-      }
-    ]
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin(),
     new StyleExtHtmlWebpackPlugin({
-      minify: true
-    })
+      minify: true,
+    }),
   ],
   devServer: {
-    contentBase: "./dist"
-  }
+    contentBase: "./dist",
+  },
 });

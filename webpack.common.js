@@ -5,15 +5,15 @@ const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 
 module.exports = {
   entry: {
-    app: "./src/index.js"
+    app: "./src/index.js",
   },
   module: {
     rules: [
       {
         test: /\.(png|jpe?g|gif|woff|woff2|eot|ttf|otf)$/,
-        use: ["file-loader"]
-      }
-    ]
+        use: ["file-loader"],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -26,18 +26,18 @@ module.exports = {
         googlebot: "index,follow",
         generator: "Webpack",
         subject: "Proof Kazi can kind of code, for the web at least",
-        referrer: "no-referrer"
+        referrer: "no-referrer",
       },
       title: "Kazi Elman Awal",
-      favicon: "./src/favicon.png"
+      favicon: "./src/favicon.png",
     }),
     new ScriptExtHtmlWebpackPlugin({
-      module: /\.js$/
-    })
+      module: /\.js$/,
+    }),
   ],
   output: {
     filename: "[name].[contenthash].js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "dist"),
   },
   optimization: {
     moduleIds: "hashed",
@@ -47,9 +47,9 @@ module.exports = {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: "vendors",
-          chunks: "all"
-        }
-      }
-    }
-  }
+          chunks: "all",
+        },
+      },
+    },
+  },
 };

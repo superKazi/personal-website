@@ -23,56 +23,56 @@ module.exports = merge(common, {
                 "@babel/preset-env",
                 {
                   targets: {
-                    esmodules: true
-                  }
-                }
+                    esmodules: true,
+                  },
+                },
               ],
-              "minify"
-            ]
-          }
-        }
+              "minify",
+            ],
+          },
+        },
       },
       {
         test: /\.(sa|sc|c)ss$/i,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader
+            loader: MiniCssExtractPlugin.loader,
           },
           {
             loader: "css-loader",
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: "postcss-loader",
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: "sass-loader",
             options: {
-              sourceMap: true
-            }
-          }
-        ]
-      }
-    ]
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   optimization: {
     minimize: true,
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        sourceMap: true
-      })
-    ]
+        sourceMap: true,
+      }),
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin(),
     new StyleExtHtmlWebpackPlugin({
-      minify: true
+      minify: true,
     }),
     new WebpackPwaManifest({
       name: "Kazi Elman Awal",
@@ -86,9 +86,9 @@ module.exports = merge(common, {
         {
           src: "src/favicon.png",
           sizes: [192, 512],
-          ios: true
-        }
-      ]
+          ios: true,
+        },
+      ],
     }),
     new workboxPlugin.GenerateSW({
       swDest: "sw.js",
@@ -108,7 +108,7 @@ module.exports = merge(common, {
         "Edge >= 16",
         "Opera >= 48",
         "Android >= 80",
-        "Samsung >= 8.2"
+        "Samsung >= 8.2",
       ],
       cacheId: "kazi’s-stuff",
       runtimeCaching: [
@@ -118,12 +118,12 @@ module.exports = merge(common, {
           options: {
             cacheName: "kazi’s-images",
             expiration: {
-              maxEntries: 5
-            }
-          }
-        }
-      ]
+              maxEntries: 5,
+            },
+          },
+        },
+      ],
     }),
-    new CopyPlugin(["src/_headers", "src/_redirects"])
-  ]
+    new CopyPlugin(["src/_headers", "src/_redirects"]),
+  ],
 });

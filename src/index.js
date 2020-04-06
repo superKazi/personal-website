@@ -16,7 +16,7 @@ if ("serviceWorker" in navigator) {
           "Hiya! My website has changed at least a teeny bit since you last visited. Refresh to get the latest version.",
         duration: 8000,
         icon: false,
-        backgroundColor: "#0c0c0c",
+        background: "#0c0c0c",
         ripple: true,
       });
     }

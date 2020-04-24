@@ -47,7 +47,7 @@
     "focus-trap": "5.1.0",
     "mini-debounce": "1.0.7",
     "notyf": "3.5.1",
-    "rfs": "9.0.2",
+    "rfs": "9.0.3",
     "workbox-window": "5.1.2"
   }
 }

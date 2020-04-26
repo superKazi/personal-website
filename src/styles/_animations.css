@@ -75,7 +75,7 @@
 
 .enterwork {
   animation-name: enterWork;
-  animation-duration: 400ms;
+  animation-duration: 450ms;
 }
 
 .exitwork {
@@ -93,7 +93,7 @@
 
 .exitwork,
 .exitposter {
-  animation-duration: 250ms;
+  animation-duration: 350ms;
 }
 
 .enterwork,

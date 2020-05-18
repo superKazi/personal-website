@@ -124,6 +124,9 @@ module.exports = merge(common, {
         },
       ],
     }),
-    new CopyPlugin(["src/_headers", "src/_redirects"]),
+    new CopyPlugin({
+      patterns: [{ from: "src/_headers" }, { from: "src/_redirects" }],
+      options: { concurrency: 50 },
+    }),
   ],
 });

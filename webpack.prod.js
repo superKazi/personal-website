@@ -92,7 +92,7 @@ module.exports = merge(common, {
     }),
     new workboxPlugin.GenerateSW({
       swDest: "sw.js",
-      exclude: [/\.jpg$/, /\.jpeg$/, /\.png$/],
+      exclude: [/\.jpg$/, /\.jpeg$/, /\.png$/, /^_.*/],
       clientsClaim: true,
       skipWaiting: true,
       cleanupOutdatedCaches: true,

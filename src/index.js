@@ -166,9 +166,9 @@ if ("serviceWorker" in navigator) {
           "Hiya! My website has changed at least a teeny bit since you last visited. Refresh to get the latest version.",
         duration: 8000,
         icon: false,
-        background: "black",
+        background: "white",
         ripple: true,
-        className: "kazi-notyf",
+        // className: "kazi-notyf",
       });
     }
   });

@@ -237,10 +237,9 @@ li {
   }
 }
 
-.kazi-notyf {
-  color: inherit;
-  animation: woo 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
-  border: 1px solid white;
-}
+// .kazi-notyf {
+//   color: black;
+//   border: 1px solid black;
+// }
 
 @import "../../node_modules/notyf/notyf.min.css";

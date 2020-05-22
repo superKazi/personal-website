@@ -169,7 +169,7 @@ if ("serviceWorker" in navigator) {
         icon: false,
         background: "white",
         ripple: true,
-        // className: "kazi-notyf",
+        className: "kazi-notyf",
       });
     }
   });

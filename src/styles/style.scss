@@ -237,9 +237,10 @@ li {
   }
 }
 
-// .kazi-notyf {
-//   color: black;
-//   border: 1px solid black;
-// }
+.kazi-notyf {
+  color: black;
+  border: 1px solid #666666;
+  border-radius: 8px;
+}
 
 @import "../../node_modules/notyf/notyf.min.css";

@@ -155,6 +155,7 @@ function update() {
 }
 
 // service worker code
+// pushing comment to test notyf styles
 if ("serviceWorker" in navigator) {
   const wb = new Workbox("/sw.js");
   const notyf = new Notyf();

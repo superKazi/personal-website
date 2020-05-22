@@ -167,6 +167,10 @@ if ("serviceWorker" in navigator) {
         duration: 8000,
         icon: false,
         background: "white",
+        position: {
+          x: "left",
+          y: "bottom",
+        },
         ripple: true,
         className: "kazi-notyf",
       });

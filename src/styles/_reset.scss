@@ -45,10 +45,8 @@ body {
   font-family: "Radio Grotesk", Helvetica, sans-serif;
   font-kerning: normal;
   font-variant-ligatures: normal;
-  text-rendering: geometricPrecision;
+  text-rendering: optimizeLegibility;
   line-height: 1.2;
-
-  animation: woo 30s ease-in-out infinite;
 }
 
 %plain-list {

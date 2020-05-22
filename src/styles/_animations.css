@@ -12,19 +12,19 @@
 
 @keyframes woo {
   0% {
-    background: #c6ffdd;
+    color: #c6ffdd;
   }
 
   33% {
-    background: #fbd786;
+    color: #fbd786;
   }
 
   66% {
-    background: #f7797d;
+    color: #f7797d;
   }
 
   100% {
-    background: #c6ffdd;
+    color: #c6ffdd;
   }
 }
 

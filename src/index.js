@@ -173,6 +173,7 @@ if ("serviceWorker" in navigator) {
         },
         ripple: true,
         className: "kazi-notyf",
+        dismissible: true,
       });
     }
   });

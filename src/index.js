@@ -155,6 +155,7 @@ function update() {
 }
 
 // service worker code
+// comment does async break sw?
 if ("serviceWorker" in navigator) {
   const wb = new Workbox("/sw.js");
   const notyf = new Notyf();

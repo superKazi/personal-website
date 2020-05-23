@@ -9,7 +9,7 @@ module.exports = merge(common, {
       {
         test: /\.(sa|sc|c)ss$/i,
         use: [
-          'style-loader',
+          "style-loader",
           {
             loader: "css-loader",
             options: {

@@ -27,11 +27,17 @@ module.exports = {
         generator: "Webpack",
         subject: "Proof Kazi can kind of code, for the web at least",
         referrer: "no-referrer",
+        "Consent-Security-Policy": {
+          "http-equiv": "Content-Security-Policy",
+          content:
+            "default-src 'self'; img-src 'self' data: https://*; child-src 'self'; style-src 'self' 'unsafe-inline';",
+        },
       },
       title: "Kazi Elman Awal",
       favicon: "./src/favicon.png",
     }),
     new ScriptExtHtmlWebpackPlugin({
+      async: /\.js$/,
       module: /\.js$/,
     }),
   ],

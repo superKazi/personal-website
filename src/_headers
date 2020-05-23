@@ -2,6 +2,9 @@
   Cache-Control: public
   Cache-Control: max-age=0
   Cache-Control: must-revalidate
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
 # another path:
 /sw.js
   # headers for that path:

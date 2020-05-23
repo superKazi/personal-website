@@ -37,7 +37,6 @@ module.exports = {
       favicon: "./src/favicon.png",
     }),
     new ScriptExtHtmlWebpackPlugin({
-      async: /\.js$/,
       module: /\.js$/,
     }),
   ],

@@ -47,7 +47,7 @@
     "focus-trap": "5.1.0",
     "mini-debounce": "1.0.7",
     "notyf": "3.7.0",
-    "ogl": "0.0.48",
+    "ogl": "0.0.54",
     "workbox-window": "5.1.3"
   }
 }

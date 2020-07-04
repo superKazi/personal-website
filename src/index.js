@@ -3,17 +3,7 @@ import { debounce } from "mini-debounce";
 import { Workbox } from "workbox-window";
 import { Notyf } from "notyf";
 import * as createFocusTrap from "focus-trap";
-import {
-  Polyline,
-  Renderer,
-  Transform,
-  Geometry,
-  Program,
-  Mesh,
-  Vec3,
-  Vec2,
-  Color,
-} from "ogl";
+import { Polyline, Renderer, Transform, Vec3, Color } from "ogl";
 
 //animation shamelessly stolen from https://tympanus.net/codrops/2019/09/24/crafting-stylised-mouse-trails-with-ogl/
 const vertex = `

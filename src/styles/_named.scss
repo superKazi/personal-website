@@ -67,7 +67,9 @@ h2 {
 #description,
 li {
   font-size: var(--step-0);
-
+  &:first-of-type {
+    max-width: 40ch;
+  }
   @media (min-width: 485px) {
     font-size: var(--step-2);
   }

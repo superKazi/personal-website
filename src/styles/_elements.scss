@@ -96,8 +96,7 @@ button:active {
 ul {
   list-style: none;
   padding: 0;
-  margin-top: var(--step-8);
-  
+  margin-top: var(--step-4);  
   @media (min-width: 1920px) {
     margin-top: calc(var(--step-10) * -1);
   }

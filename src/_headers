@@ -18,6 +18,24 @@
   Cache-Control: max-age=0
   Cache-Control: must-revalidate
 # another path:
+/runtime.*.js
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable
+# another path:
+/vendors.*.js
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable
+# another path:
+/app.*.js
+  # headers for that path:
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable
+# another path:
 /*.jpg
   # headers for that path:
   Cache-Control: public

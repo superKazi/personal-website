@@ -86,7 +86,6 @@ module.exports = merge(common, {
         {
           src: "src/favicon.png",
           sizes: [192, 512],
-          ios: true,
           purpose: "maskable",
         },
       ],

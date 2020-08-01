@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "focus-trap": "5.1.0",
-    "mini-debounce": "1.0.7",
+    "mini-debounce": "1.0.8",
     "notyf": "3.9.0",
     "ogl": "0.0.54",
     "workbox-window": "5.1.3"

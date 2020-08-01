@@ -22,6 +22,12 @@
     <meta name="twitter:description" content="Some proof that Kazi can code" />
 
     <link rel="canonical" href="https://kazielmanawal.me" />
+    <link
+      rel="preload"
+      href="./<%= require('./fonts/RadioGrotesk-Bold.woff2').default %>"
+      as="font"
+      type="font/woff2"
+    />
   </head>
 
   <body>
@@ -29,7 +35,7 @@
       <h1>Kazi Elman Awal</h1>
       <article id="poster">
         <button
-          arial-label="Show list of links to work examples"
+          aria-label="Show list of links to work examples"
           type="button"
           id="show-work"
         >
@@ -48,7 +54,7 @@
         <div id="work-nav-container">
           <h2>Recent work</h2>
           <button
-            arial-label="Hide list of work example links"
+            aria-label="Hide list of work example links"
             type="button"
             id="show-poster"
           >

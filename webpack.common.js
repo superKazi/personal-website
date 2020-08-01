@@ -30,7 +30,7 @@ module.exports = {
         "Consent-Security-Policy": {
           "http-equiv": "Content-Security-Policy",
           content:
-            "default-src 'self'; img-src 'self' data: https://*; child-src 'self'; style-src 'self' 'unsafe-inline';",
+            "default-src 'self'; img-src 'self' data: https://*; font-src 'self'; child-src 'self'; style-src 'self' 'unsafe-inline';",
         },
       },
       title: "Kazi Elman Awal",

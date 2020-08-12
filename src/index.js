@@ -2,7 +2,7 @@ import "./styles/style.scss";
 import { debounce } from "mini-debounce";
 import { Workbox } from "workbox-window";
 import { Notyf } from "notyf";
-import * as createFocusTrap from "focus-trap";
+import createFocusTrap from "focus-trap";
 import { Polyline, Renderer, Transform, Vec3, Color } from "ogl";
 
 //animation shamelessly stolen from https://tympanus.net/codrops/2019/09/24/crafting-stylised-mouse-trails-with-ogl/
@@ -167,6 +167,7 @@ if ("serviceWorker" in navigator) {
       });
     }
   });
+  // noinspection JSIgnoredPromiseFromCall
   wb.register();
 }
 
@@ -186,7 +187,7 @@ const workButton = document.querySelector("#show-work");
 const posterButton = document.querySelector("#show-poster");
 const poster = document.querySelector("#poster");
 const work = document.querySelector("#work");
-const focusTrap = createFocusTrap(work, {
+const focusTrap = createFocusTrap("#work", {
   escapeDeactivates: false,
 });
 

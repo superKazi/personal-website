@@ -66,7 +66,7 @@ if ("serviceWorker" in navigator) {
           ? "white"
           : "black",
         position: {
-          x: "left",
+          x: "right",
           y: "bottom",
         },
         ripple: true,

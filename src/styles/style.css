@@ -77,7 +77,7 @@ a {
     font-size: var(--step-4);
   }
   p {
-    max-width: 30ch;
+    max-width: 100%;
   }
   .kazi-notyf {
     border: 1px solid #666666;

@@ -34,7 +34,6 @@ module.exports = {
         },
       },
       title: "Kazi Elman Awal",
-      favicon: "./src/favicon.png",
     }),
     new ScriptExtHtmlWebpackPlugin({
       module: /\.js$/,

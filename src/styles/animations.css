@@ -1,0 +1,21 @@
+@supports (font-variation-settings: normal) {
+    @keyframes bwoop {
+        0% {
+            font-variation-settings: 'wght' 400, 'wdth' 100, "ital" 0;
+        }
+        100% {
+            font-variation-settings: 'wght' 900, 'wdth' 200, "ital" 9;
+        }
+    }
+    @keyframes shwoop {
+        0% {
+            font-variation-settings: 'wght' 400, 'wdth' 100, "ital" 0;
+        }
+        62% {
+            font-variation-settings: 'wght' 900, 'wdth' 200, "ital" 9;
+        }
+        100% {
+            font-variation-settings: 'wght' 400, 'wdth' 100, "ital" 0;
+        }
+    }
+}

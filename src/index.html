@@ -1,124 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- Design inspired by/stolen from: https://www.typographicposters.com/posters/tomasz-berezowski/594953641abbcb141757b303 -->
-
-  <head>
-    <meta name="charset" content="utf-8" />
+<head>
+    <meta name="charset" content="utf-8"/>
     <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1,shrink-to-fit=no"
+            name="viewport"
+            content="width=device-width,initial-scale=1,shrink-to-fit=no"
     />
-    <meta name="theme-color" content="#C6FFDD" />
+    <meta name="theme-color" content="#C6FFDD"/>
     <title><%= htmlWebpackPlugin.options.title %></title>
 
-    <meta property="og:title" content="Kazi’s Website" />
-    <meta property="og:image" content="<%= require('./og.jpg').default %>" />
-    <meta property="og:image:alt" content="Kazi’s face" />
-    <meta property="og:description" content="Some proof that Kazi can code" />
+    <meta property="og:title" content="Kazi’s Website"/>
+    <meta property="og:image" content="<%= require('./og.jpg').default %>"/>
+    <meta property="og:image:alt" content="Kazi’s face"/>
+    <meta property="og:description" content="Some proof that Kazi can code"/>
 
-    <meta name="twitter:title" content="Kazi’s Website" />
-    <meta name="twitter:image" content="<%= require('./og.jpg').default %>" />
-    <meta name="twitter:image:alt" content="Kazi’s face" />
-    <meta name="twitter:description" content="Some proof that Kazi can code" />
+    <meta name="twitter:title" content="Kazi’s Website"/>
+    <meta name="twitter:image" content="<%= require('./og.jpg').default %>"/>
+    <meta name="twitter:image:alt" content="Kazi’s face"/>
+    <meta name="twitter:description" content="Some proof that Kazi can code"/>
 
-    <link rel="canonical" href="https://kazielmanawal.me" />
+    <link rel="canonical" href="https://kazielmanawal.me"/>
     <link
-      rel="preload"
-      crossorigin="anonymous"
-      href="./<%= require('./fonts/RadioGrotesk-Bold.woff2').default %>"
-      as="font"
-      type="font/woff2"
+            rel="preload"
+            crossorigin="anonymous"
+            href="./<%= require('./fonts/Agrandir-Variable.woff2').default %>"
+            as="font"
+            type="font/woff2"
     />
-  </head>
+</head>
 
-  <body>
-    <main>
-      <h1>Kazi Elman Awal</h1>
-      <article id="poster">
-        <button
-          aria-label="Show list of links to work examples"
-          type="button"
-          id="show-work"
-        >
-          &#8594;
-        </button>
-        <p aria-hidden="true" id="kazi">Kazi</p>
-        <p aria-hidden="true" id="elman-awal">Elman Awal</p>
-        <p id="description">
-          Designer/Developer at <br />
-          The San Francisco Chronicle. <br />
-          Previously, THE CITY <br />
-          and The Washington Post. <br />
-        </p>
-      </article>
-      <article id="work">
-        <div id="work-nav-container">
-          <h2>Recent work</h2>
-          <button
-            aria-label="Hide list of work example links"
-            type="button"
-            id="show-poster"
-          >
-            &#8592;
-          </button>
-        </div>
-        <ul role="list">
-          <li>
-            <a
-              href="https://www.sfchronicle.com/projects/sf-homeless/homeless-suburbs/"
-              >Homelessness is surging in Bay Area suburbs. COVID-19 is making
-              it even more visible.</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://projects.sfchronicle.com/2020/bay-area-people-died-coronavirus-obituaries/"
-              >Bay Area lives lost during the coronavirus pandemic</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://projects.sfchronicle.com/2020/bay-area-union-boss-legalize-pot/"
-              >Operation Limelight: The Rise and Fall of Pot’s Superman</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://projects.sfchronicle.com/2020/sushi-yoshizumi-review/"
-              >San Mateo’s Sushi Yoshizumi is an omakase menu you’ll dream
-              about</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://www.sfchronicle.com/bayarea/article/The-hater-s-guide-to-loving-the-San-Francisco-15008185.php"
-              >Hater’s guide to loving the 49ers</a
-            >
-          </li>
-          <li>
-            <a href="https://projects.sfchronicle.com/2020/25-must-eats/"
-              >25 Must-eat Bay Area Dishes for 2020</a
-            >
-          </li>
-          <li>
-            <a href="https://projects.sfchronicle.com/class-of-2020/spring/"
-              >Class of 2020: What’s it like to come of age in the Bay Area
-              today?</a
-            >
-          </li>
-          <li>
-            <a href="https://projects.sfchronicle.com/2019/kincade-fire-origin/"
-              >A Spark on Burned Mountain</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://projects.sfchronicle.com/2019/the-fishermans-secret/"
-              >The Fisherman’s Secret: A modern-day treasure hunt</a
-            >
-          </li>
-        </ul>
-      </article>
-    </main>
-  </body>
+<body>
+<main>
+    <h1>Hi, I’m <span id="kazi">Kazi</span>, a front-end developer at <span id="link"><a
+            href="https://restofworld.org/">rest of world</a></span>.</h1>
+    <p>Sometimes I <a href="https://twitter.com/superkazi">tweet</a>. If you’d like, you can find out more about me <a
+            href="https://www.linkedin.com/in/superkazi/">here</a>.</p>
+</main>
+</body>
 </html>

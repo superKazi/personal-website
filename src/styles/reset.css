@@ -11,12 +11,6 @@ html {
   box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition-duration: 1ms !important;
-  }
-}
-
 body,
 h1,
 p {
@@ -25,8 +19,22 @@ p {
 }
 
 body {
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration-skip-ink: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

@@ -9,9 +9,9 @@
 
 body {
   font-family: "Agrandir", Helvetica Neue, Helvetica, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
   font-kerning: normal;
   font-variant-ligatures: normal;
-  text-rendering: optimizeLegibility;
   line-height: 1.2;
 }
 

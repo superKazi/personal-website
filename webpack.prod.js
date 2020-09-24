@@ -72,8 +72,8 @@ module.exports = merge(common, {
       name: "Kazi Elman Awal",
       short_name: "Kazi",
       description: "Journalist, designer, developer Kazi Elman Awal’s website",
-      background_color: "#C6FFDD",
-      theme_color: "#C6FFDD",
+      background_color: "#FFFFFF",
+      theme_color: "#FFFFFF",
       orientation: "portrait-primary",
       ios: true,
       icons: [

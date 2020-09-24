@@ -36,6 +36,7 @@ module.exports = {
       title: "Kazi Elman Awal",
     }),
     new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: "defer",
       module: /\.js$/,
     }),
   ],

@@ -25,6 +25,7 @@ module.exports = merge(common, {
                   targets: {
                     esmodules: true,
                   },
+                  useBuiltIns: "usage",
                 },
               ],
               "minify",

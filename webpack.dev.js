@@ -20,6 +20,13 @@ module.exports = merge(common, {
             loader: "postcss-loader",
             options: {
               sourceMap: true,
+              postcssOptions: {
+                plugins: [
+                  'postcss-import',
+                  'postcss-preset-env',
+                  'cssnano'
+                ]
+              },
             },
           },
         ],

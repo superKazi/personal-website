@@ -26,6 +26,7 @@ module.exports = merge(common, {
                     esmodules: true,
                   },
                   useBuiltIns: "usage",
+                  corejs: 3,
                 },
               ],
               "minify",
@@ -49,6 +50,13 @@ module.exports = merge(common, {
             loader: "postcss-loader",
             options: {
               sourceMap: true,
+              postcssOptions: {
+                plugins: [
+                  'postcss-import',
+                  'postcss-preset-env',
+                  'cssnano'
+                ]
+              },
             },
           },
         ],

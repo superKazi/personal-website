@@ -1,144 +1,137 @@
-@import "reset.css";
-@import "../../node_modules/notyf/notyf.min.css";
+@import 'reset.css';
+@import '../../node_modules/notyf/notyf.min.css';
 
 main {
-  width: 100%;
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
-  padding: var(--step-0);
+    width: 100%;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    padding: var(--step-0);
 
-  display: grid;
-  grid-template-rows: 1fr max-content 1.618fr max-content .382fr;
+    display: grid;
+    grid-template-rows: 1fr max-content 1.618fr max-content 0.382fr;
 }
 
 h1 {
-  font-synthesis: none;
-  font-weight: normal;
-  font-size: var(--step-2);
-  grid-row: 2 / span 1;
+    font-synthesis: none;
+    font-weight: normal;
+    font-size: var(--step-5);
+    grid-row: 2 / span 1;
 }
 
 p {
-  font-size: var(--step-0);
-  font-weight: lighter;
-  max-width: 25ch;
-  text-transform: uppercase;
-  letter-spacing: .05em;
-  font-feature-settings: 'ss02';
-  grid-row: 4 / span 1;
+    font-size: var(--step-1);
+    font-weight: lighter;
+    max-width: 25ch;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-feature-settings: 'ss02';
+    grid-row: 4 / span 1;
 }
 
 p a {
-  font-weight: normal;
-  transition: all 100ms ease-out;
+    font-weight: normal;
+    transition: all 100ms ease-out;
 }
 
 p a:hover {
-  font-weight: bold;
-  letter-spacing: .12em;
+    font-weight: bold;
+    letter-spacing: 0.12em;
 }
 
 span {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 a {
-  color: #0043ef;
+    color: #0043ef;
 }
 
 .kazi-notyf {
-  color: white;
-  line-height: 1.2;
-}
-
-@media (prefers-color-scheme: dark) {
-  .kazi-notyf {
-    color: black;
-    line-height: 1.25;
-  }
-  a {
-    color: #4c7bf3;
-  }
-  a:visited {
-    color: #4c7bf3;
-  }
-}
-
-@media (min-width: 768px) {
-  h1 {
-    font-size: var(--step-3);
-  }
-  p {
-    font-size: var(--step-1);
-  }
+    color: white;
+    line-height: 1.2;
 }
 
 @media (min-width: 1024px) {
-  h1 {
-    font-size: var(--step-4);
-    letter-spacing: -.02em;
-  }
-  p {
-    max-width: 100%;
-  }
-  .kazi-notyf {
-    border: 1px solid #666666;
-    border-radius: 8px;
-  }
+    h1 {
+        letter-spacing: -0.02em;
+    }
+
+    p {
+        max-width: 100%;
+    }
+
+    .kazi-notyf {
+        border: 1px solid #666666;
+        border-radius: 8px;
+    }
 }
 
-@media (min-width: 2560px) {
-  h1 {
-    font-size: var(--step-5);
-  }
-  p {
-    font-size: var(--step-2);
-  }
+@media (orientation: landscape) {
+    p {
+        max-width: 100%;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .kazi-notyf {
+        color: black;
+        line-height: 1.25;
+    }
+
+    a {
+        color: #4c7bf3;
+    }
+
+    a:visited {
+        color: #4c7bf3;
+    }
 }
 
 @supports (font-variation-settings: normal) {
-  span {
-    font-weight: initial;
-  }
+    span {
+        font-weight: initial;
+    }
 
-  h1 {
-    font-weight: 400;
-  }
+    h1 {
+        font-weight: 400;
+    }
 
-  h1 a {
-    font-feature-settings: 'ss01';
-  }
+    h1 a {
+        font-feature-settings: 'ss01';
+    }
 
-  h1 a span span {
-    font-weight: 550;
-  }
-
-  a {
-    text-decoration: none;
-  }
-
-  @media (min-width: 1024px) and (orientation: landscape) {
     h1 a span span {
-      --delay: calc(var(--char-index) * 100ms);
-      animation: shwoop 4s infinite forwards;
-      animation-delay: var(--delay);
-      animation-play-state: paused;
+        font-weight: 550;
     }
 
-    h1 a:hover span span {
-      animation-play-state: running;
+    a {
+        text-decoration: none;
     }
-  }
 
-  .splitting, .word, .char {
-    display: inline-block;
-  }
+    @media (min-width: 1024px) and (orientation: landscape) {
+        h1 a span span {
+            --delay: calc(var(--char-index) * 100ms);
+            animation: shwoop 4s infinite forwards;
+            animation-delay: var(--delay);
+            animation-play-state: paused;
+        }
 
-  #kazi .word .char {
-    --delay: calc(var(--char-index) * 100ms);
-    font-weight: 750;
-    font-stretch: 175%;
-    animation: bwoop 0.8s ease-out both;
-    animation-delay: var(--delay);
-  }
+        h1 a:hover span span {
+            animation-play-state: running;
+        }
+    }
+
+    .splitting,
+    .word,
+    .char {
+        display: inline-block;
+    }
+
+    #kazi .word .char {
+        --delay: calc(var(--char-index) * 100ms);
+        font-weight: 750;
+        font-stretch: 175%;
+        animation: bwoop 0.8s ease-out both;
+        animation-delay: var(--delay);
+    }
 }

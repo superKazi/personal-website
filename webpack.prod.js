@@ -87,7 +87,7 @@ module.exports = merge(common, {
       ios: true,
       icons: [
         {
-          src: "src/favicon.png",
+          src: "src/favicon.svg",
           sizes: [192, 512],
           purpose: "maskable",
           ios: true,
@@ -96,7 +96,7 @@ module.exports = merge(common, {
     }),
     new workboxPlugin.GenerateSW({
       swDest: "sw.js",
-      exclude: [/\.jpg$/, /\.jpeg$/, /\.png$/, /^_.*/],
+      exclude: [/\.jpg$/, /\.jpeg$/, /\.png$/, /\.svg$/, /^_.*/],
       clientsClaim: true,
       skipWaiting: true,
       cleanupOutdatedCaches: true,
@@ -117,7 +117,7 @@ module.exports = merge(common, {
       cacheId: "kazi’s-stuff",
       runtimeCaching: [
         {
-          urlPattern: /\.(?:jpg|jpeg|png)$/,
+          urlPattern: /\.(?:jpg|jpeg|png|svg)$/,
           handler: "CacheFirst",
           options: {
             cacheName: "kazi’s-images",

@@ -6,7 +6,6 @@
             name="viewport"
             content="width=device-width,initial-scale=1,shrink-to-fit=no"
     />
-    <meta name="theme-color" content="#FFF"/>
     <title><%= htmlWebpackPlugin.options.title %></title>
 
     <meta property="og:type" content="profile"/>
@@ -46,13 +45,12 @@
             type="font/woff2"
     />
     <link rel="shortcut icon" href="./<%= require('./favicon.svg').default %>">
-    <link rel="mask-icon" href="./<%= require('./favicon.svg').default %>" color="#000000">
 </head>
 
 <body>
 <main>
     <h1>Hi, I’m <span id="kazi">Kazi</span>, a front-end developer at <span id="link"><a
-            href="https://restofworld.org/">rest of world</a></span>.</h1>
+            aria-label="rest of world" href="https://restofworld.org/">rest of world</a></span>.</h1>
     <p>Sometimes I <a href="https://twitter.com/superkazi">tweet</a>. If you want, you can find my work on <a
             href="https://www.linkedin.com/in/superkazi/">Linkedin</a>.</p>
 </main>

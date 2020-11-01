@@ -87,9 +87,14 @@ module.exports = merge(common, {
       ios: true,
       icons: [
         {
+          src: "src/favicon.png",
+          sizes: [96, 128, 192, 256, 384, 512],
+          ios: true,
+        },
+        {
           src: "src/favicon.svg",
-          sizes: [192, 512],
-          purpose: "maskable",
+          sizes: "512x512",
+          purpose: 'maskable',
           ios: true,
         },
       ],

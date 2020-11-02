@@ -19,16 +19,6 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
-      meta: {
-        description:
-          "Journalist, designer, developer Kazi Elman Awal’s website",
-        robots: "index,follow",
-        googlebot: "index,follow",
-        generator: "Webpack",
-        subject: "Proof Kazi can kind of code, for the web at least",
-        referrer: "no-referrer",
-      },
-      title: "Kazi Elman Awal",
     }),
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: "defer",

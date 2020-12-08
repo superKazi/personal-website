@@ -1,6 +1,11 @@
 @import 'animations.css';
 @import 'typography.css';
 
+:root {
+    --black: hsla(0, 0%, 5%, 1);
+    --white: hsla(0, 0%, 95%, 1);
+}
+
 html {
     font-size: 100%;
 }
@@ -22,10 +27,13 @@ body {
     min-height: 100vh;
     min-height: calc(var(--vh, 1vh) * 100);
     scroll-behavior: smooth;
+    background: var(--white);
+    color: var(--black);
 }
 
 a {
     text-decoration-skip-ink: auto;
+    color: var(--black);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -39,7 +47,10 @@ a {
 
 @media (prefers-color-scheme: dark) {
     body {
-        background: black;
-        color: white;
+        background: var(--black);
+        color: var(--white);
+    }
+    a {
+        color: var(--white);
     }
 }

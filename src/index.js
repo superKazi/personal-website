@@ -4,6 +4,53 @@ import { Workbox } from 'workbox-window';
 import { Notyf } from 'notyf';
 import Splitting from 'splitting';
 
+// service worker code
+if ('serviceWorker' in navigator) {
+    const wb = new Workbox('/sw.js');
+    const notyf = new Notyf();
+
+    wb.addEventListener('installed', (event) => {
+        if (event.isUpdate) {
+            notyf.success({
+                message:
+                    'Hiya! My website has changed at least a teeny bit since you last visited. Refresh to get the latest version.',
+                duration: 8000,
+                icon: false,
+                background: window.matchMedia('(prefers-color-scheme: dark)')
+                    .matches
+                    ? getComputedStyle(
+                          document.documentElement
+                      ).getPropertyValue('--white')
+                    : getComputedStyle(
+                          document.documentElement
+                      ).getPropertyValue('--black'),
+                position: {
+                    x: 'right',
+                    y: 'bottom',
+                },
+                ripple: true,
+                className: 'kazi-notyf',
+                dismissible: true,
+            });
+        }
+    });
+    // noinspection JSIgnoredPromiseFromCall
+
+    wb.register();
+}
+
+// client code
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+window.addEventListener(
+    'resize',
+    debounce(() => {
+        vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }, 300)
+);
+
 Splitting({
     target: [document.querySelector('#kazi'), document.querySelector('#link')],
 });
@@ -57,49 +104,6 @@ rowFancyLetters.forEach((letter) => {
             return;
     }
 });
-
-// service worker code
-if ('serviceWorker' in navigator) {
-    const wb = new Workbox('/sw.js');
-    const notyf = new Notyf();
-
-    wb.addEventListener('installed', (event) => {
-        if (event.isUpdate) {
-            notyf.success({
-                message:
-                    'Hiya! My website has changed at least a teeny bit since you last visited. Refresh to get the latest version.',
-                duration: 8000,
-                icon: false,
-                background: window.matchMedia('(prefers-color-scheme: dark)')
-                    .matches
-                    ? 'white'
-                    : 'black',
-                position: {
-                    x: 'right',
-                    y: 'bottom',
-                },
-                ripple: true,
-                className: 'kazi-notyf',
-                dismissible: true,
-            });
-        }
-    });
-    // noinspection JSIgnoredPromiseFromCall
-
-    wb.register();
-}
-
-// client code
-let vh = window.innerHeight * 0.01;
-document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-window.addEventListener(
-    'resize',
-    debounce(() => {
-        vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }, 300)
-);
 
 // polite console
 console.log(

@@ -18,12 +18,20 @@ h1 {
     grid-row: 2 / span 1;
 }
 
+#link {
+    border: 2px solid var(--black);
+    border-radius: var(--step-2);
+    padding: .2em .2em 0;
+    line-height: 1;
+}
+
 p {
     font-size: var(--step-1);
     font-weight: lighter;
     max-width: 25ch;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    line-height: 1.5;
     font-feature-settings: 'ss02';
     grid-row: 4 / span 1;
 }
@@ -31,6 +39,10 @@ p {
 p a {
     font-weight: normal;
     transition: all 100ms ease-out;
+    line-height: 1;
+    border: 1px solid var(--black);
+    padding: .2em .2em 0;
+    border-radius: var(--step--2);
 }
 
 p a:hover {
@@ -42,12 +54,8 @@ span {
     font-weight: bold;
 }
 
-a {
-    color: #0043ef;
-}
-
 .kazi-notyf {
-    color: white;
+    color: var(--white);
     line-height: 1.2;
 }
 
@@ -74,16 +82,11 @@ a {
 
 @media (prefers-color-scheme: dark) {
     .kazi-notyf {
-        color: black;
+        color: var(--black);
         line-height: 1.25;
     }
-
-    a {
-        color: #4c7bf3;
-    }
-
-    a:visited {
-        color: #4c7bf3;
+    #link, p a {
+        border-color: var(--white);
     }
 }
 

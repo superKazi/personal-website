@@ -21,7 +21,7 @@ h1 {
 #link {
     border: 2px solid var(--black);
     border-radius: var(--step-2);
-    padding: .2em .2em 0;
+    padding: .2em .18em 0 .2em;
     line-height: 1;
 }
 
@@ -41,7 +41,7 @@ p a {
     transition: all 100ms ease-out;
     line-height: 1;
     border: 1px solid var(--black);
-    padding: .2em .2em 0;
+    padding: .2em .18em 0 .2em;
     border-radius: var(--step--2);
 }
 

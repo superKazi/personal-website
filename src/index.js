@@ -2,7 +2,6 @@ import './styles/style.css';
 import { debounce } from 'mini-debounce';
 import { Workbox } from 'workbox-window';
 import { Notyf } from 'notyf';
-import Splitting from 'splitting';
 
 // service worker code
 if ('serviceWorker' in navigator) {
@@ -51,59 +50,69 @@ window.addEventListener(
     }, 300)
 );
 
-Splitting({
-    target: [document.querySelector('#kazi'), document.querySelector('#link')],
-});
+(async function variableFontFun() {
+    if (CSS.supports('font-variation-settings', 'normal')) {
 
-const fancyLetters = {
-    eArr: ['e', 'ĕ', 'ě', 'ë'],
-    sArr: ['s', 'ş'],
-    wArr: ['w', 'ŵ'],
-    oArr: ['o', 'ŏ', 'ô'],
-};
+        const {default: splitting} = await import('splitting');
 
-const rowFancyLetters = [
-    ...document.querySelectorAll('#link a .word .char'),
-].filter((character) => {
-    const { innerText } = character;
-    return (
-        innerText === 'e' ||
-        innerText === 's' ||
-        innerText === 'w' ||
-        innerText === 'o'
-    );
-});
+        splitting({
+            target: [
+                document.querySelector('#kazi'),
+                document.querySelector('#link'),
+            ],
+        });
 
-rowFancyLetters.forEach((letter) => {
-    switch (letter.innerText) {
-        case 'e':
-            letter.innerHTML =
-                fancyLetters.eArr[
-                    Math.floor(Math.random() * fancyLetters.eArr.length)
-                ];
-            break;
-        case 's':
-            letter.innerHTML =
-                fancyLetters.sArr[
-                    Math.floor(Math.random() * fancyLetters.sArr.length)
-                ];
-            break;
-        case 'w':
-            letter.innerHTML =
-                fancyLetters.wArr[
-                    Math.floor(Math.random() * fancyLetters.wArr.length)
-                ];
-            break;
-        case 'o':
-            letter.innerHTML =
-                fancyLetters.oArr[
-                    Math.floor(Math.random() * fancyLetters.oArr.length)
-                ];
-            break;
-        default:
-            return;
+        const fancyLetters = {
+            eArr: ['e', 'ĕ', 'ě', 'ë'],
+            sArr: ['s', 'ş'],
+            wArr: ['w', 'ŵ'],
+            oArr: ['o', 'ŏ', 'ô'],
+        };
+
+        const rowFancyLetters = [
+            ...document.querySelectorAll('#link a .word .char'),
+        ].filter((character) => {
+            const { innerText } = character;
+            return (
+                innerText === 'e' ||
+                innerText === 's' ||
+                innerText === 'w' ||
+                innerText === 'o'
+            );
+        });
+
+        rowFancyLetters.forEach((letter) => {
+            switch (letter.innerText) {
+                case 'e':
+                    letter.innerHTML =
+                        fancyLetters.eArr[
+                            Math.floor(Math.random() * fancyLetters.eArr.length)
+                        ];
+                    break;
+                case 's':
+                    letter.innerHTML =
+                        fancyLetters.sArr[
+                            Math.floor(Math.random() * fancyLetters.sArr.length)
+                        ];
+                    break;
+                case 'w':
+                    letter.innerHTML =
+                        fancyLetters.wArr[
+                            Math.floor(Math.random() * fancyLetters.wArr.length)
+                        ];
+                    break;
+                case 'o':
+                    letter.innerHTML =
+                        fancyLetters.oArr[
+                            Math.floor(Math.random() * fancyLetters.oArr.length)
+                        ];
+                    break;
+                default:
+                    return;
+            }
+        });
     }
-});
+})();
 
 // polite console
 console.log(

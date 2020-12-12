@@ -69,9 +69,6 @@ span {
         color: var(--black);
         line-height: 1.25;
     }
-    #link, p a {
-        border-color: var(--white);
-    }
 }
 
 @supports (font-variation-settings: normal) {
@@ -110,6 +107,12 @@ span {
     p a:hover {
         font-weight: bold;
         letter-spacing: 0.12em;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        #link, p a {
+            border-color: var(--white);
+        }
     }
 
     @media (min-width: 1024px) and (orientation: landscape) {

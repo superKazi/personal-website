@@ -58,7 +58,7 @@ window.addEventListener(
         splitting({
             target: [
                 document.querySelector('#kazi'),
-                document.querySelector('#link'),
+                document.querySelector('#job'),
             ],
         });
 
@@ -70,7 +70,7 @@ window.addEventListener(
         };
 
         const rowFancyLetters = [
-            ...document.querySelectorAll('#link a .word .char'),
+            ...document.querySelectorAll('.job .word .char'),
         ].filter((character) => {
             const { innerText } = character;
             return (

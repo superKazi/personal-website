@@ -8,12 +8,14 @@ main {
     padding: var(--step-0);
 
     display: grid;
-    grid-template-rows: 1fr max-content 1.618fr max-content 0.382fr;
+    grid-gap: var(--step-0);
+    grid-template-rows: 38fr max-content 62fr max-content 38fr;
 }
 
 h1 {
     font-synthesis: none;
     font-weight: normal;
+    letter-spacing: -0.02em;
     font-size: var(--step-5);
     grid-row: 2 / span 1;
 }
@@ -21,7 +23,6 @@ h1 {
 p {
     font-size: var(--step-1);
     font-weight: lighter;
-    max-width: 25ch;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     line-height: 1.5;
@@ -29,13 +30,13 @@ p {
     grid-row: 4 / span 1;
 }
 
-p a {
-    font-weight: normal;
-    transition: all 100ms ease-out;
-}
-
 span {
     font-weight: bold;
+}
+
+.social {
+    font-weight: normal;
+    transition: all 100ms ease-out;
 }
 
 .kazi-notyf {
@@ -44,23 +45,9 @@ span {
 }
 
 @media (min-width: 1024px) {
-    h1 {
-        letter-spacing: -0.02em;
-    }
-
-    p {
-        max-width: 100%;
-    }
-
     .kazi-notyf {
-        border: 1px solid #666666;
-        border-radius: 8px;
-    }
-}
-
-@media (orientation: landscape) {
-    p {
-        max-width: 100%;
+        border: 1px solid var(--black);
+        border-radius: var(--step--2);
     }
 }
 
@@ -80,23 +67,23 @@ span {
         font-weight: 400;
     }
 
-    #link {
+    #job {
         border: 2px solid var(--black);
         border-radius: var(--step-2);
         padding: .2em .18em 0 .2em;
         line-height: 1;
     }
 
-    h1 a {
+    .job {
         text-decoration: none;
         font-feature-settings: 'ss01';
     }
 
-    h1 a span span {
+    .job .word .char {
         font-weight: 550;
     }
 
-    p a {
+    .social {
         line-height: 1;
         border: 1px solid var(--black);
         padding: .2em .18em 0 .2em;
@@ -104,26 +91,26 @@ span {
         text-decoration: none;
     }
 
-    p a:hover {
+    .social:hover {
         font-weight: bold;
         letter-spacing: 0.12em;
     }
 
     @media (prefers-color-scheme: dark) {
-        #link, p a {
+        #job, .social {
             border-color: var(--white);
         }
     }
 
     @media (min-width: 1024px) and (orientation: landscape) {
-        h1 a span span {
+        .job .word .char {
             --delay: calc(var(--char-index) * 100ms);
             animation: shwoop 4s infinite forwards;
             animation-delay: var(--delay);
             animation-play-state: paused;
         }
 
-        h1 a:hover span span {
+        .job:hover .word .char {
             animation-play-state: running;
         }
     }

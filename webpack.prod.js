@@ -22,10 +22,8 @@ module.exports = merge(common, {
                             [
                                 '@babel/preset-env',
                                 {
-                                    targets: {
-                                        esmodules: true,
-                                    },
-                                    useBuiltIns: 'entry',
+                                    targets: "defaults",
+                                    useBuiltIns: 'usage',
                                     corejs: 3,
                                 },
                             ],

@@ -44,18 +44,7 @@
     "tabWidth": 4,
     "singleQuote": true
   },
-  "browserslist": [
-    "Chrome >= 61",
-    "ChromeAndroid >= 80",
-    "Safari >= 11",
-    "iOS >= 11",
-    "Firefox >= 60",
-    "FirefoxAndroid >= 68",
-    "Edge >= 16",
-    "Opera >= 48",
-    "Android >= 80",
-    "Samsung >= 8.2"
-  ],
+  "browserslist": ["defaults"],
   "devDependencies": {
     "@babel/core": "7.12.10",
     "@babel/preset-env": "7.12.11",

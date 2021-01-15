@@ -99,6 +99,7 @@ module.exports = merge(common, {
             skipWaiting: true,
             cleanupOutdatedCaches: true,
             sourcemap: true,
+            inlineWorkboxRuntime: true,
             babelPresetEnvTargets: ['defaults'],
             cacheId: 'kazi’s-stuff',
             runtimeCaching: [

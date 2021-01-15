@@ -100,7 +100,6 @@ module.exports = merge(common, {
             cleanupOutdatedCaches: true,
             sourcemap: true,
             inlineWorkboxRuntime: true,
-            babelPresetEnvTargets: ['defaults'],
             cacheId: 'kazi’s-stuff',
             runtimeCaching: [
                 {

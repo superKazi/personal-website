@@ -7,7 +7,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(png|jpe?g|gif|woff|woff2|eot|ttf|otf|svg)$/,
-                use: ['file-loader'],
+                type: 'asset/resource',
             },
         ],
     },

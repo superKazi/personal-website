@@ -1,12 +1,8 @@
-const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 
 module.exports = {
-    entry: {
-        app: './src/index.js',
-    },
     module: {
         rules: [
             {
@@ -25,10 +21,10 @@ module.exports = {
         }),
     ],
     output: {
-        filename: '[name].[hash].js',
-        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].[contenthash].js',
+        publicPath: '/'
     },
     optimization: {
-        moduleIds: 'hashed',
+        moduleIds: 'deterministic',
     },
 };

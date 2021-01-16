@@ -4,11 +4,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 
 module.exports = {
+    entry: {
+        app: './src/index.js',
+    },
     module: {
         rules: [
             {
                 test: /\.(png|jpe?g|gif|woff|woff2|eot|ttf|otf|svg)$/,
-                type: 'asset/resource',
+                use: ['file-loader'],
             },
         ],
     },
@@ -22,11 +25,10 @@ module.exports = {
         }),
     ],
     output: {
+        filename: '[name].[hash].js',
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[contenthash].js',
-        publicPath: '/'
     },
     optimization: {
-        moduleIds: 'deterministic',
+        moduleIds: 'hashed',
     },
 };

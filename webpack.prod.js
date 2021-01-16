@@ -2,6 +2,7 @@ const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 const workboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -21,9 +22,9 @@ module.exports = merge(common, {
                             [
                                 '@babel/preset-env',
                                 {
-                                    targets: 'defaults',
+                                    targets: "defaults",
                                     useBuiltIns: 'usage',
-                                    corejs: 3.8,
+                                    corejs: 3,
                                 },
                             ],
                             'minify',
@@ -66,8 +67,9 @@ module.exports = merge(common, {
         ],
     },
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: '[name].[contenthash].css',
+        new MiniCssExtractPlugin(),
+        new StyleExtHtmlWebpackPlugin({
+            minify: true,
         }),
         new WebpackPwaManifest({
             name: 'Kazi Elman Awal',
@@ -100,6 +102,18 @@ module.exports = merge(common, {
             cleanupOutdatedCaches: true,
             sourcemap: true,
             inlineWorkboxRuntime: true,
+            babelPresetEnvTargets: [
+                'Chrome >= 61',
+                'ChromeAndroid >= 80',
+                'Safari >= 11',
+                'iOS >= 11',
+                'Firefox >= 60',
+                'FirefoxAndroid >= 68',
+                'Edge >= 16',
+                'Opera >= 48',
+                'Android >= 80',
+                'Samsung >= 8.2',
+            ],
             cacheId: 'kazi’s-stuff',
             runtimeCaching: [
                 {

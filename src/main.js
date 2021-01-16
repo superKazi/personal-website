@@ -1,4 +1,4 @@
-import { debounce } from 'https://cdn.skypack.dev/mini-debounce';
+import { debounce } from 'https://cdn.skypack.dev/pin/mini-debounce@v1.0.8-Zdrw8ioDWJBckPavi5e3/min/mini-debounce.js';
 
 // client code
 let vh = window.innerHeight * 0.01;
@@ -15,7 +15,7 @@ window.addEventListener(
 (async function variableFontFun() {
     if (CSS.supports('font-variation-settings', 'normal')) {
 
-        const {default: splitting} = await import('https://cdn.skypack.dev/splitting');
+        const {default: splitting} = await import('https://cdn.skypack.dev/pin/splitting@v1.0.6-Za2vDy3XuQ4lO2x5hbUG/min/splitting.js');
 
         splitting({
             target: [

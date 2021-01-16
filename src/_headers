@@ -1,12 +1,8 @@
-/*
-  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://*; font-src 'self'; child-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self';
+# the page:
 /index.html
   Cache-Control: public
   Cache-Control: max-age=0
   Cache-Control: must-revalidate
-  X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
-  X-Content-Type-Options: nosniff
 # service worker:
 /sw.js
   Cache-Control: public

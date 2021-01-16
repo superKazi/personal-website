@@ -1,5 +1,4 @@
 @import 'reset.css';
-@import '../../node_modules/notyf/notyf.min.css';
 
 main {
     width: 100%;
@@ -37,25 +36,6 @@ span {
 .social {
     font-weight: normal;
     transition: all 100ms ease-out;
-}
-
-.kazi-notyf {
-    color: var(--white);
-    line-height: 1.2;
-}
-
-@media (min-width: 1024px) {
-    .kazi-notyf {
-        border: 1px solid var(--black);
-        border-radius: var(--step--2);
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    .kazi-notyf {
-        color: var(--black);
-        line-height: 1.25;
-    }
 }
 
 @supports (font-variation-settings: normal) {

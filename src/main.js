@@ -1,42 +1,4 @@
-import './styles/style.css';
-import { debounce } from 'mini-debounce';
-import { Workbox } from 'workbox-window';
-import { Notyf } from 'notyf';
-
-// service worker code
-if ('serviceWorker' in navigator) {
-    const wb = new Workbox('/sw.js');
-    const notyf = new Notyf();
-
-    wb.addEventListener('installed', (event) => {
-        if (event.isUpdate) {
-            notyf.success({
-                message:
-                    'Hiya! My website has changed at least a teeny bit since you last visited. Refresh to get the latest version.',
-                duration: 8000,
-                icon: false,
-                background: window.matchMedia('(prefers-color-scheme: dark)')
-                    .matches
-                    ? getComputedStyle(
-                          document.documentElement
-                      ).getPropertyValue('--white')
-                    : getComputedStyle(
-                          document.documentElement
-                      ).getPropertyValue('--black'),
-                position: {
-                    x: 'right',
-                    y: 'bottom',
-                },
-                ripple: true,
-                className: 'kazi-notyf',
-                dismissible: true,
-            });
-        }
-    });
-    // noinspection JSIgnoredPromiseFromCall
-
-    wb.register();
-}
+import { debounce } from 'https://cdn.skypack.dev/mini-debounce';
 
 // client code
 let vh = window.innerHeight * 0.01;
@@ -53,7 +15,7 @@ window.addEventListener(
 (async function variableFontFun() {
     if (CSS.supports('font-variation-settings', 'normal')) {
 
-        const {default: splitting} = await import('splitting');
+        const {default: splitting} = await import('https://cdn.skypack.dev/splitting');
 
         splitting({
             target: [
@@ -87,25 +49,25 @@ window.addEventListener(
                     letter.innerHTML =
                         fancyLetters.eArr[
                             Math.floor(Math.random() * fancyLetters.eArr.length)
-                        ];
+                            ];
                     break;
                 case 's':
                     letter.innerHTML =
                         fancyLetters.sArr[
                             Math.floor(Math.random() * fancyLetters.sArr.length)
-                        ];
+                            ];
                     break;
                 case 'w':
                     letter.innerHTML =
                         fancyLetters.wArr[
                             Math.floor(Math.random() * fancyLetters.wArr.length)
-                        ];
+                            ];
                     break;
                 case 'o':
                     letter.innerHTML =
                         fancyLetters.oArr[
                             Math.floor(Math.random() * fancyLetters.oArr.length)
-                        ];
+                            ];
                     break;
                 default:
                     return;

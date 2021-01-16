@@ -18,15 +18,7 @@
   Cache-Control: max-age=0
   Cache-Control: must-revalidate
 # javascript:
-/runtime.*.js
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-/vendors.*.js
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-/app.*.js
+/main.*.js
   Cache-Control: public
   Cache-Control: max-age=31536000
   Cache-Control: immutable

@@ -1,64 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Kazi Elman Awal</title>
 
-    <meta name="charset" content="utf-8"/>
-    <meta
+<html lang="en">
+    <head>
+        <title>Kazi Elman Awal</title>
+        <meta name="charset" content="utf-8" />
+        <meta
             name="viewport"
             content="width=device-width,initial-scale=1,shrink-to-fit=no"
-    />
+        />
+        <meta
+            name="subject"
+            content="Proof Kazi can kind of code, for the web at least"
+        />
+        <meta
+            name="description"
+            content="Journalist, designer, developer Kazi Elman Awal’s website"
+        />
+        <meta name="robots" content="index,follow" />
+        <meta name="googlebot" content="index,follow" />
+        <meta name="referrer" content="no-referrer" />
 
-    <meta name="subject" content="Proof Kazi can kind of code, for the web at least">
-    <meta name="description" content="Journalist, designer, developer Kazi Elman Awal’s website">
-    <meta name="robots" content="index,follow">
-    <meta name="googlebot" content="index,follow">
-    <meta name="generator" content="Webpack">
-    <meta name="referrer" content="no-referrer">
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content="Kazi’s Website" />
+        <meta property="og:url" content="https://kazielmanawal.me" />
+        <meta property="og:image" content="og.jpg" />
+        <meta property="og:image:alt" content="Kazi’s face" />
+        <meta
+            property="og:description"
+            content="Some proof that Kazi can code"
+        />
 
-    <meta property="og:type" content="profile"/>
-    <meta property="og:title" content="Kazi’s Website"/>
-    <meta property="og:url" content="https://kazielmanawal.me"/>
-    <meta property="og:image" content="<%= require('./og.jpg').default %>"/>
-    <meta property="og:image:alt" content="Kazi’s face"/>
-    <meta property="og:description" content="Some proof that Kazi can code"/>
-    <meta property="profile:first_name" content="Kazi">
-    <meta property="profile:last_name" content="Awal">
+        <meta property="profile:first_name" content="Kazi" />
+        <meta property="profile:last_name" content="Awal" />
 
-    <meta name="twitter:title" content="Kazi’s Website"/>
-    <meta name="twitter:image" content="<%= require('./og.jpg').default %>"/>
-    <meta name="twitter:image:alt" content="Kazi’s face"/>
-    <meta name="twitter:description" content="Some proof that Kazi can code"/>
+        <meta name="twitter:title" content="Kazi’s Website" />
+        <meta
+            name="twitter:image"
+            content="og.jpg"
+        />
+        <meta name="twitter:image:alt" content="Kazi’s face" />
+        <meta
+            name="twitter:description"
+            content="Some proof that Kazi can code"
+        />
 
-    <script type="application/ld+json">
-        {
-            "@context": "http://schema.org/",
-            "@type": "Person",
-            "name": "Kazi Elman Awal",
-            "jobTitle": "Front-end Developer",
-            "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Brooklyn",
-                "addressRegion": "NY"
-            }
-        }
-    </script>
+        <link rel="icon" href="favicon.ico">
+        <link rel="icon" href="favicon.svg" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="apple.png">
+        <link rel="manifest" href="manifest.webmanifest">
 
-    <link rel="canonical" href="https://kazielmanawal.me"/>
-    <link
+        <link rel="canonical" href="https://kazielmanawal.me" />
+        <link
             rel="preload"
             crossorigin="anonymous"
-            href="./<%= require('./fonts/Agrandir-Variable.woff2').default %>"
+            href="fonts/Agrandir-Variable.woff2"
             as="font"
             type="font/woff2"
-    />
-    <link rel="shortcut icon" href="./<%= require('./favicon.svg').default %>">
-</head>
+        />
+        <link rel="preload" href="styles/style.css" as="style">
+        <link rel="stylesheet" href="styles/style.css">
 
-<body>
-<main>
-    <h1>Hi, I’m <span id="kazi">Kazi</span>, a front-end developer at <span id="job"><a class="job" aria-label="rest of world" href="https://restofworld.org/">rest of world</a></span>.</h1>
-    <p>Sometimes I <a class="social" href="https://twitter.com/superkazi">tweet</a>. If you want, you can find my work on <a class="social" href="https://www.linkedin.com/in/superkazi/">Linkedin</a>.</p>
-</main>
-</body>
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org/",
+                "@type": "Person",
+                "name": "Kazi Elman Awal",
+                "jobTitle": "Front-end Developer",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Brooklyn",
+                    "addressRegion": "NY"
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <main>
+            <h1>
+                Hi, I’m <span id="kazi">Kazi</span>, a front-end developer at
+                <span id="job"
+                    ><a
+                        class="job"
+                        aria-label="rest of world"
+                        href="https://restofworld.org/"
+                        >rest of world</a
+                    ></span
+                >.
+            </h1>
+            <p>
+                Sometimes I
+                <a class="social" href="https://twitter.com/superkazi">tweet</a
+                >. If you want, you can find my work on
+                <a class="social" href="https://www.linkedin.com/in/superkazi/"
+                    >Linkedin</a
+                >.
+            </p>
+        </main>
+        <script type="module" src="main.js"></script>
+    </body>
 </html>

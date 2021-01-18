@@ -14,7 +14,12 @@
   Cache-Control: max-age=0
   Cache-Control: must-revalidate
 # javascript:
-/main.*.js
+/main.js
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable
+# styles:
+/*.css
   Cache-Control: public
   Cache-Control: max-age=31536000
   Cache-Control: immutable

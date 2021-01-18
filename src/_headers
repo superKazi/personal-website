@@ -36,6 +36,10 @@
   Cache-Control: public
   Cache-Control: max-age=31536000
   Cache-Control: immutable
+/*.ico
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable
 # fonts:
 /*.woff2
   Cache-Control: public

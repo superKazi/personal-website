@@ -1,5 +1,5 @@
-@import 'animations.css';
-@import 'typography.css';
+@import 'animations.css?v=1.0.1';
+@import 'typography.css?v=1.0.1';
 
 :root {
     --black: hsla(0, 0%, 5%, 1);

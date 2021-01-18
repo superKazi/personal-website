@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'Agrandir';
-    src: url('../fonts/Agrandir-Variable.woff2')
+    src: url('../fonts/Agrandir-Variable.woff2?v=1.0.1')
             format('woff2 supports variations'),
-        url('../fonts/Agrandir-Variable.woff2') format('woff2-variations');
+        url('../fonts/Agrandir-Variable.woff2?v=1.0.1') format('woff2-variations');
     font-weight: 100 900;
     font-stretch: 50% 200%;
     font-display: fallback;

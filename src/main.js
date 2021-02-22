@@ -61,15 +61,17 @@ rowFancyLetters.forEach((letter) => {
 });
 
 // remove leftover workbox sw stuff
-indexedDB
-  .databases()
-  .then((dbs) => {
-    if (dbs.length > 0) {
-      dbs.forEach((db) => indexedDB.deleteDatabase(db.name));
-    }
-  })
-  .then(() => null)
-  .catch((e) => console.error(e));
+if (typeof indexedDB.databases === "function") {
+  indexedDB
+    .databases()
+    .then((dbs) => {
+      if (dbs.length > 0) {
+        dbs.forEach((db) => indexedDB.deleteDatabase(db.name));
+      }
+    })
+    .then(() => null)
+    .catch((e) => console.error(e));
+}
 
 // polite console
 console.log(

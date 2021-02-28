@@ -1,8 +1,6 @@
 import { debounce } from "https://cdn.skypack.dev/pin/mini-debounce@v1.0.8-Zdrw8ioDWJBckPavi5e3/min/mini-debounce.js";
 
-import Splitting from "https://cdn.skypack.dev/pin/splitting@v1.0.6-Za2vDy3XuQ4lO2x5hbUG/min/splitting.js";
-
-// client code
+// perfect vh
 let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty("--vh", `${vh}px`);
 
@@ -11,54 +9,55 @@ window.addEventListener(
   debounce(() => {
     vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }, 300)
+  }, 300),
+  { passive: true }
 );
 
-Splitting({
-  target: [document.querySelector("#kazi"), document.querySelector("#job")],
+// animate bang
+const bang = document.querySelector(".bang");
+
+bang.addEventListener("animationend", () => (bang.style.animationName = ""), {
+  passive: true,
 });
 
-const fancyLetters = {
-  eArr: ["e", "ĕ", "ě", "ë"],
-  sArr: ["s", "ş"],
-  wArr: ["w", "ŵ"],
-  oArr: ["o", "ŏ", "ô"],
-};
+const interactions = [
+  "scroll",
+  "resize",
+  "devicemotion",
+  "deviceorientation",
+  "mousedown",
+  "mousemove",
+  "touchstart",
+  "keydown",
+];
 
-const rowFancyLetters = [
-  ...document.querySelectorAll(".job .word .char"),
-].filter((character) => {
-  const { innerText } = character;
-  return (
-    innerText === "e" ||
-    innerText === "s" ||
-    innerText === "w" ||
-    innerText === "o"
-  );
-});
+const animations = ["groove", "pop", "swing", "spin"];
+let lastPlayed = "";
 
-rowFancyLetters.forEach((letter) => {
-  switch (letter.innerText) {
-    case "e":
-      letter.innerHTML =
-        fancyLetters.eArr[Math.floor(Math.random() * fancyLetters.eArr.length)];
-      break;
-    case "s":
-      letter.innerHTML =
-        fancyLetters.sArr[Math.floor(Math.random() * fancyLetters.sArr.length)];
-      break;
-    case "w":
-      letter.innerHTML =
-        fancyLetters.wArr[Math.floor(Math.random() * fancyLetters.wArr.length)];
-      break;
-    case "o":
-      letter.innerHTML =
-        fancyLetters.oArr[Math.floor(Math.random() * fancyLetters.oArr.length)];
-      break;
-    default:
-      return;
+interactions.forEach((interaction) =>
+  window.addEventListener(interaction, debounce(animateBang, 1000), {
+    passive: true,
+  })
+);
+
+function animateBang() {
+  if (window.matchMedia("(orientation: landscape)").matches) {
+    if (bang.style.animationName === "") {
+      if (lastPlayed === "") {
+        bang.style.animationName =
+          animations[Math.floor(Math.random() * animations.length)];
+        lastPlayed = bang.style.animationName;
+      } else {
+        const filtered = animations.filter(
+          (animation) => animation !== lastPlayed
+        );
+        bang.style.animationName =
+          filtered[Math.floor(Math.random() * filtered.length)];
+        lastPlayed = bang.style.animationName;
+      }
+    }
   }
-});
+}
 
 // remove leftover workbox sw stuff
 if (typeof indexedDB.databases === "function") {

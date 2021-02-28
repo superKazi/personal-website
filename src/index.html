@@ -6,7 +6,7 @@
     <meta name="charset" content="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width,initial-scale=1,shrink-to-fit=no"
+      content="width=device-width,initial-scale=1,shrink-to-fit=no,viewport-fit=cover"
     />
     <meta
       name="subject"
@@ -24,7 +24,7 @@
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Kazi’s Website" />
     <meta property="og:url" content="https://kazielmanawal.me" />
-    <meta property="og:image" content="og.jpg?v=1.0.2" />
+    <meta property="og:image" content="og.jpg?v=1.1.0" />
     <meta property="og:image:alt" content="Kazi’s face" />
     <meta property="og:description" content="Some proof that Kazi can code" />
 
@@ -32,20 +32,27 @@
     <meta property="profile:last_name" content="Awal" />
 
     <meta name="twitter:title" content="Kazi’s Website" />
-    <meta name="twitter:image" content="og.jpg?v=1.0.2" />
+    <meta name="twitter:image" content="og.jpg?v=1.1.0" />
     <meta name="twitter:image:alt" content="Kazi’s face" />
     <meta name="twitter:description" content="Some proof that Kazi can code" />
 
-    <link rel="icon" href="favicon.ico?v=1.0.2" />
-    <link rel="icon" href="favicon.svg?v=1.0.2" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="apple.png?v=1.0.2" />
+    <link rel="icon" href="favicon.ico?v=1.1.0" />
+    <link rel="icon" href="favicon.svg?v=1.1.0" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple.png?v=1.1.0" />
     <link rel="manifest" href="manifest.json" />
 
     <link rel="canonical" href="https://kazielmanawal.me" />
     <link
       rel="preload"
       crossorigin="anonymous"
-      href="Agrandir-Variable.woff2?v=1.0.2"
+      href="PolySansGX.woff2?v=1.1.0"
+      as="font"
+      type="font/woff2"
+    />
+    <link
+      rel="preload"
+      crossorigin="anonymous"
+      href="PolySansItalicGX.woff2?v=1.1.0"
       as="font"
       type="font/woff2"
     />
@@ -64,49 +71,24 @@
       }
     </script>
     <style>
-      @supports (font-variation-settings: normal) {
-        @keyframes bwoop {
-          0% {
-            font-variation-settings: "wght" 400, "wdth" 100, "ital" 0;
-          }
-          100% {
-            font-variation-settings: "wght" 900, "wdth" 200, "ital" 9;
-          }
-        }
-        @keyframes shwoop {
-          0% {
-            font-variation-settings: "wght" 400, "wdth" 100, "ital" 0;
-          }
-          62% {
-            font-variation-settings: "wght" 900, "wdth" 200, "ital" 9;
-          }
-          100% {
-            font-variation-settings: "wght" 400, "wdth" 100, "ital" 0;
-          }
-        }
-      }
       @font-face {
-        font-family: "Agrandir";
-        src: url("Agrandir-Variable.woff2?v=1.0.2")
-            format("woff2 supports variations"),
-          url("Agrandir-Variable.woff2?v=1.0.2") format("woff2-variations");
-        font-weight: 100 900;
-        font-stretch: 50% 200%;
+        font-family: "PolySans";
+        src: url("PolySansGX.woff2?v=1.1.0") format("woff2 supports variations"),
+          url("PolySansGX.woff2?v=1.1.0") format("woff2-variations");
+        font-weight: 50 200;
+        font-stretch: 100% 200%;
+        font-optical-sizing: auto;
         font-display: fallback;
       }
-
-      body {
-        font-family: "Agrandir", Helvetica Neue, Helvetica, Arial, sans-serif;
-        text-rendering: optimizeLegibility;
-        font-kerning: normal;
-        font-variant-ligatures: normal;
-        line-height: 1.2;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        body {
-          line-height: 1.3;
-        }
+      @font-face {
+        font-family: "PolySans";
+        src: url("PolySansItalicGX.woff2?v=1.1.0")
+            format("woff2 supports variations"),
+          url("PolySansItalicGX.woff2?v=1.1.0") format("woff2-variations");
+        font-weight: 50 200;
+        font-optical-sizing: auto;
+        font-style: italic;
+        font-display: fallback;
       }
 
       :root {
@@ -132,11 +114,6 @@
       *::before,
       *::after {
         box-sizing: border-box;
-      }
-
-      body,
-      h1,
-      p {
         margin: 0;
         padding: 0;
       }
@@ -147,11 +124,49 @@
         scroll-behavior: smooth;
         background: var(--white);
         color: var(--black);
+
+        font-family: "PolySans", Helvetica Neue, Helvetica, Arial, sans-serif;
+        text-rendering: optimizeLegibility;
+        font-variation-settings: "opsz" 100;
+        font-kerning: normal;
+        font-weight: 100;
+        line-height: 1.1;
+      }
+
+      header,
+      main {
+        padding: var(--step--2);
+      }
+
+      main {
+        margin: var(--step-3) auto;
+      }
+
+      h1 {
+        letter-spacing: -0.02em;
+        font-size: var(--step-5);
+        line-height: 1;
+        font-weight: 100;
+      }
+
+      p {
+        font-size: var(--step-3);
+      }
+
+      p + p {
+        margin-top: var(--step-2);
       }
 
       a {
-        text-decoration-skip-ink: auto;
+        font-style: italic;
+        font-weight: 133;
+        text-decoration: none;
         color: var(--black);
+        transition: font-weight 200ms ease-in-out, color 200ms ease-in-out;
+      }
+
+      a:hover {
+        font-weight: 200;
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -163,157 +178,189 @@
         }
       }
 
+      @keyframes groove {
+        0% {
+          transform: skewY(0deg) rotate(0deg);
+        }
+        15% {
+          transform: skewY(-10deg) rotateZ(8deg);
+        }
+        35% {
+          transform: skewY(10deg) rotateZ(-8deg);
+        }
+        55% {
+          transform: skewY(-6deg) rotateZ(-4deg);
+        }
+        85% {
+          transform: skewY(6deg) rotateZ(4deg);
+        }
+        100% {
+          transform: skewY(0deg) rotate(0deg);
+        }
+      }
+
+      @keyframes pop {
+        0% {
+          transform: scaleX(1) scaleY(1);
+        }
+        20%,
+        45% {
+          transform: scaleX(1.35) scaleY(0.1);
+        }
+        65% {
+          transform: scaleX(0.8) scaleY(1.7);
+        }
+        80% {
+          transform: scaleX(0.6) scaleY(0.85);
+        }
+        100% {
+          transform: scaleX(1) scaleY(1);
+        }
+      }
+
+      @keyframes swing {
+        0% {
+          transform: rotateZ(0deg);
+        }
+        20% {
+          transform: rotateZ(15deg);
+        }
+        40% {
+          transform: rotateZ(-15deg);
+        }
+        60% {
+          transform: rotateZ(7deg);
+        }
+        80% {
+          transform: rotateZ(-7deg);
+        }
+        100% {
+          transform: rotateZ(0deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
       @media (prefers-color-scheme: dark) {
         body {
           background: var(--black);
           color: var(--white);
+          line-height: 1.2;
         }
+
+        h1 {
+          line-height: 1.1;
+        }
+
         a {
           color: var(--white);
         }
       }
-      main {
-        width: 100%;
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-        padding: var(--step-0);
 
-        display: grid;
-        grid-gap: var(--step-0);
-        grid-template-rows: 38fr max-content 62fr max-content 38fr;
+      @media (orientation: portrait) and (min-width: 768px) {
+        main {
+          margin: var(--step-5) auto;
+        }
       }
 
-      h1 {
-        font-synthesis: none;
-        font-weight: normal;
-        letter-spacing: -0.02em;
-        font-size: var(--step-5);
-        grid-row: 2 / span 1;
-      }
-
-      p {
-        font-size: var(--step-1);
-        font-weight: lighter;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        line-height: 1.5;
-        font-feature-settings: "ss02";
-        grid-row: 4 / span 1;
-      }
-
-      span {
-        font-weight: bold;
-      }
-
-      .social {
-        font-weight: normal;
-        transition: all 100ms ease-out;
-      }
-
-      @supports (font-variation-settings: normal) {
-        span {
-          font-weight: initial;
+      @media (orientation: landscape) {
+        body {
+          display: grid;
+          grid-template-columns: repeat(8, minmax(10px, 1fr));
+          grid-auto-rows: min-content;
+          gap: var(--step--2);
         }
 
-        h1 {
-          font-weight: 400;
+        header {
+          grid-column: 1 / -1;
         }
 
-        #job {
-          border: 2px solid var(--black);
-          border-radius: var(--step-2);
-          padding: 0.2em 0.18em 0 0.2em;
-          line-height: 1;
+        main {
+          grid-column: 3 / span 5;
         }
 
-        .job {
-          text-decoration: none;
-          font-feature-settings: "ss01";
-        }
-
-        .job .word .char {
-          font-weight: 550;
-        }
-
-        .social {
-          line-height: 1;
-          border: 1px solid var(--black);
-          padding: 0.2em 0.18em 0 0.2em;
-          border-radius: var(--step--2);
-          text-decoration: none;
-        }
-
-        .social:hover {
-          font-weight: bold;
-          letter-spacing: 0.12em;
-        }
-
-        @media (prefers-color-scheme: dark) {
-          #job,
-          .social {
-            border-color: var(--white);
-          }
-        }
-
-        @media (min-width: 1024px) and (orientation: landscape) {
-          .job .word .char {
-            --delay: calc(var(--char-index) * 100ms);
-            animation: shwoop 4s infinite forwards;
-            animation-delay: var(--delay);
-            animation-play-state: paused;
-          }
-
-          .job:hover .word .char {
-            animation-play-state: running;
-          }
-        }
-
-        .splitting,
-        .word,
-        .char {
+        .bang {
           display: inline-block;
+          position: fixed;
+          top: var(--step--2);
+          animation-duration: 450ms;
+          animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          animation-delay: 0ms;
+          animation-iteration-count: 1;
+          animation-direction: normal;
+          animation-fill-mode: both;
         }
 
-        #kazi .word .char {
-          --delay: calc(var(--char-index) * 100ms);
-          font-weight: 750;
-          font-stretch: 175%;
-          animation: bwoop 1.8s ease-in both;
-          animation-delay: var(--delay);
+        .you {
+          display: inline-block;
+          margin-left: 0.275em;
+        }
+      }
+
+      @supports (padding: max(0px)) {
+        @media (orientation: landscape) and (max-width: 1024px) {
+          header {
+            padding-top: env(safe-area-inset-top, var(--step-2));
+            padding-right: env(safe-area-inset-right, var(--step-2));
+            padding-left: env(safe-area-inset-left, var(--step-2));
+          }
+          .bang {
+            top: env(safe-area-inset-top, var(--step-2));
+          }
         }
       }
     </style>
   </head>
-  <body>
-    <main>
+  <body data-instant-allow-external-links>
+    <header>
       <h1>
-        Hi, I’m <span id="kazi">Kazi</span>, a front-end developer at
-        <span id="job"
-          ><a
-            class="job"
-            aria-label="rest of world"
-            href="https://restofworld.org/"
-            id="rest-of-world"
-            data-goatcounter-click
-            >rest of world</a
-          ></span
-        >.
+        Nice<span class="bang">!</span>
+        <span class="you">You</span> landed<br />on Kazi’s website.
       </h1>
+    </header>
+    <main>
       <p>
-        Sometimes I
+        Currently, he is a front-end developer on the product team at
+        <a href="https://restofworld.org/" data-goatcounter-click
+          >Rest of World</a
+        >
+        where he helps make stuff for readers and the editorial folks.
+      </p>
+
+      <p>
+        Before that, he worked in various newsrooms designing and developing
+        projects to
+        <a href="https://projects.sfchronicle.com/class-of-2020/spring"
+          >engage readers</a
+        >
+        and
         <a
-          class="social"
-          id="twitter"
-          href="https://twitter.com/superkazi"
-          data-goatcounter-click
-          >tweet</a
-        >. If you want, you can find my work on
+          href="https://www.washingtonpost.com/graphics/2018/world/reports-of-hate-crime-cases-have-spiked-in-india/"
+          data-goatcounter-click=""
+          >elevate storytelling</a
+        >.
+      </p>
+
+      <p>
+        Following him on
+        <a href="https://twitter.com/superkazi" data-goatcounter-click
+          >Twitter</a
+        >
+        probably isn’t worth it, but, if you want, you can find more of Kazi’s
+        work on
         <a
           class="social"
           id="linkedin"
           href="https://www.linkedin.com/in/superkazi/"
           data-goatcounter-click
-          >Linkedin</a
+          >LinkedIn</a
         >.
       </p>
     </main>
@@ -328,6 +375,11 @@
         src="https://superkazi.goatcounter.com/count?p=/test-img"
       />
     </noscript>
-    <script type="module" src="main.js?v=1.0.3"></script>
+    <script type="module" src="main.js?v=1.1.0"></script>
+    <script
+      src="//instant.page/5.1.0"
+      type="module"
+      integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"
+    ></script>
   </body>
 </html>

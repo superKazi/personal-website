@@ -1,0 +1,11 @@
+env:
+  browser: true
+  es2017: true
+  serviceworker: true
+extends:
+  - standard
+  - prettier
+parserOptions:
+  ecmaVersion: 8
+  sourceType: module
+rules: {}

@@ -1,5 +1,3 @@
-import { debounce } from 'https://cdn.skypack.dev/pin/mini-debounce@v1.0.8-Zdrw8ioDWJBckPavi5e3/min/mini-debounce.js'
-
 // animate bang
 const bang = document.querySelector('.bang')
 
@@ -14,11 +12,11 @@ if (bang) {
     'mousedown',
     'mousemove',
     'touchstart',
-    'keydown',
+    'keydown'
   ]
 
   interactions.forEach((interaction) =>
-    window.addEventListener(interaction, debounce(animateBang, 1000), {
+    window.addEventListener(interaction, throttle(animateBang, 650), {
       passive: true,
     })
   )
@@ -58,6 +56,27 @@ if (typeof indexedDB.databases === 'function') {
     })
     .then(() => null)
     .catch((e) => console.error(e))
+}
+
+// throttle function
+// https://github.com/gramkin/nano-throttle#readme
+function throttle(callback, ms, trailing) {
+  let t = 0
+  let call
+  arguments.length < 3 && (trailing = true)
+  return function () {
+    const args = arguments
+    call = () => {
+      callback.apply(this, args)
+      t = new Date().getTime() + ms
+      call = null
+      trailing &&
+        setTimeout(function () {
+          call && call()
+        }, ms)
+    }
+    if (new Date().getTime() > t) call()
+  }
 }
 
 // polite console

@@ -124,12 +124,10 @@
         background: var(--white);
         color: var(--black);
 
-        font-family: 'PolySans', Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
         text-rendering: optimizeLegibility;
-        font-variation-settings: 'opsz' 100;
         font-variant-ligatures: discretionary-ligatures;
         font-kerning: normal;
-        font-weight: 100;
         line-height: 1.1;
       }
 
@@ -145,8 +143,8 @@
       h1 {
         letter-spacing: -0.02em;
         font-size: var(--step-5);
+        font-weight: 400;
         line-height: 1;
-        font-weight: 100;
       }
 
       p {
@@ -159,16 +157,13 @@
 
       a {
         font-style: italic;
-        font-weight: 200;
-        text-decoration: none;
+        text-decoration-skip-ink: auto;
         color: var(--black);
-        transition: font-weight 250ms cubic-bezier(0.4, 0, 0.2, 1),
-          font-variation-settings 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: font-weight 250ms cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       a:hover {
-        font-weight: 100;
-        font-variation-settings: 'opsz' 150;
+        font-weight: 900;
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -255,12 +250,12 @@
           background: var(--black);
           color: var(--white);
           line-height: 1.2;
-          font-weight: 50;
+          font-weight: 400;
         }
 
         h1 {
           line-height: 1.1;
-          font-weight: 50;
+          font-weight: 400;
         }
 
         a {
@@ -305,6 +300,40 @@
         .you {
           display: inline-block;
           margin-left: 0.275em;
+        }
+      }
+
+      @supports (font-variation-settings: 'wdth' 100) {
+        body {
+          font-family: 'PolySans', Helvetica Neue, Helvetica, Arial, sans-serif;
+          font-variation-settings: 'opsz' 100;
+          font-weight: 100;
+        }
+
+        h1 {
+          font-weight: 100;
+        }
+
+        a {
+          text-decoration: none;
+          font-weight: 200;
+          transition: font-weight 250ms cubic-bezier(0.4, 0, 0.2, 1),
+            font-variation-settings 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        a:hover {
+          font-weight: 100;
+          font-variation-settings: 'opsz' 150;
+        }
+
+        @media (prefers-color-scheme: dark) {
+          body {
+            font-weight: 50;
+          }
+
+          h1 {
+            font-weight: 50;
+          }
         }
       }
 

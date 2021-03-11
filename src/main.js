@@ -21,7 +21,7 @@ if (bang) {
     })
   )
 
-  const animations = ['groove', 'pop', 'swing', 'spin']
+  const animations = ['groove', 'pop', 'spin', 'bounce']
   let lastPlayed = ''
 
   function animateBang() {

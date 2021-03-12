@@ -1,6 +1,6 @@
 # Hi, I’m Kazi.
 
-Netlify ”builds“ this code to make my website.
+Netlify “builds” this code to make my website.
 
 ### I used:
 - [Subfont](https://github.com/Munter/subfont) to do fancy font loading stuff

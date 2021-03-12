@@ -12,7 +12,7 @@
   src: url('PolySansItalicGX.woff2?v=1.1.0') format('woff2 supports variations'),
     url('PolySansItalicGX.woff2?v=1.1.0') format('woff2-variations');
   font-stretch: normal;
-	font-style: italic;
+  font-style: italic;
   font-weight: 50 200;
   font-display: fallback;
 }

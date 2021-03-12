@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
   <head>
     <title>Kazi Elman Awal</title>
@@ -42,20 +41,6 @@
     <link rel="manifest" href="manifest.json" />
 
     <link rel="canonical" href="https://kazielmanawal.me" />
-    <link
-      rel="preload"
-      crossorigin="anonymous"
-      href="PolySansGX.woff2?v=1.1.0"
-      as="font"
-      type="font/woff2"
-    />
-    <link
-      rel="preload"
-      crossorigin="anonymous"
-      href="PolySansItalicGX.woff2?v=1.1.0"
-      as="font"
-      type="font/woff2"
-    />
 
     <script type="application/ld+json">
       {
@@ -70,23 +55,63 @@
         }
       }
     </script>
+
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+      href="PolySansGXSub.woff2?v=1.1.0"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+      href="PolySansItalicGXSub.woff2?v=1.1.0"
+    />
+
+    <script>
+      try {
+        new FontFace(
+          'PolySansSub',
+          "url('PolySansGXSub.woff2?v=1.1.0') format('woff2 supports variations'),url('PolySansGXSub.woff2?v=1.1.0') format('woff2-variations')",
+          { 'font-stretch': '100% 200%', 'font-weight': '50 200' }
+        ).load(),
+          new FontFace(
+            'PolySansSub',
+            "url('PolySansItalicGXSub.woff2?v=1.1.0') format('woff2 supports variations'),url('PolySansItalicGXSub.woff2?v=1.1.0') format('woff2-variations')",
+            { 'font-style': 'italic', 'font-weight': '50 200' }
+          ).load()
+      } catch (e) {
+        console.error(e)
+      }
+    </script>
+
     <style>
       @font-face {
-        font-family: 'PolySans';
-        src: url('PolySansGX.woff2?v=1.1.0') format('woff2 supports variations'),
-          url('PolySansGX.woff2?v=1.1.0') format('woff2-variations');
-        font-weight: 50 200;
+        font-family: 'PolySansSub';
+        src: url('PolySansGXSub.woff2?v=1.1.0')
+            format('woff2 supports variations'),
+          url('PolySansGXSub.woff2?v=1.1.0') format('woff2-variations');
+        unicode-range: U+a, U+20-21, U+2c-2e, U+42-43, U+46, U+4b, U+4e, U+59,
+          U+61-70, U+72-77, U+79-7a, U+2019;
         font-stretch: 100% 200%;
+        font-style: normal;
+        font-weight: 50 200;
         font-display: fallback;
       }
 
       @font-face {
-        font-family: 'PolySans';
-        src: url('PolySansItalicGX.woff2?v=1.1.0')
+        font-family: 'PolySansSub';
+        src: url('PolySansItalicGXSub.woff2?v=1.1.0')
             format('woff2 supports variations'),
-          url('PolySansItalicGX.woff2?v=1.1.0') format('woff2-variations');
-        font-weight: 50 200;
+          url('PolySansItalicGXSub.woff2?v=1.1.0') format('woff2-variations');
+        unicode-range: U+20, U+49, U+4c, U+52, U+54, U+57, U+61, U+64-67, U+69,
+          U+6b-6c, U+6e-6f, U+72-74, U+76-77, U+79;
+        font-stretch: normal;
         font-style: italic;
+        font-weight: 50 200;
         font-display: fallback;
       }
 
@@ -304,7 +329,8 @@
 
       @supports (font-variation-settings: 'wdth' 100) {
         body {
-          font-family: 'PolySans', Helvetica Neue, Helvetica, Arial, sans-serif;
+          font-family: 'PolySansSub', 'PolySans', Helvetica Neue, Helvetica,
+            Arial, sans-serif;
           font-variation-settings: 'opsz' 100;
           font-weight: 100;
         }
@@ -415,5 +441,14 @@
       type="module"
       integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"
     ></script>
+    <script>
+      !(function fullFonts() {
+        const link = document.createElement('link')
+        ;(link.href = 'fullfonts.css?v=1.1.0'),
+          (link.rel = 'stylesheet'),
+          document.body.appendChild(link)
+      })()
+    </script>
+    <noscript><link rel="stylesheet" href="fullfonts.css?v=1.1.0" /></noscript>
   </body>
 </html>

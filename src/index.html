@@ -71,23 +71,6 @@
       href="PolySansItalicGXSub.woff2?v=1.1.0"
     />
 
-    <script>
-      try {
-        new FontFace(
-          'PolySansSub',
-          "url('PolySansGXSub.woff2?v=1.1.0') format('woff2 supports variations'),url('PolySansGXSub.woff2?v=1.1.0') format('woff2-variations')",
-          { 'font-stretch': '100% 200%', 'font-weight': '50 200' }
-        ).load(),
-          new FontFace(
-            'PolySansSub',
-            "url('PolySansItalicGXSub.woff2?v=1.1.0') format('woff2 supports variations'),url('PolySansItalicGXSub.woff2?v=1.1.0') format('woff2-variations')",
-            { 'font-style': 'italic', 'font-weight': '50 200' }
-          ).load()
-      } catch (e) {
-        console.error(e)
-      }
-    </script>
-
     <style>
       @font-face {
         font-family: 'PolySansSub';
@@ -441,14 +424,6 @@
       type="module"
       integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"
     ></script>
-    <script>
-      !(function fullFonts() {
-          const link = document.createElement('link')
-          link.href = 'fullfonts.css?v=1.1.0'
-          link.rel = 'stylesheet'
-          document.body.appendChild(link)
-      })()
-    </script>
-    <noscript><link rel="stylesheet" href="fullfonts.css?v=1.1.0" /></noscript>
+    <link rel="stylesheet" href="fullfonts.css?v=1.1.1" />
   </body>
 </html>

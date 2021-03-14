@@ -1,3 +1,7 @@
+// variable fonts render all at once for cls reasons
+document.fonts &&
+  document.fonts.ready.then(() => document.body.classList.add('v-fonts'))
+
 // animate bang
 const bang = document.querySelector('.bang')
 
@@ -12,7 +16,7 @@ if (bang) {
     'mousedown',
     'mousemove',
     'touchstart',
-    'keydown'
+    'keydown',
   ]
 
   interactions.forEach((interaction) =>

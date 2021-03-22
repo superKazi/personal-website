@@ -6,10 +6,6 @@ document.fonts &&
 const bang = document.querySelector('.bang')
 
 if (bang) {
-  bang.addEventListener('animationend', () => (bang.style.animationName = ''), {
-    passive: true,
-  })
-
   const interactions = [
     'scroll',
     'resize',
@@ -18,17 +14,10 @@ if (bang) {
     'touchstart',
     'keydown',
   ]
-
-  interactions.forEach((interaction) =>
-    window.addEventListener(interaction, throttle(animateBang, 650), {
-      passive: true,
-    })
-  )
-
   const animations = ['groove', 'pop', 'spin', 'bounce']
   let lastPlayed = ''
 
-  function animateBang() {
+  const animateBang = () => {
     if (
       window.matchMedia('(orientation: landscape)').matches &&
       bang.style.animationName === ''
@@ -47,6 +36,38 @@ if (bang) {
       }
     }
   }
+
+  // https://www.30secondsofcode.org/js/s/throttle
+  const throttle = (fn, wait) => {
+    let inThrottle, lastFn, lastTime
+    return function () {
+      const context = this
+      const args = arguments
+      if (!inThrottle) {
+        fn.apply(context, args)
+        lastTime = Date.now()
+        inThrottle = true
+      } else {
+        clearTimeout(lastFn)
+        lastFn = setTimeout(function () {
+          if (Date.now() - lastTime >= wait) {
+            fn.apply(context, args)
+            lastTime = Date.now()
+          }
+        }, Math.max(wait - (Date.now() - lastTime), 0))
+      }
+    }
+  }
+
+  bang.addEventListener('animationend', () => (bang.style.animationName = ''), {
+    passive: true,
+  })
+
+  interactions.forEach((interaction) =>
+    window.addEventListener(interaction, throttle(animateBang, 650), {
+      passive: true,
+    })
+  )
 }
 
 // remove leftover workbox sw stuff
@@ -60,27 +81,6 @@ if (typeof indexedDB.databases === 'function') {
     })
     .then(() => null)
     .catch((e) => console.error(e))
-}
-
-// throttle function
-// https://github.com/gramkin/nano-throttle#readme
-function throttle(callback, ms, trailing) {
-  let t = 0
-  let call
-  arguments.length < 3 && (trailing = true)
-  return function () {
-    const args = arguments
-    call = () => {
-      callback.apply(this, args)
-      t = new Date().getTime() + ms
-      call = null
-      trailing &&
-        setTimeout(function () {
-          call && call()
-        }, ms)
-    }
-    if (new Date().getTime() > t) call()
-  }
 }
 
 // polite console

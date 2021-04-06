@@ -70,7 +70,7 @@
       crossorigin="anonymous"
       href="PolySansItalicGXSub.woff2?v=1.1.0"
     />
-    <link rel="preconnect" href="https://superkazi.goatcounter.com">
+    <link rel="preconnect" href="https://superkazi.goatcounter.com" />
 
     <style>
       @font-face {
@@ -355,6 +355,12 @@
         }
       }
     </style>
+
+    <script>
+      // variable fonts render all at once for cls reasons
+      document.fonts &&
+        document.fonts.ready.then(() => document.body.classList.add('v-fonts'))
+    </script>
   </head>
   <body data-instant-allow-external-links>
     <header>
@@ -421,7 +427,7 @@
         src="https://superkazi.goatcounter.com/count?p=/test-img"
       />
     </noscript>
-    <script type="module" src="main.js?v=1.1.6"></script>
+    <script type="module" src="main.js?v=1.1.7"></script>
     <script
       src="//instant.page/5.1.0"
       type="module"

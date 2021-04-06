@@ -312,32 +312,29 @@
       }
 
       @supports (font-variation-settings: 'wdth' 100) {
-        .v-fonts {
+        body {
           font-family: 'PolySansSub', Helvetica Neue, Helvetica, Arial,
             sans-serif;
-          font-variation-settings: 'opsz' 100;
-          font-weight: 100;
+          font-variation-settings: 'opsz' 100, 'wght' 100;
         }
-        .v-fonts h1 {
-          font-weight: 100;
+        h1 {
+          font-variation-settings: 'opsz' 100, 'wght' 100;
         }
-        .v-fonts a {
+        a {
           text-decoration: none;
-          font-weight: 200;
-          transition: font-weight 250ms cubic-bezier(0.4, 0, 0.2, 1),
-            font-variation-settings 250ms cubic-bezier(0.4, 0, 0.2, 1);
+          font-variation-settings: 'opsz' 100, 'wght' 200;
+          transition: font-variation-settings 250ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .v-fonts a:hover {
-          font-weight: 100;
-          font-variation-settings: 'opsz' 150;
+        a:hover {
+          font-variation-settings: 'opsz' 150, 'wght' 100;
         }
 
         @media (prefers-color-scheme: dark) {
-          .v-fonts {
-            font-weight: 50;
+          body {
+            font-variation-settings: 'opsz' 100, 'wght' 50;
           }
-          .v-fonts h1 {
-            font-weight: 50;
+          h1 {
+            font-variation-settings: 'opsz' 100, 'wght' 50;
           }
         }
       }
@@ -355,12 +352,6 @@
         }
       }
     </style>
-
-    <script>
-      // variable fonts render all at once for cls reasons
-      document.fonts &&
-        document.fonts.ready.then(() => document.body.classList.add('v-fonts'))
-    </script>
   </head>
   <body data-instant-allow-external-links>
     <header>

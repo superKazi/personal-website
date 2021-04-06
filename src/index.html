@@ -312,31 +312,31 @@
       }
 
       @supports (font-variation-settings: 'wdth' 100) {
-        .v-fonts {
+        body {
           font-family: 'PolySansSub', Helvetica Neue, Helvetica, Arial,
             sans-serif;
           font-variation-settings: 'opsz' 100;
           font-weight: 100;
         }
-        .v-fonts h1 {
+        h1 {
           font-weight: 100;
         }
-        .v-fonts a {
+        a {
           text-decoration: none;
           font-weight: 200;
           transition: font-weight 250ms cubic-bezier(0.4, 0, 0.2, 1),
             font-variation-settings 250ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .v-fonts a:hover {
+        a:hover {
           font-weight: 100;
           font-variation-settings: 'opsz' 150;
         }
 
         @media (prefers-color-scheme: dark) {
-          .v-fonts {
+          body {
             font-weight: 50;
           }
-          .v-fonts h1 {
+          h1 {
             font-weight: 50;
           }
         }
@@ -421,7 +421,7 @@
         src="https://superkazi.goatcounter.com/count?p=/test-img"
       />
     </noscript>
-    <script type="module" src="main.js?v=1.1.6"></script>
+    <script type="module" src="main.js?v=1.1.7"></script>
     <script
       src="//instant.page/5.1.0"
       type="module"

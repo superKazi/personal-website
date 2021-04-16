@@ -15,7 +15,6 @@ generateSW({
   sourcemap: false,
   inlineWorkboxRuntime: true,
   cleanupOutdatedCaches: true,
-  dontCacheBustURLsMatching: /.*/,
   babelPresetEnvTargets: ['supports es6-module'],
 
   // https://web.dev/runtime-caching-with-workbox/

@@ -10,4 +10,5 @@ Netlify “builds” this code to make my website.
 - Some stuff from this [CSS reset](https://piccalil.li/blog/a-modern-css-reset) by Andy Bell
 - [Goatcounter](https://www.goatcounter.com) by Martin Tournoij to track you if/when you visit
 - [Instant dot page](https://instant.page) to make any links you might click a bit speedier to load by Alexandre Dieulot
+- Service worker created using [Workbox](https://developers.google.com/web/tools/workbox)
 - Several css animations from various libraries I can’t remember 😬 but are easy enough to find in your preferred search engine

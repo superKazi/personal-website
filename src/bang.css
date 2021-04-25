@@ -1,0 +1,100 @@
+@keyframes groove {
+  0% {
+    transform: skewY(0deg) rotate(0deg);
+  }
+  15% {
+    transform: skewY(-10deg) rotateZ(8deg);
+  }
+  35% {
+    transform: skewY(10deg) rotateZ(-8deg);
+  }
+  55% {
+    transform: skewY(-6deg) rotateZ(-4deg);
+  }
+  85% {
+    transform: skewY(6deg) rotateZ(4deg);
+  }
+  100% {
+    transform: skewY(0deg) rotate(0deg);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scaleX(1) scaleY(1);
+  }
+  20%,
+  45% {
+    transform: scaleX(1.35) scaleY(0.1);
+  }
+  65% {
+    transform: scaleX(0.8) scaleY(1.7);
+  }
+  80% {
+    transform: scaleX(0.6) scaleY(0.85);
+  }
+  100% {
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes bounce {
+  from,
+  20%,
+  53%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -30px, 0) scaleY(1.1);
+  }
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -15px, 0) scaleY(1.05);
+  }
+  80% {
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0) scaleY(0.95);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0) scaleY(1.02);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (orientation: landscape) {
+  .bang {
+    display: inline-block;
+    position: fixed;
+    top: var(--step--2);
+    animation-duration: 450ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-delay: 0ms;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: both;
+  }
+  .you {
+    display: inline-block;
+    margin-left: 0.275em;
+  }
+}
+
+@supports (padding: max(0px)) {
+  @media (orientation: landscape) and (max-width: 1024px) {
+    .bang {
+      top: max(env(safe-area-inset-top), var(--step--2));
+    }
+  }
+}

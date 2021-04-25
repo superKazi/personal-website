@@ -25,6 +25,9 @@ const animate = () => {
   const bang = document.querySelector('.bang')
 
   if (bang) {
+    document.head.innerHTML +=
+      '<link rel="stylesheet" type="text/css" href="./bang.css?v=2.1.0">'
+
     const interactions = [
       'scroll',
       'resize',

@@ -1,0 +1,18 @@
+.shape {
+  position: absolute;
+  pointer-events: none;
+  width: 33.333vw;
+  height: 33.333vw;
+  mix-blend-mode: exclusion;
+  top: 0;
+  left: 0;
+  background: var(--white);
+}
+
+#circle {
+  border-radius: 50%;
+}
+
+#triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}

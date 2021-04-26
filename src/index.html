@@ -169,11 +169,24 @@
         font-style: italic;
         text-decoration-skip-ink: auto;
         color: var(--black);
-        transition: font-weight 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: font-weight 250ms cubic-bezier(0.4, 0, 0.2, 1),
+          color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+          background 150ms cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       a:hover {
         font-weight: 900;
+      }
+
+      a:active {
+        text-decoration: underline;
+      }
+
+      a:focus,
+      a:focus-visible {
+        color: var(--white);
+        background: var(--black);
+        outline: none;
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -201,6 +214,12 @@
         }
         a {
           color: var(--white);
+        }
+        a:focus,
+        a:focus-visible {
+          color: var(--black);
+          background: var(--white);
+          outline: none;
         }
       }
 
@@ -267,13 +286,13 @@
   <body data-instant-allow-external-links>
     <header>
       <h1>
-        Nice<span class="bang">!</span>
-        <span class="you">You</span> landed<br />on Kazi’s website.
+        nice<span class="bang">!</span>
+        <span class="you">you</span> landed<br />on Kazi’s website.
       </h1>
     </header>
     <main>
       <p>
-        Currently, he is a front-end developer on the product team at
+        currently, he is a front-end developer on the product team at
         <a id="row" href="https://restofworld.org/" data-goatcounter-click
           >Rest of World</a
         >
@@ -281,7 +300,7 @@
       </p>
 
       <p>
-        Before that, he worked in various newsrooms designing and developing
+        before that, he worked in various newsrooms designing and developing
         projects to
         <a
           id="sfc"
@@ -299,7 +318,7 @@
       </p>
 
       <p>
-        Following him on
+        following him on
         <a
           id="twitter"
           href="https://twitter.com/superkazi"

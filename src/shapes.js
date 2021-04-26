@@ -1,13 +1,13 @@
-const animate = async () => {
+const animate = async (loadCssFn) => {
   try {
-		// https://animejs.com/documentation/
+    // https://animejs.com/documentation/
     const animeLib = await import(
       'https://cdn.skypack.dev/pin/animejs@v3.2.1-bxGmKN3J3Mb49M8BrbV5/mode=imports,min/optimized/animejs.js'
     )
 
-    if (animeLib.default) {
-      document.head.innerHTML +=
-        '<link rel="stylesheet" type="text/css" href="./shapes.css?v=2.1.0">'
+    const styles = await loadCssFn('./shapes.css?v=2.1.0')
+
+    if (animeLib.default && styles.rel === 'stylesheet') {
 
       const anime = animeLib.default
 

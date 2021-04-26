@@ -21,6 +21,23 @@ if ('serviceWorker' in navigator) {
   })
 }
 
+// css loader helper
+const loadCss = (src) => {
+  return new Promise((resolve, reject) => {
+    const link = document.createElement('link')
+    link.href = src
+    link.rel = 'stylesheet'
+    link.type = 'text/css'
+
+    link.addEventListener('load', () => resolve(link))
+    link.addEventListener('error', () =>
+      reject(new Error(`Style load error for ${src}`))
+    )
+
+    document.head.appendChild(link)
+  })
+}
+
 // animations
 if (localStorage.getItem('visited') === null) {
   localStorage.setItem('visited', 'kaziTown')
@@ -32,7 +49,7 @@ if (localStorage.getItem('visited') === null) {
       try {
         const bangLib = await import('./bang.js?v=2.1.0')
         if (bangLib.animate) {
-          bangLib.animate()
+          bangLib.animate(loadCss)
         }
       } catch (error) {
         console.error(error)
@@ -45,7 +62,7 @@ if (localStorage.getItem('visited') === null) {
       try {
         const shapesLib = await import('./shapes.js?v=2.1.0')
         if (shapesLib.animate) {
-          shapesLib.animate()
+          shapesLib.animate(loadCss)
         }
       } catch (error) {
         console.error(error)

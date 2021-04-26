@@ -108,15 +108,14 @@
         --step-3: clamp(1.7281rem, 1.1566rem + 2.8575vw, 8.4719rem);
         --step-4: clamp(2.0738rem, 1.0879rem + 4.9293vw, 13.7069rem);
         --step-5: clamp(2.4881rem, 0.8195rem + 8.3432vw, 22.1781rem);
-      }
 
-      :root {
         --black: hsla(0, 0%, 5%, 1);
         --white: hsla(0, 0%, 95%, 1);
       }
 
       html {
         font-size: 100%;
+        background: var(--white);
       }
 
       *,
@@ -129,6 +128,8 @@
 
       body {
         min-height: 100vh;
+        max-width: 100vw;
+        overflow-x: hidden;
         scroll-behavior: smooth;
         background: var(--white);
         color: var(--black);
@@ -184,82 +185,10 @@
         }
       }
 
-      @keyframes groove {
-        0% {
-          transform: skewY(0deg) rotate(0deg);
-        }
-        15% {
-          transform: skewY(-10deg) rotateZ(8deg);
-        }
-        35% {
-          transform: skewY(10deg) rotateZ(-8deg);
-        }
-        55% {
-          transform: skewY(-6deg) rotateZ(-4deg);
-        }
-        85% {
-          transform: skewY(6deg) rotateZ(4deg);
-        }
-        100% {
-          transform: skewY(0deg) rotate(0deg);
-        }
-      }
-
-      @keyframes pop {
-        0% {
-          transform: scaleX(1) scaleY(1);
-        }
-        20%,
-        45% {
-          transform: scaleX(1.35) scaleY(0.1);
-        }
-        65% {
-          transform: scaleX(0.8) scaleY(1.7);
-        }
-        80% {
-          transform: scaleX(0.6) scaleY(0.85);
-        }
-        100% {
-          transform: scaleX(1) scaleY(1);
-        }
-      }
-
-      @keyframes bounce {
-        from,
-        20%,
-        53%,
-        to {
-          animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-          transform: translate3d(0, 0, 0);
-        }
-        40%,
-        43% {
-          animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
-          transform: translate3d(0, -30px, 0) scaleY(1.1);
-        }
-        70% {
-          animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
-          transform: translate3d(0, -15px, 0) scaleY(1.05);
-        }
-        80% {
-          transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-          transform: translate3d(0, 0, 0) scaleY(0.95);
-        }
-        90% {
-          transform: translate3d(0, -4px, 0) scaleY(1.02);
-        }
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
       @media (prefers-color-scheme: dark) {
+        html {
+          background: var(--black);
+        }
         body {
           background: var(--black);
           color: var(--white);
@@ -293,21 +222,6 @@
         }
         main {
           grid-column: 3 / span 5;
-        }
-        .bang {
-          display: inline-block;
-          position: fixed;
-          top: var(--step--2);
-          animation-duration: 450ms;
-          animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-          animation-delay: 0ms;
-          animation-iteration-count: 1;
-          animation-direction: normal;
-          animation-fill-mode: both;
-        }
-        .you {
-          display: inline-block;
-          margin-left: 0.275em;
         }
       }
 
@@ -345,9 +259,6 @@
             padding-top: max(env(safe-area-inset-top), var(--step--2));
             padding-right: max(env(safe-area-inset-right), var(--step--2));
             padding-left: max(env(safe-area-inset-left), var(--step--2));
-          }
-          .bang {
-            top: max(env(safe-area-inset-top), var(--step--2));
           }
         }
       }
@@ -418,7 +329,7 @@
         src="https://superkazi.goatcounter.com/count?p=/test-img"
       />
     </noscript>
-    <script type="module" src="main.js?v=2.0.0"></script>
+    <script type="module" src="main.js?v=2.1.0"></script>
     <script
       src="//instant.page/5.1.0"
       type="module"

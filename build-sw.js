@@ -9,7 +9,7 @@ generateSW({
   swDest,
   globDirectory: './src',
   globPatterns: ['**/index.html'],
-  globIgnores: ['**/*.{json,js,png,jpg,svg,ico,woff2}'],
+  globIgnores: ['**/*.{json,js,css,png,jpg,svg,ico,woff2}'],
   clientsClaim: true,
   skipWaiting: true,
   sourcemap: false,

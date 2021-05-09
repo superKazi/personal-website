@@ -5,7 +5,7 @@ const animate = async (loadCssFn) => {
       'https://cdn.skypack.dev/pin/animejs@v3.2.1-bxGmKN3J3Mb49M8BrbV5/mode=imports,min/optimized/animejs.js'
     )
 
-    const styles = await loadCssFn('./shapes.css?v=2.1.0')
+    const styles = await loadCssFn('./shapes.css?v=2.1.1')
 
     if (animeLib.default && styles.rel === 'stylesheet') {
 

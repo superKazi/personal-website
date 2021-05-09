@@ -1,12 +1,20 @@
 .shape {
   position: absolute;
   pointer-events: none;
-  width: 33.333vw;
-  height: 33.333vw;
   mix-blend-mode: exclusion;
   top: 0;
   left: 0;
   background: var(--white);
+}
+
+#square {
+  width: 33.333vw;
+  height: 33.333vw;
+}
+
+#circle, #triangle {
+  width: 36.666vw;
+  height: 36.666vw;
 }
 
 #circle {

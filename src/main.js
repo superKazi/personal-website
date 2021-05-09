@@ -60,7 +60,7 @@ if (localStorage.getItem('visited') === null) {
   ;(async function shapes() {
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       try {
-        const shapesLib = await import('./shapes.js?v=2.1.0')
+        const shapesLib = await import('./shapes.js?v=2.1.1')
         if (shapesLib.animate) {
           shapesLib.animate(loadCss)
         }

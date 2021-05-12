@@ -26,8 +26,8 @@ const animate = async (loadCssFn) => {
 
   if (bang) {
     try {
-      const styles = await loadCssFn('./bang.css?v=2.1.0')
-      
+      const styles = await loadCssFn('./bang.css?v=2.2.0')
+
       if (styles.rel === 'stylesheet') {
         const interactions = [
           'scroll',

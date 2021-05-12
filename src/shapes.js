@@ -5,17 +5,16 @@ const animate = async (loadCssFn) => {
       'https://cdn.skypack.dev/pin/animejs@v3.2.1-bxGmKN3J3Mb49M8BrbV5/mode=imports,min/optimized/animejs.js'
     )
 
-    const styles = await loadCssFn('./shapes.css?v=2.1.1')
+    const styles = await loadCssFn('./shapes.css?v=2.2.0')
 
     if (animeLib.default && styles.rel === 'stylesheet') {
-
       const anime = animeLib.default
+      const templates = document.querySelectorAll('.template')
 
-      document.body.innerHTML += `
-      <div aria-hidden="true" style="opacity: 0;" class="shape" id="circle"></div>
-      <div aria-hidden="true" style="opacity: 0;" class="shape" id="square"></div>
-      <div aria-hidden="true" style="opacity: 0;" class="shape" id="triangle"></div>
-    `
+      templates.forEach((template) => {
+        const clone = template.content.cloneNode(true)
+        document.body.appendChild(clone)
+      })
 
       const springs = [
         'spring(5, 90, 15, 1)',

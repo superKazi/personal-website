@@ -47,7 +47,7 @@ if (localStorage.getItem('visited') === null) {
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches
     ) {
       try {
-        const bangLib = await import('./bang.js?v=2.1.0')
+        const bangLib = await import('./bang.js?v=2.2.0')
         if (bangLib.animate) {
           bangLib.animate(loadCss)
         }
@@ -58,9 +58,12 @@ if (localStorage.getItem('visited') === null) {
   })()
 } else if (localStorage.getItem('visited') === 'kaziTown') {
   ;(async function shapes() {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      'content' in document.createElement('template')
+    ) {
       try {
-        const shapesLib = await import('./shapes.js?v=2.1.1')
+        const shapesLib = await import('./shapes.js?v=2.2.0')
         if (shapesLib.animate) {
           shapesLib.animate(loadCss)
         }

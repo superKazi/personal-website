@@ -12,7 +12,8 @@
   height: 33.333vw;
 }
 
-#circle, #triangle {
+#circle,
+#triangle {
   width: 36.666vw;
   height: 36.666vw;
 }

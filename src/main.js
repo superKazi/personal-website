@@ -42,7 +42,7 @@
       'https://cdn.skypack.dev/pin/splitting@v1.0.6-Za2vDy3XuQ4lO2x5hbUG/mode=imports,min/optimized/splitting.js'
     )
     const splittingStyles = await loadCss(
-      'https://unpkg.com/splitting/dist/splitting-cells.css'
+      'https://unpkg.com/splitting@1.0.6/dist/splitting.css'
     )
 
     if (animeLib.default && splittingLib.default && splittingStyles) {
@@ -71,14 +71,6 @@
         delay: (el, i) => i * 100,
         easing: 'easeInOutSine',
         autoplay: false,
-      })
-
-      document.querySelectorAll('.char').forEach((char) => {
-        char.style.setProperty('display', 'inline-block')
-      })
-
-      document.querySelectorAll('.word').forEach((word) => {
-        word.style.setProperty('display', 'inline-block')
       })
 
       article.addEventListener(

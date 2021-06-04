@@ -1,25 +1,25 @@
 // service worker
-// if ('serviceWorker' in navigator) {
-//   window.addEventListener('load', async () => {
-//     try {
-//       // https://developers.google.com/web/tools/workbox/modules/workbox-window
-//       const lib = await import(
-//         'https://storage.googleapis.com/workbox-cdn/releases/6.0.0/workbox-window.prod.mjs'
-//       )
-//       if (lib.Workbox) {
-//         const wb = new lib.Workbox('./sw.js')
-//         wb.addEventListener('installed', (event) => {
-//           if (event.isUpdate) {
-//             window.location.reload()
-//           }
-//         })
-//         wb.register()
-//       }
-//     } catch (error) {
-//       console.error(error)
-//     }
-//   })
-// }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      // https://developers.google.com/web/tools/workbox/modules/workbox-window
+      const lib = await import(
+        'https://storage.googleapis.com/workbox-cdn/releases/6.0.0/workbox-window.prod.mjs'
+      )
+      if (lib.Workbox) {
+        const wb = new lib.Workbox('./sw.js')
+        wb.addEventListener('installed', (event) => {
+          if (event.isUpdate) {
+            window.location.reload()
+          }
+        })
+        wb.register()
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  })
+}
 
 // mobile vh unit fix
 ;(function perfectVh() {

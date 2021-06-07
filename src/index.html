@@ -386,12 +386,18 @@
           article {
             border: initial;
           }
+          article::after {
+            height: 6rem;
+          }
         }
         @media (min-width: 1024px) {
           main {
             gap: 3rem;
             max-width: initial;
             margin: initial;
+          }
+          article::after {
+            height: 9rem;
           }
         }
         @media (orientation: landscape) and (min-width: 1024px) {
@@ -503,10 +509,10 @@
             gap: 4rem;
           }
           article p + p {
-            margin-top: 4rem;
+            margin-top: 5rem;
           }
           p {
-            font-size: 4rem;
+            font-size: 5rem;
           }
           button {
             width: 16rem;
@@ -515,6 +521,26 @@
           .name,
           .mode {
             font-size: 16rem;
+          }
+        }
+        @media (orientation: landscape) and (min-width: 3840px) {
+          main {
+            padding: 16rem;
+            gap: 6rem;
+          }
+          article p + p {
+            margin-top: 7rem;
+          }
+          p {
+            font-size: 7rem;
+          }
+          button {
+            width: 25rem;
+            height: 25rem;
+          }
+          .name,
+          .mode {
+            font-size: 25rem;
           }
         }
       }
@@ -559,16 +585,28 @@
       </button>
       <article>
         <p>
-          currently, he is a front-end developer on the product team at
+          hi, thanks for visiting Kazi’s website. He is the Senior Designer for
+          Special Projects at
+          <a id="insider" href="https://insider.com" data-goatcounter-click
+            >Insider</a
+          >, where he leads design on ambitious editorial efforts
+        </p>
+        <p>
+          before, that he was a front-end developer on the product team at
           <a id="row" href="https://restofworld.org/" data-goatcounter-click
             >Rest of World</a
           >
-          where he helps make web stuff for its audience and editorial folks.
+          where he updated google analytics implementations, created
+          <a
+            id="social-card-generator"
+            href="https://restofworld.org/wp-content/projects/card-builder/"
+            data-goatcounter-click
+            >tools for the editorial team</a
+          >, and developed experiences for the audience, among other things.
         </p>
-
         <p>
-          before that, he worked in various newsrooms designing and developing
-          projects to
+          but he’s spent most of his career working in various newsrooms on the
+          editorial side designing and developing projects to
           <a
             id="sfc"
             href="https://projects.sfchronicle.com/class-of-2020/spring"
@@ -627,6 +665,27 @@
       function fullFonts() {
         document.body.classList.add('full-fonts')
       }
+      // track if scrolling is obvious
+      ;(function trackScroll() {
+        console.log(window.goatcounter)
+        if (window.goatcounter) {
+          const article = document.querySelector('article')
+          article.addEventListener(
+            'scroll',
+            () => {
+              window.goatcounter.count({
+                path: 'scroll-article',
+                title: 'Content',
+                event: true,
+              })
+            },
+            {
+              once: true,
+              passive: true,
+            }
+          )
+        }
+      })()
       // light and dark mode
       ;(function colorMode() {
         const root = document.documentElement

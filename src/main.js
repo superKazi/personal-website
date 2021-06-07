@@ -34,60 +34,66 @@ if ('serviceWorker' in navigator) {
 
 // animate middle name
 ;(async function bouncyText() {
-  try {
-    const animeLib = await import(
-      'https://cdn.skypack.dev/pin/animejs@v3.2.1-bxGmKN3J3Mb49M8BrbV5/mode=imports,min/optimized/animejs.js'
-    )
-    const splittingLib = await import(
-      'https://cdn.skypack.dev/pin/splitting@v1.0.6-Za2vDy3XuQ4lO2x5hbUG/mode=imports,min/optimized/splitting.js'
-    )
-    const splittingStyles = await loadCss(
-      'https://unpkg.com/splitting@1.0.6/dist/splitting.css'
-    )
+  const animationsOn = !window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches
 
-    if (animeLib.default && splittingLib.default && splittingStyles) {
-      const anime = animeLib.default
-      const Splitting = splittingLib.default
-      const article = document.querySelector('article')
-
-      Splitting()
-
-      const animation = anime({
-        targets: '.char',
-        translateY: [
-          { value: 0 },
-          { value: -10 },
-          { value: 0 },
-          { value: 10 },
-          { value: 0 },
-        ],
-        skew: [
-          { value: 0 },
-          { value: -10 },
-          { value: 0 },
-          { value: 10 },
-          { value: 0 },
-        ],
-        delay: (el, i) => i * 100,
-        easing: 'easeInOutSine',
-        autoplay: false,
-      })
-
-      article.addEventListener(
-        'scroll',
-        ({ currentTarget }) => {
-          const scrollTop = currentTarget.scrollTop
-          const scrollHeight = currentTarget.scrollHeight
-          const articleHeight = currentTarget.offsetHeight
-          const scrollPercent = scrollTop / (scrollHeight - articleHeight)
-
-          animation.seek(animation.duration * scrollPercent)
-        },
-        { passive: true }
+  if (animationsOn) {
+    try {
+      const animeLib = await import(
+        'https://cdn.skypack.dev/pin/animejs@v3.2.1-bxGmKN3J3Mb49M8BrbV5/mode=imports,min/optimized/animejs.js'
       )
+      const splittingLib = await import(
+        'https://cdn.skypack.dev/pin/splitting@v1.0.6-Za2vDy3XuQ4lO2x5hbUG/mode=imports,min/optimized/splitting.js'
+      )
+      const splittingStyles = await loadCss(
+        'https://unpkg.com/splitting@1.0.6/dist/splitting.css'
+      )
+
+      if (animeLib.default && splittingLib.default && splittingStyles) {
+        const anime = animeLib.default
+        const Splitting = splittingLib.default
+        const article = document.querySelector('article')
+
+        Splitting()
+
+        const animation = anime({
+          targets: '.char',
+          translateY: [
+            { value: 0 },
+            { value: -20 },
+            { value: 0 },
+            { value: 20 },
+            { value: 0 },
+          ],
+          skew: [
+            { value: 0 },
+            { value: -20 },
+            { value: 0 },
+            { value: 20 },
+            { value: 0 },
+          ],
+          delay: (el, i) => i * 100,
+          easing: 'easeInOutSine',
+          autoplay: false,
+        })
+
+        article.addEventListener(
+          'scroll',
+          ({ currentTarget }) => {
+            const scrollTop = currentTarget.scrollTop
+            const scrollHeight = currentTarget.scrollHeight
+            const articleHeight = currentTarget.offsetHeight
+            const scrollPercent = scrollTop / (scrollHeight - articleHeight)
+
+            animation.seek(animation.duration * scrollPercent)
+          },
+          { passive: true }
+        )
+      }
+    } catch (error) {
+      console.error(error)
     }
-  } catch (error) {
-    console.error(error)
   }
 })()
 

@@ -34,9 +34,8 @@ if ('serviceWorker' in navigator) {
 
 // animate middle name
 ;(async function bouncyText() {
-  const animationsOn = !window.matchMedia(
-    '(prefers-reduced-motion: reduce)'
-  ).matches
+  const animationsOn = !window.matchMedia('(prefers-reduced-motion: reduce)')
+    .matches
 
   if (animationsOn) {
     try {
@@ -75,9 +74,9 @@ if ('serviceWorker' in navigator) {
           ],
           opacity: [
             { value: 1 },
-            { value: .333 },
-            { value: .666 },
-            { value: .333 },
+            { value: 0.333 },
+            { value: 0.666 },
+            { value: 0.333 },
             { value: 1 },
           ],
           delay: (el, i) => i * 100,

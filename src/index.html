@@ -585,11 +585,11 @@
       </button>
       <article>
         <p>
-          hi, thanks for visiting Kazi’s website. He is the Senior Designer for
+          hi, thanks for visiting Kazi’s website. he is a Senior Designer for
           Special Projects at
           <a id="insider" href="https://insider.com" data-goatcounter-click
             >Insider</a
-          >, where he leads design on ambitious editorial efforts
+          >, where he helps design ambitious journalism.
         </p>
         <p>
           before, that he was a front-end developer on the product team at
@@ -665,27 +665,6 @@
       function fullFonts() {
         document.body.classList.add('full-fonts')
       }
-      // track if scrolling is obvious
-      ;(function trackScroll() {
-        console.log(window.goatcounter)
-        if (window.goatcounter) {
-          const article = document.querySelector('article')
-          article.addEventListener(
-            'scroll',
-            () => {
-              window.goatcounter.count({
-                path: 'scroll-article',
-                title: 'Content',
-                event: true,
-              })
-            },
-            {
-              once: true,
-              passive: true,
-            }
-          )
-        }
-      })()
       // light and dark mode
       ;(function colorMode() {
         const root = document.documentElement

@@ -73,6 +73,13 @@ if ('serviceWorker' in navigator) {
             { value: 20 },
             { value: 0 },
           ],
+          opacity: [
+            { value: 1 },
+            { value: .333 },
+            { value: .666 },
+            { value: .333 },
+            { value: 1 },
+          ],
           delay: (el, i) => i * 100,
           easing: 'easeInOutSine',
           autoplay: false,

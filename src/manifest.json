@@ -19,6 +19,6 @@
   "display": "standalone",
   "start_url": ".",
   "description": "Journalist, designer, developer Kazi Elman Awal’s website",
-  "background_color": "#FFFFFF",
-  "theme_color": "#FFFFFF"
+  "background_color": "#f2f2f2",
+  "theme_color": "#f2f2f2"
 }

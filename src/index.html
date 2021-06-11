@@ -655,6 +655,7 @@
       // light and dark mode
       ;(function colorMode() {
         const root = document.documentElement
+        const themes = document.querySelectorAll('meta[name=theme-color]')
         const buttons = document.querySelectorAll('.mode')
         const light = window.matchMedia('(prefers-color-scheme: light)').matches
         const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -669,10 +670,12 @@
 
         if (savedMode === 'light') {
           root.classList.add('light-mode')
+          themes.forEach((theme) => theme.setAttribute('content', '#f2f2f2'))
           document.querySelector('.light').setAttribute('disabled', true)
         }
         if (savedMode === 'dark') {
           root.classList.add('dark-mode')
+          themes.forEach((theme) => theme.setAttribute('content', '#0d0d0d'))
           document.querySelector('.dark').setAttribute('disabled', true)
         }
 
@@ -684,6 +687,9 @@
               currentTarget.setAttribute('disabled', true)
               currentTarget.previousElementSibling.removeAttribute('disabled')
               localStorage.setItem('mode', 'light')
+              themes.forEach((theme) =>
+                theme.setAttribute('content', '#f2f2f2')
+              )
             }
             if (currentTarget.classList.contains('dark')) {
               root.classList.remove('light-mode')
@@ -691,6 +697,9 @@
               currentTarget.setAttribute('disabled', true)
               currentTarget.nextElementSibling.removeAttribute('disabled')
               localStorage.setItem('mode', 'dark')
+              themes.forEach((theme) =>
+                theme.setAttribute('content', '#0d0d0d')
+              )
             }
           })
         })

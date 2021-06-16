@@ -3,5 +3,5 @@
   src: url('Baryton-Italic.woff2?v=3.0.0') format('woff2');
   font-style: italic;
   font-weight: normal;
-  font-display: fallback;
+  font-display: swap;
 }

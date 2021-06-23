@@ -663,10 +663,20 @@
       integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"
     ></script>
     <script>
-      // full fonts callback
-      function fullFonts() {
+      // full fonts
+      ;(function fullFonts() {
+        const styleSheet = document.styleSheets[0]
+        styleSheet.insertRule(`
+          @font-face {
+            font-family: 'Baryton';
+            src: url('Baryton-Italic.woff2?v=3.0.0') format('woff2');
+            font-style: italic;
+            font-weight: normal;
+            font-display: swap;
+          }
+        `, 0)
         document.body.classList.add('full-fonts')
-      }
+      })()
       // light and dark mode
       ;(function colorMode() {
         const root = document.documentElement

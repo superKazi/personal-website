@@ -601,8 +601,8 @@
           hi, thanks for visiting Kazi’s website! he is a senior designer at
           <a id="insider" href="https://insider.com" data-goatcounter-click
             >Insider</a
-          >, where he helps design ambitious journalism and
-          special&nbsp;projects.
+          >, where he designs and develops ambitious journalism on the special
+          projects&nbsp;team.
         </p>
         <p>
           before, that he was a front-end developer on the product team at
@@ -671,7 +671,8 @@
       // full fonts
       ;(function fullFonts() {
         const styleSheet = document.styleSheets[0]
-        styleSheet.insertRule(`
+        styleSheet.insertRule(
+          `
           @font-face {
             font-family: 'Baryton';
             src: url('Baryton-Italic.woff2?v=3.0.0') format('woff2');
@@ -679,7 +680,9 @@
             font-weight: normal;
             font-display: swap;
           }
-        `, 0)
+        `,
+          0
+        )
         document.body.classList.add('full-fonts')
       })()
       // light and dark mode

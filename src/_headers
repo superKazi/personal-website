@@ -1,3 +1,6 @@
+# everything:
+/*
+  X-Content-Type-Options: nosniff
 # the page:
 /index.html
   Cache-Control: public

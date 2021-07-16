@@ -5,17 +5,14 @@
 /index.html
   Cache-Control: public
   Cache-Control: max-age=0
-  Cache-Control: must-revalidate
 # service worker:
 /sw.js
   Cache-Control: public
   Cache-Control: max-age=0
-  Cache-Control: must-revalidate
 # data:
 /*.json
   Cache-Control: public
   Cache-Control: max-age=0
-  Cache-Control: must-revalidate
 # javascript:
 /main.js
   Cache-Control: public

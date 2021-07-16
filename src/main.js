@@ -115,6 +115,7 @@ function loadCss(src) {
     link.href = src
     link.rel = 'stylesheet'
     link.type = 'text/css'
+    link.crossOrigin = 'anonymous'
 
     link.addEventListener('load', () => resolve(true))
     link.addEventListener('error', () =>

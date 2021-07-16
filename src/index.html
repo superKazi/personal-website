@@ -86,31 +86,36 @@
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
-      href="Baryton-Italic.woff2?v=3.0.0"
+      href="Baryton-ItalicSub.woff2?v=3.0.0"
     />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
-      href="PolySansGX.woff2?v=3.0.0"
+      href="PolySansGXSub.woff2?v=3.0.0"
     />
     <link rel="preconnect" href="https://superkazi.goatcounter.com" />
 
     <style>
       @font-face {
-        font-family: 'Baryton';
-        src: url('Baryton-Italic.woff2?v=3.0.0') format('woff2');
+        font-family: 'BarytonSub';
+        src: url('Baryton-ItalicSub.woff2?v=3.0.0') format('woff2');
         font-weight: normal;
         font-display: fallback;
+        unicode-range: U+20, U+61, U+65, U+69, U+6b-6e, U+77, U+7a, U+d83c,
+          U+d83c, U+df1a, U+df1e, U+1f31a, U+1f31e;
       }
       @font-face {
-        font-family: 'PolySans';
-        src: url('PolySansGX.woff2?v=3.0.0') format('woff2-variations');
-        font-weight: 50 200;
-        font-stretch: 100% 200%;
+        font-family: 'PolySansSub';
+        src: url('PolySansGXSub.woff2?v=3.0.0') format('woff2-variations');
         font-optical-sizing: auto;
+        font-stretch: 100% 200%;
+        font-style: normal;
+        font-weight: 50 200;
         font-display: fallback;
+        unicode-range: U+20-21, U+2c-2e, U+49, U+4b-4c, U+52, U+54, U+57,
+          U+61-70, U+72-7a, U+a0, U+2019;
       }
 
       :root {
@@ -229,7 +234,7 @@
       }
 
       .baryton {
-        font-family: 'Baryton', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        font-family: 'BarytonSub', -apple-system, BlinkMacSystemFont, 'Segoe UI',
           Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
           'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
           'Noto Color Emoji';
@@ -240,9 +245,16 @@
         line-height: 1;
       }
 
+      .full-fonts .baryton {
+        font-family: 'Baryton', 'BarytonSub', -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+          'Noto Color Emoji';
+      }
+
       .polysans {
-        font-family: 'PolySans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-          Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+        font-family: 'PolySansSub', -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
           'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
           'Noto Color Emoji';
         font-kerning: normal;
@@ -250,6 +262,13 @@
         font-feature-settings: 'case' 1;
         text-rendering: optimizeLegibility;
         line-height: 1.2;
+      }
+
+      .full-fonts .polysans {
+        font-family: 'PolySans', 'PolySansSub', -apple-system,
+          BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+          'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', 'Noto Color Emoji';
       }
 
       .polysans p {
@@ -726,6 +745,35 @@
       integrity="sha384-by67kQnR+pyfy8yWP4kPO12fHKRLHZPfEsiSXR8u2IKcTdxD805MGUXBzVPnkLHw"
     ></script>
     <script>
+      // add fullfonts
+      ;(function fullFonts() {
+        const styleSheet = document.styleSheets[0]
+        styleSheet.insertRule(
+          `
+          @font-face {
+            font-family: 'Baryton';
+            src: url('Baryton-Italic.woff2?v=3.0.0') format('woff2');
+            font-weight: normal;
+            font-display: swap;
+          }
+        `,
+          0
+        )
+        styleSheet.insertRule(
+          `
+          @font-face {
+            font-family: 'PolySans';
+            src: url('PolySansGX.woff2?v=3.0.0') format('woff2-variations');
+            font-weight: 50 200;
+            font-stretch: 100% 200%;
+            font-optical-sizing: auto;
+            font-display: swap;
+          }
+        `,
+          0
+        )
+        document.body.classList.add('full-fonts')
+      })()
       // light and dark mode
       ;(function colorMode() {
         const root = document.documentElement

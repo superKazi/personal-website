@@ -60,7 +60,7 @@
       content="https://kazielmanawal.me/og.jpg?v=3.0.0"
     />
 
-    <link rel="icon" href="favicon.ico?v=3.0.0" sizes="any"/>
+    <link rel="icon" href="favicon.ico?v=3.0.0" sizes="any" />
     <link rel="icon" href="favicon.svg?v=3.0.0" />
     <link rel="apple-touch-icon" href="apple.png?v=3.0.0" />
     <link rel="manifest" href="manifest.json" />
@@ -733,32 +733,34 @@
     <script>
       // add fullfonts
       ;(function fullFonts() {
-        const styleSheet = document.styleSheets[0]
-        styleSheet.insertRule(
-          `
-          @font-face {
-            font-family: 'Baryton';
-            src: url('Baryton-Italic.woff2?v=3.0.0') format('woff2');
-            font-weight: normal;
-            font-display: swap;
-          }
-        `,
-          0
-        )
-        styleSheet.insertRule(
-          `
-          @font-face {
-            font-family: 'PolySans';
-            src: url('PolySansGX.woff2?v=3.0.0') format('woff2-variations');
-            font-weight: 50 200;
-            font-stretch: 100% 200%;
-            font-optical-sizing: auto;
-            font-display: swap;
-          }
-        `,
-          0
-        )
-        document.body.classList.add('full-fonts')
+        window.addEventListener('load', function loadFullFonts() {
+          const styleSheet = document.styleSheets[0]
+          styleSheet.insertRule(
+            `
+              @font-face {
+                font-family: 'Baryton';
+                src: url('Baryton-Italic.woff2?v=3.0.0') format('woff2');
+                font-weight: normal;
+                font-display: swap;
+              }
+            `,
+            0
+          )
+          styleSheet.insertRule(
+            `
+              @font-face {
+                font-family: 'PolySans';
+                src: url('PolySansGX.woff2?v=3.0.0') format('woff2-variations');
+                font-weight: 50 200;
+                font-stretch: 100% 200%;
+                font-optical-sizing: auto;
+                font-display: swap;
+              }
+           `,
+            0
+          )
+          document.body.classList.add('full-fonts')
+        })
       })()
       // light and dark mode
       ;(function colorMode() {

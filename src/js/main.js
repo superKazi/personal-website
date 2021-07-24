@@ -3,7 +3,7 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
       // https://developers.google.com/web/tools/workbox/modules/workbox-window
-      const { Workbox } = await import('./workbox-window-prod.mjs')
+      const { Workbox } = await import('./workbox-window.prod.mjs')
       if (Workbox) {
         const wb = new Workbox('../sw.js')
         wb.addEventListener('installed', (event) => {

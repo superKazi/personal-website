@@ -14,7 +14,7 @@
   Cache-Control: public
   Cache-Control: max-age=0
 # javascript:
-/main.js
+/js/*.js
   Cache-Control: public
   Cache-Control: max-age=31536000
   Cache-Control: immutable

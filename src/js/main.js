@@ -31,9 +31,9 @@ window.addEventListener("resize", _debounce(placeParagraphs, 200));
 
 // polite console
 console.log(
-  '%cThanks for checking out my site!',
-  'font-family: Helvetica, sans-serif; text-transform: uppercase; font-weight: bold; letter-spacing: .12em; font-size: 3rem; color: black;'
-)
+  "%cThanks for checking out my site!",
+  "font-family: Helvetica, sans-serif; text-transform: uppercase; font-weight: bold; letter-spacing: .12em; font-size: 3rem; color: black;"
+);
 
 /* Function definitions */
 
@@ -73,24 +73,20 @@ async function initScrollyFun() {
   }
 }
 
-function handleServiceWorker() {
+async function handleServiceWorker() {
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", async () => {
-      try {
-        // https://developers.google.com/web/tools/workbox/modules/workbox-window
-        const { Workbox } = await import("workbox-window");
-        if (Workbox) {
-          const wb = new Workbox("../sw.js");
-          wb.addEventListener("installed", (event) => {
-            if (event.isUpdate) {
-              window.location.reload();
-            }
-          });
-          wb.register();
+    try {
+      // https://developers.google.com/web/tools/workbox/modules/workbox-window
+      const { Workbox } = await import("workbox-window");
+      const wb = new Workbox("../sw.js");
+      wb.addEventListener("installed", (event) => {
+        if (event.isUpdate) {
+          window.location.reload();
         }
-      } catch (err) {
-        console.error(err);
-      }
-    });
+      });
+      wb.register();
+    } catch (err) {
+      console.error(err);
+    }
   }
 }

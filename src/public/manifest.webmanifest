@@ -17,8 +17,7 @@
   "short_name": "Kazi",
   "orientation": "portrait-primary",
   "display": "standalone",
-  "start_url": ".",
+  "start_url": "/",
   "description": "Journalist, designer, developer Kazi Elman Awal’s website",
-  "background_color": "#f2f2f2",
-  "theme_color": "#f2f2f2"
+  "theme_color": "#ffffff"
 }

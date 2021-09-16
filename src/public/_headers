@@ -1,0 +1,28 @@
+# everything:
+/*
+  X-Content-Type-Options: nosniff
+# the page:
+/index.html
+  Cache-Control: no-store
+  Cache-Control: max-age=0
+# service worker:
+/sw.js
+  Cache-Control: no-store
+  Cache-Control: max-age=0
+# web manifest:
+/mainfest.webmanifest
+  Cache-Control: no-store
+  Cache-Control: max-age=0
+# favicon tings:
+/*.{png,svg,ico}
+  Cache-Control: public
+  Cache-Control: max-age=604800
+# og image:
+/og.jpg
+  Cache-Control: public
+  Cache-Control: max-age=604800
+# assets with unique hashes in filename  
+/assets/*
+  Cache-Control: public
+  Cache-Control: max-age=31536000
+  Cache-Control: immutable

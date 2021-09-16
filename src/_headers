@@ -9,43 +9,8 @@
 /sw.js
   Cache-Control: public
   Cache-Control: max-age=0
-# data:
-/*.json
-  Cache-Control: public
-  Cache-Control: max-age=0
-# javascript:
-/js/*.js
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-/js/*.mjs
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-# css:
-/*.css
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-# images:
-/*.jpg
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-/*.png
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-/*.svg
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-/*.ico
-  Cache-Control: public
-  Cache-Control: max-age=31536000
-  Cache-Control: immutable
-# fonts:
-/*.woff2
+# assets with unique hashes in filename  
+/assets/*
   Cache-Control: public
   Cache-Control: max-age=31536000
   Cache-Control: immutable

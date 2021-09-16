@@ -81,8 +81,11 @@ function handleServiceWorker() {
         const { Workbox } = await import("workbox-window");
         if (Workbox) {
           const wb = new Workbox("../sw.js");
+          console.log(wb)
           wb.addEventListener("installed", (event) => {
+            console.log("sw installed")
             if (event.isUpdate) {
+              console.log("sw update")
               window.location.reload();
             }
           });

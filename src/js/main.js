@@ -1,13 +1,14 @@
 import styles from "../css/style.css";
-import { listen } from "quicklink";
 import _random from "lodash.random";
 import _debounce from "lodash.debounce";
 import "splitting/dist/splitting.css";
 import "splitting/dist/splitting-cells.css";
 import Splitting from "splitting";
 
-handleServiceWorker()
+// force service worker page reload if site updates
+handleServiceWorker();
 
+// set up variables for functions
 const paragraphs = [...document.querySelectorAll("p")];
 const windowWidth = window.innerWidth;
 const allowAnimations = window.matchMedia(
@@ -15,24 +16,26 @@ const allowAnimations = window.matchMedia(
 ).matches;
 let isBig = window.matchMedia("(min-width: 960px)").matches;
 
+// place paragraphs on desktop willy nilly
 placeParagraphs();
 
+// make links styles weird
 Splitting({ target: "a", by: "chars", whitespace: true });
 funkyChars();
 
+// add gradient scroll animation
 initScrollyFun();
 
+// fix paragraph placement on screen resize
 window.addEventListener("resize", _debounce(placeParagraphs, 200));
 
-window.addEventListener(
-  "load",
-  () => {
-    listen({
-      origins: [],
-    });
-  },
-  { once: true }
-);
+// polite console
+console.log(
+  '%cThanks for checking out my site!',
+  'font-family: Helvetica, sans-serif; text-transform: uppercase; font-weight: bold; letter-spacing: .12em; font-size: 3rem; color: black;'
+)
+
+/* Function definitions */
 
 function placeParagraphs() {
   isBig = window.matchMedia("(min-width: 960px)").matches;

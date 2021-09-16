@@ -18,7 +18,6 @@
     "gsap": "^3.7.1",
     "lodash.debounce": "^4.0.8",
     "lodash.random": "^3.2.0",
-    "quicklink": "^2.2.0",
     "splitting": "^1.0.6",
     "workbox-window": "^6.3.0"
   }

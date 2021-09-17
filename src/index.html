@@ -19,16 +19,7 @@
     <meta name="googlebot" content="index,follow" />
     <meta name="referrer" content="no-referrer" />
 
-    <meta
-      name="theme-color"
-      content="#f2f2f2"
-      media="(prefers-color-scheme: light)"
-    />
-    <meta
-      name="theme-color"
-      content="#0d0d0d"
-      media="(prefers-color-scheme: dark)"
-    />
+    <meta name="theme-color" content="#6bffb3" />
 
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Kazi’s website" />
@@ -38,10 +29,7 @@
       property="og:image:alt"
       content="Graphic design made using the letter k"
     />
-    <meta
-      property="og:image"
-      content="https://kazielmanawal.me/og.jpg?v=3.0.0"
-    />
+    <meta property="og:image" content="./og.jpg" />
 
     <meta property="profile:first_name" content="Kazi" />
     <meta property="profile:last_name" content="Awal" />
@@ -55,15 +43,11 @@
       name="twitter:image:alt"
       content="Graphic design made using the letter k"
     />
-    <meta
-      name="twitter:image"
-      content="https://kazielmanawal.me/og.jpg?v=3.0.0"
-    />
+    <meta name="twitter:image" content="./og.jpg" />
 
-    <link rel="icon" href="favicon.ico?v=3.0.0" sizes="any" />
-    <link rel="icon" href="favicon.svg?v=3.0.0" />
-    <link rel="apple-touch-icon" href="apple.png?v=3.0.0" />
-    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="./favicon.ico" sizes="any" />
+    <link rel="icon" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./apple.png" />
 
     <link rel="canonical" href="https://kazielmanawal.me" />
 
@@ -86,248 +70,106 @@
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
-      href="fonts/Baryton-ItalicSub.woff2?v=3.0.0"
+      href="./fonts/Baryton-Italic.woff2"
     />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
-      href="fonts/PolySansGXSub.woff2?v=3.0.0"
+      href="./fonts/PolySansGX.woff2"
     />
     <link rel="preconnect" href="https://superkazi.goatcounter.com" />
+    <link rel="manifest" href="./manifest.webmanifest" />
 
     <style>
-      @font-face {
-        font-family: 'BarytonSub';
-        src: url('fonts/Baryton-ItalicSub.woff2?v=3.0.0') format('woff2');
-        font-weight: normal;
-        font-display: fallback;
-        unicode-range: U+20, U+61, U+65, U+69, U+6b-6e, U+77, U+7a, U+d83c,
-          U+d83c, U+df1a, U+df1e, U+1f31a, U+1f31e;
-      }
-      @font-face {
-        font-family: 'PolySansSub';
-        src: url('fonts/PolySansGXSub.woff2?v=3.0.0') format('woff2-variations');
-        font-optical-sizing: auto;
-        font-stretch: 100% 200%;
-        font-style: normal;
-        font-weight: 50 200;
-        font-display: fallback;
-        unicode-range: U+20-21, U+2c-2e, U+49, U+4b-4c, U+52, U+54, U+57,
-          U+61-70, U+72-7a, U+a0, U+2019;
-      }
-
-      :root {
-        --foreground: hsla(0, 0%, 5%, 1);
-        --background: hsla(0, 0%, 95%, 1);
-        --transparent: hsla(0, 0%, 95%, 0);
-      }
-
-      html {
-        font-size: 100%;
-        background: var(--background);
-      }
-
       *,
       *::before,
       *::after {
         box-sizing: border-box;
+      }
+
+      :root {
+        --step--2: clamp(0.87rem, 0.84rem + 0.12vw, 1.15rem);
+        --step--1: clamp(1.04rem, 0.97rem + 0.34vw, 1.85rem);
+        --step-0: clamp(1.25rem, 1.1rem + 0.74vw, 3rem);
+        --step-1: clamp(1.5rem, 1.22rem + 1.42vw, 4.85rem);
+        --step-2: clamp(1.8rem, 1.29rem + 2.57vw, 7.85rem);
+        --step-3: clamp(2.16rem, 1.27rem + 4.47vw, 12.71rem);
+        --step-4: clamp(2.59rem, 1.07rem + 7.61vw, 20.56rem);
+        --step-5: clamp(3.11rem, 0.56rem + 12.78vw, 33.27rem);
+      }
+
+      body,
+      header,
+      main,
+      p {
         margin: 0;
-        padding: 0;
+      }
+
+      html:focus-within {
+        scroll-behavior: smooth;
       }
 
       body {
-        min-height: calc(var(--vh, 1vh) * 100);
-        scroll-behavior: smooth;
-        background: var(--background);
-        color: var(--foreground);
-
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-          'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-        text-rendering: optimizeSpeed;
-        line-height: 1.2;
-      }
-
-      main {
-        padding: 1.5rem;
-        max-width: 100%;
-      }
-
-      article {
-        margin-top: 1.5rem;
-      }
-
-      article p + p {
-        text-indent: 10%;
-      }
-
-      p {
-        font-size: 1.333rem;
-        max-width: 50ch;
-      }
-
-      a {
-        font-weight: 900;
-        text-decoration: none;
-        color: var(--foreground);
-      }
-
-      a:hover {
-        font-style: italic;
-      }
-
-      a:active {
-        text-decoration: underline;
-        text-decoration-skip-ink: auto;
-      }
-
-      button {
-        width: 5rem;
-        height: 5rem;
-        margin-top: 1.5rem;
-        display: inline-grid;
-        place-items: center;
-
-        background: var(--transparent);
-        color: var(--foreground);
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-        transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1),
-          background 150ms cubic-bezier(0.4, 0, 0.2, 1),
-          transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      button:hover {
-        transform: scale(1.05);
-      }
-
-      button:active {
-        transform: scale(0.85);
-      }
-
-      button:disabled {
-        pointer-events: none;
-        filter: blur(1px);
-        opacity: 0.5;
-      }
-
-      a:focus,
-      a:focus-visible,
-      button:focus,
-      button:focus-visible {
-        outline-color: var(--foreground);
-      }
-
-      .visually-hidden {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      }
-
-      .baryton {
-        font-family: 'BarytonSub', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-          Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-          'Noto Color Emoji';
-        font-kerning: normal;
-        font-variant-ligatures: normal;
-        font-feature-settings: 'case' 1;
+        min-height: 100vh;
         text-rendering: optimizeLegibility;
-        line-height: 1;
-      }
-
-      .full-fonts .baryton {
-        font-family: 'Baryton', 'BarytonSub', -apple-system, BlinkMacSystemFont,
-          'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-          'Noto Color Emoji';
-      }
-
-      .polysans {
-        font-family: 'PolySansSub', -apple-system, BlinkMacSystemFont,
-          'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-          'Noto Color Emoji';
-        font-kerning: normal;
-        font-variant-ligatures: normal;
-        font-feature-settings: 'case' 1;
-        text-rendering: optimizeLegibility;
-        line-height: 1.2;
-      }
-
-      .full-fonts .polysans {
-        font-family: 'PolySans', 'PolySansSub', -apple-system,
-          BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-          'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-          'Segoe UI Symbol', 'Noto Color Emoji';
-      }
-
-      .polysans p {
-        font-weight: 100;
-      }
-
-      .polysans a {
-        font-weight: 200;
-        transition: font-stretch 100ms ease-in-out;
-      }
-
-      .polysans a:hover {
-        font-style: normal;
-        font-stretch: 200%;
-      }
-
-      .dark-mode {
-        --background: hsla(0, 0%, 5%, 1);
-        --foreground: hsla(0, 0%, 95%, 1);
-        --transparent: hsla(0, 0%, 5%, 0);
-      }
-
-      .dark-mode article,
-      .dark-mode .polysans {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol";
         line-height: 1.3;
       }
 
-      .dark-mode article p {
-        font-weight: 300;
+      main {
+        isolation: isolate;
+        width: 100%;
+        padding: max(var(--step-1, 2rem), var(--step-0, 1rem));
       }
 
-      .dark-mode a {
-        font-weight: 200;
+      p {
+        font-size: var(--step-2, 3rem);
+        width: min(25ch, 100%);
+        transition: transform 200ms ease;
       }
 
-      .dark-mode .polysans p {
-        font-weight: 50;
+      p + p {
+        margin-top: max(var(--step-1, 2rem), var(--step-0, 1rem));
       }
 
-      .dark-mode .polysans a {
-        font-weight: 200;
+      p,
+      a {
+        position: relative;
+        z-index: 2;
+        color: white;
+        filter: contrast(200%);
+        mix-blend-mode: exclusion;
       }
 
-      .name {
-        font-size: 5rem;
-        max-width: max-content;
-      }
-
-      .mode {
-        font-size: 5rem;
-        text-indent: -0.0333em;
-      }
-
-      .light {
-        margin-left: 0.2em;
+      #gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background-image: conic-gradient(
+            from var(--deg, 0deg) at 62% 62%,
+            hsla(26, 82%, 71%, 0.666),
+            hsla(149, 100%, 71%, 0.5)
+          ),
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 5025 5025' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.15' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        filter: contrast(125%) brightness(105%);
+        background-position: center;
+        background-size: cover;
       }
 
       @media (prefers-reduced-motion: reduce) {
-        * {
+        html:focus-within {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
           animation-duration: 0.01ms !important;
           animation-iteration-count: 1 !important;
           transition-duration: 0.01ms !important;
@@ -335,493 +177,89 @@
         }
       }
 
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --background: hsla(0, 0%, 5%, 1);
-          --foreground: hsla(0, 0%, 95%, 1);
-          --transparent: hsla(0, 0%, 5%, 0);
-        }
-        article,
-        .polysans {
-          line-height: 1.3;
-        }
-        article p {
-          font-weight: 300;
-        }
-        a {
-          font-weight: 700;
-        }
-        .polysans p {
-          font-weight: 50;
-        }
-        .polysans a {
-          font-weight: 150;
-        }
-        .light-mode {
-          --background: hsla(0, 0%, 95%, 1);
-          --foreground: hsla(0, 0%, 5%, 1);
-          --transparent: hsla(0, 0%, 95%, 0);
-        }
-        .light-mode article,
-        .light-mode .polysans {
-          line-height: 1.2;
-        }
-        .light-mode article p {
-          font-weight: 400;
-        }
-        .light-mode a {
-          font-weight: 900;
-        }
-        .light-mode .polysans p {
-          font-weight: 100;
-        }
-        .light-mode .polysans a {
-          font-weight: 200;
-          transition: font-stretch 100ms ease-in-out;
-        }
-        .light-mode .polysans a:hover {
-          font-style: normal;
-          font-stretch: 200%;
-        }
-      }
-
-      @media (min-width: 768px) {
-        main {
-          padding: 4rem;
-        }
-        article {
-          margin-top: 2rem;
-        }
-        p {
-          font-size: 2rem;
-        }
-        button {
-          width: 7rem;
-          height: 7rem;
-          margin-top: 2rem;
-        }
-        .name {
-          font-size: 7rem;
-          max-width: max-content;
-        }
-        .mode {
-          font-size: 7rem;
-        }
-      }
-
-      @media (min-width: 1024px) {
-        main {
-          padding: 6rem;
-          max-width: 1024px;
-          margin: 0 auto;
-        }
-        article {
-          margin-top: 3rem;
-        }
-        p {
-          font-size: 3rem;
-        }
-        button {
-          width: 9rem;
-          height: 9rem;
-          margin-top: 3rem;
-        }
-        .name {
-          font-size: 9rem;
-        }
-        .mode {
-          font-size: 9rem;
-        }
-      }
-
-      @supports (display: grid) {
-        article {
-          position: relative;
-          max-height: 100%;
-          overflow: scroll;
-        }
-        article::after {
-          content: '';
-          display: block;
-          position: sticky;
-          left: 0;
-          bottom: -2px;
-          height: 3rem;
-          width: 100%;
-          background: linear-gradient(var(--transparent), var(--background));
-          pointer-events: none;
-        }
-        .light {
-          margin-left: 1.25em;
-        }
-        @media (orientation: portrait) {
-          main {
-            display: grid;
-            height: calc(var(--vh, 1vh) * 100);
-            gap: 1rem;
-            grid-template-columns: 1fr;
-            grid-template-rows: max-content 1fr max-content max-content;
-          }
-          article {
-            grid-row: 2 / 3;
-            border-bottom: 2px solid var(--foreground);
-            border-top: 2px solid var(--foreground);
-            margin: 0;
-          }
-          button {
-            margin-top: initial;
-          }
-          .first {
-            grid-row: 1 / 2;
-          }
-          .mode {
-            grid-row: 3 / 4;
-            grid-column: 1 / 2;
-          }
-          .middle-last {
-            grid-row: 4 / 5;
-          }
-        }
-        @media (orientation: portrait) and (max-height: 650px) {
-          .name {
-            font-size: 3rem;
-          }
-        }
-        @media (min-width: 768px) {
-          main {
-            gap: 2rem;
-          }
-          article {
-            border: initial;
-          }
-          article::after {
-            height: 6rem;
-          }
-        }
-        @media (min-width: 1024px) {
-          main {
-            gap: 3rem;
-            max-width: initial;
-            margin: initial;
-          }
-          article::after {
-            height: 9rem;
-          }
-        }
-        @media (orientation: landscape) and (min-width: 1024px) {
-          main {
-            display: grid;
-            height: calc(var(--vh, 1vh) * 100);
-            padding: 4rem;
-            gap: 2rem;
-            grid-template-columns: max-content 0.05fr 1fr;
-            grid-template-rows: max-content 1fr max-content;
-          }
-          article {
-            margin: initial;
-            grid-column: 3 / 4;
-            grid-row: 1 / 3;
-          }
-          p {
-            font-size: 2rem;
-          }
-          button {
-            width: 6rem;
-            height: 6rem;
-            margin-top: initial;
-          }
-          .name {
-            font-size: 6rem;
-          }
-          .first {
-            grid-column: 1 / 2;
-            grid-row: 1 / 2;
-            justify-self: end;
-          }
-          .middle-last {
-            grid-column: 3 / 4;
-            grid-row: 3 / 4;
-          }
-          .mode {
-            font-size: 6rem;
-            text-indent: -0.0333em;
-            grid-column: 1 / 2;
-            grid-row: 3 / 4;
-          }
-        }
-        @media (orientation: landscape) and (min-width: 1280px) {
-          main {
-            gap: 3rem;
-          }
-          p {
-            font-size: 2.5rem;
-          }
-          button {
-            width: 8rem;
-            height: 8rem;
-          }
-          .name {
-            font-size: 8rem;
-          }
-          .mode {
-            font-size: 8rem;
-          }
-        }
-        @media (orientation: landscape) and (min-width: 1440px) {
-          p {
-            font-size: 3rem;
-          }
-          button {
-            width: 9rem;
-            height: 9rem;
-          }
-          .name {
-            font-size: 9rem;
-          }
-          .mode {
-            font-size: 9rem;
-          }
-        }
-        @media (orientation: landscape) and (min-width: 1920px) {
-          main {
-            padding: 8rem;
-            gap: 3.5rem;
-          }
-          p {
-            font-size: 3.5rem;
-          }
-          button {
-            width: 12rem;
-            height: 12rem;
-          }
-          .name,
-          .mode {
-            font-size: 12rem;
-          }
-        }
-        @media (orientation: landscape) and (min-width: 2560px) {
-          main {
-            padding: 10rem;
-            gap: 4rem;
-          }
-          p {
-            font-size: 5rem;
-          }
-          button {
-            width: 16rem;
-            height: 16rem;
-          }
-          .name,
-          .mode {
-            font-size: 16rem;
-          }
-        }
-        @media (orientation: landscape) and (min-width: 3840px) {
-          main {
-            padding: 16rem;
-            gap: 6rem;
-          }
-          p {
-            font-size: 7rem;
-          }
-          button {
-            width: 25rem;
-            height: 25rem;
-          }
-          .name,
-          .mode {
-            font-size: 25rem;
-          }
-        }
-      }
-
-      @supports (padding: max(0px)) {
-        @media (orientation: landscape) and (max-width: 1024px) {
-          main {
-            padding-top: max(env(safe-area-inset-top), 2rem);
-            padding-right: max(env(safe-area-inset-right), 2rem);
-            padding-left: max(env(safe-area-inset-left), 2rem);
-          }
-        }
+      .visually-hidden {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: auto;
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+        white-space: nowrap;
       }
     </style>
   </head>
-  <body data-instant-allow-external-links>
+  <body>
     <header class="visually-hidden">
-      <h1>Kazi Elman Awal’s website</h1>
+      <h1>Kazi Elman Awal&rsquo;s website</h1>
     </header>
     <main>
-      <p aria-hidden="true" class="baryton name first">kazi</p>
-      <p aria-hidden="true" class="baryton name middle-last" data-splitting>
-        elman awal
+      <p>
+        hi, thanks for visiting <em>Kazi&rsquo;s</em> website! he is a senior
+        designer at
+        <a
+          id="insider"
+          href="https://www.businessinsider.com/category/kazi-awal"
+          data-goatcounter-click
+          >Insider</a
+        >, where he designs and develops ambitious journalism on the special
+        projects team.
       </p>
-      <button
-        type="button"
-        class="baryton mode dark"
-        id="dark-mode"
-        data-goatcounter-click
-      >
-        <span class="visually-hidden">activate dark mode</span>
-        🌚
-      </button>
-      <button
-        type="button"
-        class="baryton mode light"
-        id="light-mode"
-        data-goatcounter-click
-      >
-        <span class="visually-hidden">activate light mode</span>
-        🌞
-      </button>
-      <article class="polysans">
-        <p>
-          hi, thanks for visiting Kazi’s website! he is a senior designer at
-          <a id="insider" href="https://insider.com" data-goatcounter-click
-            >Insider</a
-          >, where he designs and develops ambitious journalism on the special
-          projects&nbsp;team.
-        </p>
-        <p>
-          before, that he was a front-end developer on the product team at
-          <a id="row" href="https://restofworld.org/" data-goatcounter-click
-            >Rest of World</a
-          >
-          where he updated google analytics implementations, created
-          <a
-            id="social-card-generator"
-            href="https://restofworld.org/wp-content/projects/card-builder/"
-            data-goatcounter-click
-            >tools for the editorial team</a
-          >, and developed experiences for the audience, among
-          other&nbsp;things.
-        </p>
-        <p>
-          but he’s spent most of his career working in various newsrooms on the
-          editorial side designing and developing projects to
-          <a
-            id="sfc"
-            href="https://projects.sfchronicle.com/class-of-2020/spring"
-            data-goatcounter-click
-            >engage readers</a
-          >
-          and
-          <a
-            id="wapo"
-            href="https://www.washingtonpost.com/graphics/2018/world/reports-of-hate-crime-cases-have-spiked-in-india/"
-            data-goatcounter-click
-            >elevate&nbsp;storytelling</a
-          >.
-        </p>
-        <p>
-          following him on
-          <a
-            id="twitter"
-            href="https://twitter.com/superkazi"
-            data-goatcounter-click
-            >Twitter</a
-          >
-          probably isn’t worth it, but, if you want, you can find more of Kazi’s
-          work on&nbsp;<a
-            id="linkedin"
-            href="https://www.linkedin.com/in/superkazi/"
-            data-goatcounter-click
-            >LinkedIn</a
-          >.
-        </p>
-      </article>
+      <p>
+        before, that he was a front-end developer on the product team at
+        <a id="row" href="https://restofworld.org/" data-goatcounter-click
+          >Rest of World</a
+        >&#32;where he developed experiences for the audience, created
+        <a
+          id="social-card-generator"
+          href="https://restofworld.org/wp-content/projects/card-builder/"
+          data-goatcounter-click
+          >tools for the editorial team</a
+        >, and updated google analytics implementations, among other things.
+      </p>
+      <p>
+        but he&rsquo;s spent most of his career working in various newsrooms on
+        the editorial side designing and developing projects to
+        <a
+          id="sfc"
+          href="https://projects.sfchronicle.com/class-of-2020/spring"
+          data-goatcounter-click
+          >engage readers</a
+        >&#32;and
+        <a
+          id="wapo"
+          href="https://www.washingtonpost.com/graphics/2018/world/reports-of-hate-crime-cases-have-spiked-in-india/"
+          data-goatcounter-click
+          >elevate storytelling</a
+        >.
+      </p>
+      <p>
+        following him on
+        <a
+          id="twitter"
+          href="https://twitter.com/superkazi"
+          data-goatcounter-click
+          >Twitter</a
+        >&#32;probably isn&rsquo;t worth it, but, if you want, you can find more
+        of Kazi&rsquo;s work on
+        <a
+          id="linkedin"
+          href="https://www.linkedin.com/in/superkazi/"
+          data-goatcounter-click
+          >LinkedIn</a
+        >.
+      </p>
+      <div id="gradient"></div>
     </main>
-    <script>
-      // add fullfonts
-      ;(function fullFonts() {
-        window.addEventListener('load', function loadFullFonts() {
-          const styleSheet = document.styleSheets[0]
-          styleSheet.insertRule(
-            `
-              @font-face {
-                font-family: 'Baryton';
-                src: url('fonts/Baryton-Italic.woff2?v=3.0.0') format('woff2');
-                font-weight: normal;
-                font-display: swap;
-              }
-            `,
-            0
-          )
-          styleSheet.insertRule(
-            `
-              @font-face {
-                font-family: 'PolySans';
-                src: url('fonts/PolySansGX.woff2?v=3.0.0') format('woff2-variations');
-                font-weight: 50 200;
-                font-stretch: 100% 200%;
-                font-optical-sizing: auto;
-                font-display: swap;
-              }
-           `,
-            0
-          )
-          document.body.classList.add('full-fonts')
-        })
-      })()
-      // light and dark mode
-      ;(function colorMode() {
-        const root = document.documentElement
-        const themes = document.querySelectorAll('meta[name=theme-color]')
-        const buttons = document.querySelectorAll('.mode')
-        const light = window.matchMedia('(prefers-color-scheme: light)').matches
-        const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        const savedMode = localStorage.getItem('mode')
-
-        light &&
-          !savedMode &&
-          document.querySelector('.light').setAttribute('disabled', true)
-        dark &&
-          !savedMode &&
-          document.querySelector('.dark').setAttribute('disabled', true)
-
-        if (savedMode === 'light') {
-          root.classList.add('light-mode')
-          themes.forEach((theme) => theme.setAttribute('content', '#f2f2f2'))
-          document.querySelector('.light').setAttribute('disabled', true)
-        }
-        if (savedMode === 'dark') {
-          root.classList.add('dark-mode')
-          themes.forEach((theme) => theme.setAttribute('content', '#0d0d0d'))
-          document.querySelector('.dark').setAttribute('disabled', true)
-        }
-
-        buttons.forEach((button) => {
-          button.addEventListener('click', ({ currentTarget }) => {
-            if (currentTarget.classList.contains('light')) {
-              root.classList.remove('dark-mode')
-              root.classList.add('light-mode')
-              currentTarget.setAttribute('disabled', true)
-              currentTarget.previousElementSibling.removeAttribute('disabled')
-              localStorage.setItem('mode', 'light')
-              themes.forEach((theme) =>
-                theme.setAttribute('content', '#f2f2f2')
-              )
-            }
-            if (currentTarget.classList.contains('dark')) {
-              root.classList.remove('light-mode')
-              root.classList.add('dark-mode')
-              currentTarget.setAttribute('disabled', true)
-              currentTarget.nextElementSibling.removeAttribute('disabled')
-              localStorage.setItem('mode', 'dark')
-              themes.forEach((theme) =>
-                theme.setAttribute('content', '#0d0d0d')
-              )
-            }
-          })
-        })
-      })()
-    </script>
+    <script type="module" src="./js/main.js"></script>
     <script
       data-goatcounter="https://superkazi.goatcounter.com/count"
       async
-      src="js/count.v2.js?v=3.0.2"
+      src="//gc.zgo.at/count.v2.js"
+      crossorigin="anonymous"
+      integrity="sha384-PeYXrhTyEaBBz91ANMgpSbfN1kjioQNPHNDbMvevUVLJoWrVEjDCpKb71TehNAlj"
     ></script>
-    <script type="module" src="js/main.js?v=3.0.2"></script>
-    <script type="module" src="js/instantpage-5.1.0.js?v=3.0.2"></script>
     <noscript>
       <img
         alt="analytics pixel"

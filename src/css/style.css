@@ -1,0 +1,40 @@
+@font-face {
+  font-family: "Baryton";
+  src: url("../fonts/Baryton-Italic.woff2") format("woff2");
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "PolySans";
+  src: url("../fonts/PolySansGX.woff2") format("woff2-variations");
+  font-optical-sizing: auto;
+  font-stretch: 100% 200%;
+  font-style: normal;
+  font-weight: 50 200;
+  font-display: swap;
+}
+
+body {
+  font-family: "Polysans";
+  font-weight: 50;
+}
+
+em {
+  font-family: "Baryton";
+  font-weight: normal;
+  font-style: normal;
+  font-size: calc(var(--step-2, 3rem) * 1.2);
+}
+
+a {
+  text-decoration: none;
+  transition: all 200ms ease;
+}
+
+a span {
+  text-decoration: underline;
+}
+
+a:hover, a:active {
+  text-shadow: 0px 0px 15px white;
+}

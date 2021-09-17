@@ -10,7 +10,7 @@
   Cache-Control: no-store
   Cache-Control: max-age=0
 # web manifest:
-/mainfest.webmanifest
+/manifest.webmanifest
   Cache-Control: no-store
   Cache-Control: max-age=0
 # favicon tings:

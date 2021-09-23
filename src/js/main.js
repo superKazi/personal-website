@@ -54,11 +54,8 @@ function placeParagraphs() {
 
 function funkyChars() {
   [...document.querySelectorAll(".char")].forEach((c) => {
-    c.style.fontVariationSettings = `'wdth' ${Math.trunc(
-      _random(125, 200, false)
-    )},'wght' ${Math.trunc(_random(100, 200, false))}, 'opsz' ${Math.trunc(
-      _random(100, 200, false)
-    )}`;
+    c.style.fontWidth = `${Math.trunc(_random(125, 200, false))}%`;
+    c.style.fontWeight = Math.trunc(_random(100, 200, false));
   });
 }
 

@@ -4,13 +4,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 function scrollyFun() {
   gsap.registerPlugin(ScrollTrigger);
 
-	const tween = gsap.to(document.documentElement, {
-		"--deg": "360deg",
-		ease: "expo.out", 
-	});
+  const tween = gsap.to(document.documentElement, {
+    "--deg": "360deg",
+    ease: "sine.out",
+  });
 
   ScrollTrigger.create({
-		animation: tween,
+    animation: tween,
     trigger: "main",
     start: "top top",
     end: "bottom bottom",

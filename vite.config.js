@@ -6,7 +6,6 @@ export default defineConfig({
   build: {
     outDir: "../dist",
     emptyOutDir: true,
-    assetsInlineLimit: 256,
   },
   plugins: [
     generateSW({

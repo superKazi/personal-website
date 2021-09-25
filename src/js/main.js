@@ -16,12 +16,12 @@ const allowAnimations = window.matchMedia(
 ).matches;
 let isBig = window.matchMedia("(min-width: 960px)").matches;
 
-// place paragraphs on desktop willy nilly
-placeParagraphs();
-
 // make links styles weird
 Splitting({ target: "a", by: "chars", whitespace: true });
 funkyChars();
+
+// place paragraphs on desktop willy nilly
+placeParagraphs();
 
 // add gradient scroll animation
 initScrollyFun();
@@ -42,7 +42,7 @@ function placeParagraphs() {
   if (isBig) {
     paragraphs.forEach((p) => {
       const { width } = p.getBoundingClientRect();
-      const translateX = Math.trunc(_random(windowWidth - width - 50, false));
+      const translateX = Math.trunc(_random(windowWidth - width - 60, false));
       p.style.transform = `translateX(${translateX}px)`;
     });
   } else {

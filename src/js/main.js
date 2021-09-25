@@ -8,11 +8,12 @@ import Splitting from "splitting";
 handleServiceWorker();
 
 // set up variables for functions
-const paragraphs = [...document.querySelectorAll("p")];
 const windowWidth = window.innerWidth;
 const allowAnimations = window.matchMedia(
   "(prefers-reduced-motion: no-preference)"
 ).matches;
+const paragraphs = [...document.querySelectorAll("p")];
+let paragraphsPlaced = 0;
 let isBig = window.matchMedia("(min-width: 960px)").matches;
 
 // make links styles weird
@@ -39,12 +40,13 @@ console.log(
 function placeParagraphs() {
   isBig = window.matchMedia("(min-width: 960px)").matches;
   if (isBig) {
+    paragraphsPlaced += 1
     paragraphs.forEach((p) => {
       const { width } = p.getBoundingClientRect();
       const translateX = Math.trunc(_random(windowWidth - width - 60, false));
       p.style.transform = `translateX(${translateX}px)`;
     });
-  } else {
+  } else if (!isBig && paragraphsPlaced > 0) {
     paragraphs.forEach((p) => {
       p.style.transform = "initial";
     });

@@ -1,4 +1,3 @@
-import styles from "../css/style.css";
 import _random from "lodash.random";
 import _debounce from "lodash.debounce";
 import "splitting/dist/splitting.css";

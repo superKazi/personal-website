@@ -1,5 +1,4 @@
 import _random from "lodash.random";
-import _debounce from "lodash.debounce";
 import "splitting/dist/splitting.css";
 import "splitting/dist/splitting-cells.css";
 import Splitting from "splitting";
@@ -8,26 +7,16 @@ import Splitting from "splitting";
 handleServiceWorker();
 
 // set up variables for functions
-const windowWidth = window.innerWidth;
 const allowAnimations = window.matchMedia(
   "(prefers-reduced-motion: no-preference)"
 ).matches;
-const paragraphs = [...document.querySelectorAll("p")];
-let paragraphsPlaced = 0;
-let isBig = window.matchMedia("(min-width: 960px)").matches;
 
 // make links styles weird
 Splitting({ target: "a", by: "chars", whitespace: true });
 funkyChars();
 
-// place paragraphs on desktop willy nilly
-placeParagraphs();
-
 // add gradient scroll animation
 initScrollyFun();
-
-// fix paragraph placement on screen resize
-window.addEventListener("resize", _debounce(placeParagraphs, 200));
 
 // polite console
 console.log(
@@ -37,26 +26,11 @@ console.log(
 
 /* Function definitions */
 
-function placeParagraphs() {
-  isBig = window.matchMedia("(min-width: 960px)").matches;
-  if (isBig) {
-    paragraphsPlaced += 1
-    paragraphs.forEach((p) => {
-      const { width } = p.getBoundingClientRect();
-      const translateX = Math.trunc(_random(windowWidth - width - 60, false));
-      p.style.transform = `translateX(${translateX}px)`;
-    });
-  } else if (!isBig && paragraphsPlaced > 0) {
-    paragraphs.forEach((p) => {
-      p.style.transform = "initial";
-    });
-  }
-}
-
 function funkyChars() {
   [...document.querySelectorAll(".char")].forEach((c) => {
-    c.style.fontWidth = `${Math.trunc(_random(125, 200, false))}%`;
-    c.style.fontWeight = Math.trunc(_random(100, 200, false));
+    c.style.fontVariationSettings = `"wght" ${Math.trunc(
+      _random(75, 200, false)
+    )}, "opsz" 100, "wdth" ${Math.trunc(_random(125, 200, false))}`;
   });
 }
 

@@ -46,14 +46,14 @@
       }
 
       :root {
-        --step--2: clamp(0.87rem, 0.84rem + 0.12vw, 1.15rem);
-        --step--1: clamp(1.04rem, 0.97rem + 0.34vw, 1.85rem);
-        --step-0: clamp(1.25rem, 1.1rem + 0.74vw, 3rem);
-        --step-1: clamp(1.5rem, 1.22rem + 1.42vw, 4.85rem);
-        --step-2: clamp(1.8rem, 1.29rem + 2.57vw, 7.85rem);
-        --step-3: clamp(2.16rem, 1.27rem + 4.47vw, 12.71rem);
-        --step-4: clamp(2.59rem, 1.07rem + 7.61vw, 20.56rem);
-        --step-5: clamp(3.11rem, 0.56rem + 12.78vw, 33.27rem);
+        --step--2: clamp(0.69rem, 0.63rem + 0.34vw, 2.29rem);
+        --step--1: clamp(0.83rem, 0.71rem + 0.61vw, 3.71rem);
+        --step-0: clamp(1rem, 0.79rem + 1.06vw, 6rem);
+        --step-1: clamp(1.2rem, 0.84rem + 1.81vw, 9.71rem);
+        --step-2: clamp(1.44rem, 0.83rem + 3.03vw, 15.71rem);
+        --step-3: clamp(1.73rem, 0.72rem + 5.03vw, 25.42rem);
+        --step-4: clamp(2.07rem, 0.42rem + 8.29vw, 41.12rem);
+        --step-5: clamp(2.49rem, -0.23rem + 13.59vw, 66.53rem);
       }
 
       body,
@@ -73,31 +73,27 @@
         font-family: "Polysans", -apple-system, BlinkMacSystemFont, "Segoe UI",
           "Roboto", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
           "Segoe UI Emoji", "Segoe UI Symbol";
-        font-weight: 50;
-        line-height: 1.2;
+        font-kerning: normal;
+        font-variant-ligatures: discretionary-ligatures;
+        font-variation-settings: "wght" 50, "opsz" 100, "wdth" 100;
+        line-height: 1.1;
       }
 
       main {
         isolation: isolate;
         width: 100%;
-        padding: max(var(--step-1, 2rem), var(--step-0, 1rem));
-      }
-
-      em {
-        font-family: "Baryton";
-        font-weight: normal;
-        font-style: normal;
-        font-size: calc(var(--step-2, 3rem) * 1.2);
+        padding: var(--step-1, 2rem) clamp(var(--step-0, 1rem), 6%, var(--step-3, 4rem));
       }
 
       p {
-        font-size: var(--step-2, 3rem);
-        width: min(25ch, 100%);
+        font-size: var(--step-3, 4rem);
+        letter-spacing: -0.025em;
+        word-spacing: -0.01em;
         transition: transform 200ms ease;
       }
 
       p + p {
-        margin-top: max(var(--step-1, 2rem), var(--step-0, 1rem));
+        margin-top: max(var(--step-2, 3rem), var(--step-1, 2rem));
       }
 
       p,
@@ -121,6 +117,14 @@
       a:hover,
       a:active {
         text-shadow: 0px 0px 15px white;
+      }
+
+      em {
+        font-family: "Baryton";
+        font-weight: normal;
+        font-style: normal;
+        letter-spacing: initial;
+        font-size: calc(var(--step-3, 4rem) * 1.1);
       }
 
       #gradient {

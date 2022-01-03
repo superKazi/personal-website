@@ -1,31 +1,38 @@
-// self destructing sw
-// https://github.com/NekR/self-destroying-sw
-
-// self.addEventListener('install', function (e) {
-//   self.skipWaiting()
-// })
-
-// self.addEventListener('activate', function (e) {
-//   self.registration
-//     .unregister()
-//     .then(function () {
-//       return self.clients.matchAll()
-//     })
-//     .then(function (clients) {
-//       clients.forEach((client) => client.navigate(client.url))
-//     })
-// })
-
-// remove leftover workbox sw stuff
-
-// if (typeof indexedDB.databases === 'function') {
-//   indexedDB
-//     .databases()
-//     .then((dbs) => {
-//       if (dbs.length > 0) {
-//         dbs.forEach((db) => indexedDB.deleteDatabase(db.name))
-//       }
-//     })
-//     .then(() => null)
-//     .catch((e) => console.error(e))
+// retire sw
+// async function handleServiceWorker() {
+//   if ("serviceWorker" in navigator) {
+//     try {
+//       // https://developers.google.com/web/tools/workbox/modules/workbox-window
+//       const { Workbox } = await import("workbox-window");
+//       const wb = new Workbox("../sw.js");
+//       wb.addEventListener("installed", (event) => {
+//         if (event.isUpdate) {
+//           window.location.reload();
+//         }
+//       });
+//       wb.register();
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   }
 // }
+
+// retire vite config with sw
+// export default defineConfig({
+//   root: "./src",
+//   build: {
+//     outDir: "../dist",
+//     emptyOutDir: true,
+//   },
+//   plugins: [
+//     generateSW({
+//       swDest: "./dist/sw.js",
+//       globDirectory: "./dist",
+//       globPatterns: ["**/*.{js,css,html,png,jpg,jpeg,svg,ico,woff2}"],
+//       sourcemap: false,
+//       cleanupOutdatedCaches: true,
+//       clientsClaim: true,
+//       skipWaiting: true,
+//     }),
+//   ],
+// });

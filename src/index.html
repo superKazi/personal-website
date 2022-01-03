@@ -75,21 +75,23 @@
           "Segoe UI Emoji", "Segoe UI Symbol";
         font-kerning: normal;
         font-variant-ligatures: discretionary-ligatures;
-        font-variation-settings: "wght" 50, "opsz" 100, "wdth" 100;
+        font-weight: 50;
+        font-stretch: 100%;
+        font-optical-sizing: none;
         line-height: 1.1;
       }
 
       main {
         isolation: isolate;
         width: 100%;
-        padding: var(--step-1, 2rem) clamp(var(--step-0, 1rem), 6%, var(--step-3, 4rem));
+        padding: var(--step-1, 2rem)
+          clamp(var(--step-0, 1rem), 6%, var(--step-3, 4rem));
       }
 
       p {
         font-size: var(--step-3, 4rem);
         letter-spacing: -0.025em;
         word-spacing: -0.01em;
-        transition: transform 200ms ease;
       }
 
       p + p {
@@ -108,21 +110,26 @@
       a {
         text-decoration: none;
         transition: all 200ms ease;
-      }
-
-      a span {
-        text-decoration: underline;
+        font-weight: 150;
       }
 
       a:hover,
       a:active {
-        text-shadow: 0px 0px 15px white;
+        font-weight: 200;
+        font-stretch: 200%;
+      }
+
+      a:focus {
+        outline: none;
+        text-decoration: underline;
+        text-decoration-skip-ink: auto;
       }
 
       em {
         font-family: "Baryton";
         font-weight: normal;
         font-style: normal;
+        font-optical-sizing: auto;
         letter-spacing: initial;
         font-size: calc(var(--step-3, 4rem) * 1.1);
       }
@@ -135,7 +142,7 @@
         height: 100%;
         z-index: 1;
         background-image: conic-gradient(
-            from var(--deg, 0deg) at 62% 62%,
+            from var(--deg, 0deg) at 50% 50%,
             hsla(26, 82%, 71%, 0.666),
             hsla(149, 100%, 71%, 0.5)
           ),

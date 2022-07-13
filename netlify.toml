@@ -1,0 +1,6 @@
+[[edge_functions]]
+path = "/"
+function = "geo"
+
+[dev]
+targetPort = 5173

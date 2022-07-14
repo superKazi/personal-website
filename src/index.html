@@ -109,10 +109,11 @@
 
       a {
         text-decoration: none;
-        transition: all 200ms ease;
         font-stretch: 200%;
-        text-decoration: underline;
-        text-decoration-skip-ink: auto;
+        font-weight: 200;
+        background: linear-gradient(0deg, red, green) no-repeat right bottom / 0
+          0;
+        transition: background-size 200ms ease-in-out;
       }
 
       a:focus {
@@ -122,7 +123,8 @@
       a:hover,
       a:active,
       a:focus {
-        font-weight: 200;
+        background-size: 100% 100%;
+        background-position-x: left;
       }
 
       em {
@@ -237,8 +239,7 @@
     </header>
     <main>
       <p>
-        hi, thanks for visiting {{geo}} he is a senior
-        creative developer at
+        hi, thanks for visiting {{geo}} he is a senior creative developer at
         <a
           id="insider"
           href="https://www.businessinsider.com/category/kazi-awal"

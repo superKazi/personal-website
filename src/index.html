@@ -110,19 +110,19 @@
       a {
         text-decoration: none;
         transition: all 200ms ease;
-        font-weight: 150;
-      }
-
-      a:hover,
-      a:active {
-        font-weight: 200;
         font-stretch: 200%;
+        text-decoration: underline;
+        text-decoration-skip-ink: auto;
       }
 
       a:focus {
         outline: none;
-        text-decoration: underline;
-        text-decoration-skip-ink: auto;
+      }
+
+      a:hover,
+      a:active,
+      a:focus {
+        font-weight: 200;
       }
 
       em {

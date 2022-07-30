@@ -11,10 +11,10 @@ function scrollyFun() {
 
   ScrollTrigger.create({
     animation: tween,
-    trigger: "main",
+    trigger: "body",
     start: "top top",
     end: "bottom bottom",
-    scrub: 1,
+    scrub: 5,
   });
 }
 

@@ -46,14 +46,23 @@
       }
 
       :root {
-        --step--2: clamp(0.69rem, 0.63rem + 0.34vw, 2.29rem);
-        --step--1: clamp(0.83rem, 0.71rem + 0.61vw, 3.71rem);
-        --step-0: clamp(1rem, 0.79rem + 1.06vw, 6rem);
-        --step-1: clamp(1.2rem, 0.84rem + 1.81vw, 9.71rem);
-        --step-2: clamp(1.44rem, 0.83rem + 3.03vw, 15.71rem);
-        --step-3: clamp(1.73rem, 0.72rem + 5.03vw, 25.42rem);
-        --step-4: clamp(2.07rem, 0.42rem + 8.29vw, 41.12rem);
-        --step-5: clamp(2.49rem, -0.23rem + 13.59vw, 66.53rem);
+        --step--2: clamp(0.69rem, calc(0.63rem + 0.34vw), 2.29rem);
+        --step--1: clamp(0.83rem, calc(0.71rem + 0.61vw), 3.71rem);
+        --step-0: clamp(1rem, calc(0.79rem + 1.06vw), 6rem);
+        --step-1: clamp(1.2rem, calc(0.84rem + 1.81vw), 9.71rem);
+        --step-2: clamp(1.44rem, calc(0.83rem + 3.03vw), 15.71rem);
+        --step-3: clamp(1.73rem, calc(0.72rem + 5.03vw), 25.42rem);
+        --step-4: clamp(2.07rem, calc(0.42rem + 8.29vw), 41.12rem);
+        --step-5: clamp(2.49rem, calc(-0.23rem + 13.59vw), 66.53rem);
+
+        --space-3xs-2xs: clamp(0.25rem, calc(0.14rem + 0.56vw), 1.56rem);
+        --space-2xs-xs: clamp(0.5rem, calc(0.34rem + 0.79vw), 2.38rem);
+        --space-xs-s: clamp(0.75rem, calc(0.55rem + 1.01vw), 3.13rem);
+        --space-s-m: clamp(1rem, calc(0.69rem + 1.56vw), 4.69rem);
+        --space-m-l: clamp(1.5rem, calc(1.1rem + 2.01vw), 6.25rem);
+        --space-l-xl: clamp(2rem, calc(1.38rem + 3.13vw), 9.38rem);
+        --space-xl-2xl: clamp(3rem, calc(2.19rem + 4.03vw), 12.5rem);
+        --space-2xl-3xl: clamp(4rem, calc(2.75rem + 6.25vw), 18.75rem);
       }
 
       body,
@@ -84,18 +93,17 @@
       main {
         isolation: isolate;
         width: 100%;
-        padding: var(--step-1, 2rem)
-          clamp(var(--step-0, 1rem), 6%, var(--step-3, 4rem));
+        padding: var(--space-m-l);
       }
 
       p {
-        font-size: var(--step-3, 4rem);
+        font-size: var(--step-3);
         letter-spacing: -0.025em;
         word-spacing: -0.01em;
       }
 
       p + p {
-        margin-top: max(var(--step-2, 3rem), var(--step-1, 2rem));
+        margin-top: var(--space-l-xl);
       }
 
       p,
@@ -103,7 +111,7 @@
         position: relative;
         z-index: 2;
         color: white;
-        filter: contrast(200%);
+        filter: contrast(150%);
         mix-blend-mode: exclusion;
       }
 
@@ -111,9 +119,9 @@
         text-decoration: none;
         font-stretch: 200%;
         font-weight: 200;
-        background: linear-gradient(0deg, red, green) no-repeat right bottom / 0
-          0;
-        transition: background-size 200ms ease-in-out;
+        background: linear-gradient(0deg, white, white) no-repeat right bottom /
+          0 0;
+        transition: background-size 200ms ease-in-out, color 200ms ease-in-out;
       }
 
       a:focus {
@@ -125,6 +133,7 @@
       a:focus {
         background-size: 100% 100%;
         background-position-x: left;
+        color: black;
       }
 
       em {
@@ -133,7 +142,7 @@
         font-style: normal;
         font-optical-sizing: auto;
         letter-spacing: initial;
-        font-size: calc(var(--step-3, 4rem) * 1.1);
+        font-size: calc(var(--step-3) * 1.1);
       }
 
       #gradient {

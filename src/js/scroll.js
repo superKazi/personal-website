@@ -18,13 +18,14 @@ function scrollyFun() {
   /**
    * @function lerpedAnimation
    * @description iife that recursively runs via requestAnimationFrame. It listens for vertical scroll and then updates a css custom property using an interpolated value on the next frame.
+   * @see {@link https://easings.net} for easing functions easeOutSine easing function
    */
   (function lerpedAnimation() {
     scroll(({ y }) => {
       targetY = mapRange(0, 1, clamp(0, y.progress, 1), 0, 360);
     });
     const deltaY = targetY - currentY;
-    currentY += deltaY * 0.05;
+    currentY += deltaY * Math.sin((0.0333 * Math.PI) / 2);
     document.documentElement.style.setProperty("--deg", `${currentY}deg`);
 
     requestAnimationFrame(lerpedAnimation);

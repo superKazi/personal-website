@@ -1,21 +1,27 @@
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { scroll } from "motion";
 
 function scrollyFun() {
-  gsap.registerPlugin(ScrollTrigger);
+  let currentY = 0;
+  let targetY = 0;
 
-  const tween = gsap.to(document.documentElement, {
-    "--deg": "360deg",
-    ease: "sine.out",
-  });
+  (function lerpedAnimation() {
+    scroll(({ y }) => {
+      targetY = mapRange(0, 1, clamp(0, y.progress, 1), 0, 360);
+    });
+    const deltaY = targetY - currentY;
+    currentY += deltaY * 0.05;
+    document.documentElement.style.setProperty("--deg", `${currentY}deg`);
 
-  ScrollTrigger.create({
-    animation: tween,
-    trigger: "body",
-    start: "top top",
-    end: "bottom bottom",
-    scrub: 5,
-  });
+    requestAnimationFrame(lerpedAnimation);
+  })();
+}
+
+function mapRange(in_min, in_max, input, out_min, out_max) {
+  return ((input - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+}
+
+function clamp(min, input, max) {
+  return Math.max(min, Math.min(input, max));
 }
 
 export { scrollyFun };

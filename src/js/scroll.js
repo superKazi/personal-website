@@ -47,7 +47,7 @@ function mapRange(in_min, in_max, input, out_min, out_max) {
 }
 
 /**
- * @function mapRange
+ * @function clamp
  * @param {number} min - the minimum output value
  * @param {number} input - the input value
  * @param {number} max - the maximum output value

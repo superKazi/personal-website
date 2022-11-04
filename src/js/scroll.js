@@ -20,13 +20,10 @@ function scrollyFun() {
     "--deg": "360deg",
     ease: "sine.out",
     scrollTrigger: {
-      config: { ignoreMobileResize: true },
       trigger: "body",
       start: "top top",
       end: "bottom bottom",
       scrub: 4,
-      normalizeScroll: true,
-      invalidateOnRefresh: true,
     },
   });
 }

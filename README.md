@@ -7,6 +7,7 @@ Netlify builds this code to make my website.
 - PolySans, a font by [Gradient](https://wearegradient.net/polysans/)
 - Fluid typography and spacing using [Utopia](https://utopia.fyi) by James Gilyead and Trys Mudford
 - Adobe’s [balance text](https://opensource.adobe.com/balance-text/) 
+- [Lodash](https://lodash.com/docs#debounce) for debouncing resize function
 - Color gradient inspired by [Wado Sanzo | A Dictionary of Color Combinations](https://sanzo-wada.dmbk.io/about)
 - [GSAP ScrollTrigger](https://greensock.com/scrolltrigger/) for the gradient scroll animation
 - Some stuff from this [CSS reset](https://piccalil.li/blog/a-modern-css-reset) by Andy Bell

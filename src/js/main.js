@@ -1,3 +1,8 @@
+import balancetext from "balance-text";
+
+// balance type
+balancetext()
+
 // set up variables for functions
 const allowAnimations = window.matchMedia(
   "(prefers-reduced-motion: no-preference)"

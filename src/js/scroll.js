@@ -16,6 +16,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 function scrollyFun() {
+  
+  ScrollTrigger.config({
+    limitCallbacks: true,
+    ignoreMobileResize: true,
+  });
+
+  ScrollTrigger.normalizeScroll(true);
+
   gsap.to("html", {
     "--deg": "360deg",
     ease: "sine.out",
@@ -26,6 +34,7 @@ function scrollyFun() {
       scrub: 4,
     },
   });
+  
 }
 
 export { scrollyFun };

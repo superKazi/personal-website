@@ -1,12 +1,58 @@
 import balanceText from "balance-text";
 
 /**
- * @description set up accessibility variable for scrolly function
+ * @description remove leftover workbox sw stuff
  */
 
-const allowAnimations = window.matchMedia(
-  "(prefers-reduced-motion: no-preference)"
-).matches;
+if (typeof navigator.serviceWorker === "object" && typeof caches === "object") {
+  (async function killServiceWorkers() {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      const unregisterPromises = registrations.map((registration) =>
+        registration.unregister()
+      );
+
+      const allCaches = await caches.keys();
+      const cacheDeletionPromises = allCaches.map((cache) =>
+        caches.delete(cache)
+      );
+
+      const clearAttempted = await Promise.allSettled([
+        ...unregisterPromises,
+        ...cacheDeletionPromises,
+      ]);
+
+      if (clearAttempted.includes((p) => p.status === "rejected")) {
+        throw new Error(
+          "There was an error clearing google workbox information"
+        );
+      } else {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  })();
+}
+
+if (typeof indexedDB.databases === "function") {
+  (async function clearDbs() {
+    try {
+      const dbs = await indexedDB.databases();
+
+      if (dbs.length > 0) {
+        dbs.forEach((db) => {
+          const deletedDb = indexedDB.deleteDatabase(db.name);
+          deletedDb.onerror = () => {
+            throw new Error("Couldn’t delete google workbox indexDB");
+          };
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  })();
+}
 
 /**
  * @description balance page type on larger screens
@@ -15,6 +61,14 @@ const allowAnimations = window.matchMedia(
 if (window.matchMedia("(min-width: 600px)").matches) {
   balanceText();
 }
+
+/**
+ * @description set up accessibility variable for scrolly function
+ */
+
+const allowAnimations = window.matchMedia(
+  "(prefers-reduced-motion: no-preference)"
+).matches;
 
 /**
  * @description only load and run scroll animations if they want animations
@@ -29,22 +83,6 @@ if (allowAnimations) {
       console.error(err);
     }
   })();
-}
-
-/**
- * @description remove leftover workbox sw stuff
- */
-
-if (typeof indexedDB.databases === "function") {
-  indexedDB
-    .databases()
-    .then((dbs) => {
-      if (dbs.length > 0) {
-        dbs.forEach((db) => indexedDB.deleteDatabase(db.name));
-      }
-    })
-    .then(() => null)
-    .catch((e) => console.error(e));
 }
 
 /**

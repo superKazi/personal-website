@@ -22,12 +22,14 @@ if (typeof navigator.serviceWorker === "object" && typeof caches === "object") {
         ...cacheDeletionPromises,
       ]);
 
-      if (clearAttempted.includes((p) => p.status === "rejected")) {
-        throw new Error(
-          "There was an error clearing google workbox information"
-        );
-      } else {
-        window.location.reload();
+      if (clearAttempted.length > 0) {
+        if (clearAttempted.includes((p) => p.status === "rejected")) {
+          throw new Error(
+            "There was an error clearing google workbox information"
+          );
+        } else {
+          window.location.reload();
+        }
       }
     } catch (err) {
       console.error(err);

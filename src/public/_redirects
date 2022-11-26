@@ -1,5 +1,0 @@
-# Redirect default Netlify subdomain to primary domain
-https://kazielmanawal.netlify.com/* https://kazielmanawal.me/:splat 301!
-https://www.kazielmanawal.netlify.com/* https://kazielmanawal.me/:splat 301!
-https://kazielmanawal.netlify.app/* https://kazielmanawal.me/:splat 301!
-https://www.kazielmanawal.netlify.app/* https://kazielmanawal.me/:splat 301!

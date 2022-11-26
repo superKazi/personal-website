@@ -11,5 +11,7 @@ export default async (_, context) => {
 
   const updatedPage = page.replace(regex, welcomeText);
 
+  response.headers.set('cache-control', 'max-age=0, no-store, must-revalidate')
+
   return new Response(updatedPage, response);
 };

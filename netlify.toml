@@ -1,6 +1,94 @@
+# EDGE FUNCTIONS
+
 [[edge_functions]]
-path = "/"
-function = "geo"
+	path = "/"
+	function = "geo"
 
 [dev]
-targetPort = 5173
+	targetPort = 5173
+
+# REDIRECTS
+
+[[redirects]]
+  from = "https://kazielmanawal.netlify.com/*"
+  to = "https://kazielmanawal.me/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.kazielmanawal.netlify.com/*"
+  to = "https://kazielmanawal.me/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://kazielmanawal.netlify.app/*"
+  to = "https://kazielmanawal.me/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.kazielmanawal.netlify.app/*"
+  to = "https://kazielmanawal.me/:splat"
+  status = 301
+  force = true
+
+# HEADERS	
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+		X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+		cache-control = '''
+			max-age=0,
+			no-store,
+			must-revalidate'''
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+		cache-control = '''
+			max-age=0,
+			no-store,
+			must-revalidate'''
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+		cache-control = '''
+			max-age=0,
+			no-store'''
+
+[[headers]]
+  for = "/.*\.(png|svg|ico)$"
+  [headers.values]
+		cache-control = '''
+			max-age=604800,
+			public'''
+
+[[headers]]
+  for = "/og.jpg"
+  [headers.values]
+		cache-control = '''
+			max-age=604800,
+			public'''
+
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+		cache-control = '''
+			max-age=604800,
+			public'''
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+		cache-control = '''
+			max-age=604800,
+			public'''

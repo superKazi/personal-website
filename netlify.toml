@@ -92,4 +92,4 @@
 		cache-control = '''
 			max-age=604800,
 			public,
-      must-revalidate'''
+      immutable'''

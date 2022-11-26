@@ -66,7 +66,7 @@
 			no-store'''
 
 [[headers]]
-  for = "/.*\.(png|svg|ico)$"
+  for = "/.*\\.(png|svg|ico)$"
   [headers.values]
 		cache-control = '''
 			max-age=604800,
@@ -91,4 +91,5 @@
   [headers.values]
 		cache-control = '''
 			max-age=604800,
-			public'''
+			public,
+      immutable'''

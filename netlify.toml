@@ -47,7 +47,7 @@
   [headers.values]
 		cache-control = '''
 			max-age=0,
-			no-store,
+			public,
 			must-revalidate'''
 
 [[headers]]
@@ -90,6 +90,6 @@
   for = "/assets/*"
   [headers.values]
 		cache-control = '''
-			max-age=604800,
+			max-age=31536000,
 			public,
       immutable'''

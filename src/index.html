@@ -47,8 +47,8 @@
 
       @font-face {
         font-family: "PolySans";
-        src: url("./PolySansGX.woff2") format("woff2-variations");
-        font-optical-sizing: auto;
+        src: url("./PolySansGX.woff2") format('woff2') tech('variations'),
+             url("./PolySansGX.woff2") format("woff2-variations");
         font-stretch: 100% 200%;
         font-style: normal;
         font-weight: 50 200;
@@ -102,7 +102,6 @@
         font-variant-ligatures: discretionary-ligatures;
         font-weight: 50;
         font-stretch: 100%;
-        font-optical-sizing: none;
         line-height: 1.1;
       }
 
@@ -117,6 +116,7 @@
         font-size: var(--step-3);
         letter-spacing: -0.025em;
         word-spacing: -0.01em;
+        font-optical-sizing: none;
       }
 
       p + p {

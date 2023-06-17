@@ -2,7 +2,7 @@
 
 [[edge_functions]]
 	path = "/"
-	function = "rects"
+	function = "geo"
 
 [dev]
 	targetPort = 5173

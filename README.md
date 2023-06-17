@@ -3,13 +3,11 @@
 Netlify builds this code to make my website.
 
 ### I used:
-- Baryton, a font by [Coppers and Brasses](https://www.coppersandbrasses.com/typefaces/baryton/)
-- PolySans, a font by [Gradient](https://wearegradient.net/polysans/)
-- Fluid typography and spacing using [Utopia](https://utopia.fyi) by James Gilyead and Trys Mudford
-- Daniel Aleksandersen’s [text balancer](https://www.ctrl.blog/entry/text-wrap-balance.html) 
-- Color gradient inspired by [Wado Sanzo | A Dictionary of Color Combinations](https://sanzo-wada.dmbk.io/about)
-- [GSAP ScrollTrigger](https://greensock.com/scrolltrigger/) for the gradient scroll animation
-- Some stuff from this [CSS reset](https://piccalil.li/blog/a-modern-css-reset) by Andy Bell
+
+- Degular, a font by [Oh No Type Company](https://ohnotype.co)
+- Fluid typography, spacing, and grid using [Utopia](https://utopia.fyi) by James Gilyead and Trys Mudford
+- Some stuff from this [CSS reset](https://www.joshwcomeau.com/css/custom-css-reset/) by Josh Comeau
 - Andrey Sitnik’s [favicon strategy](https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs)
 - [Goatcounter](https://www.goatcounter.com) by Martin Tournoij to track you if/when you visit
 - [Vite.js](https://vitejs.dev) for my build tooling
+- [Matt DesLauriers'](https://www.mattdesl.com) instruction for animation

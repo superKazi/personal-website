@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-city="{{geo}}">
   <head>
     <meta name="charset" content="utf-8" />
     <meta
@@ -87,8 +87,7 @@
           "Nimbus Sans", Arial, sans-serif;
         font-kerning: normal;
         text-rendering: optimizeLegibility;
-        background-color: hsl(0, 0%, 5%);
-        color: hsl(0, 0%, 95%);
+        color: hsl(0, 0%, 5%);
       }
 
       p,
@@ -119,41 +118,30 @@
         line-height: 1;
         grid-column: 1 / -1;
         place-self: start;
-        text-shadow: 0px 0px 5px black;
-        filter: drop-shadow(0px 0px 5px black);
       }
 
       p {
-        font-variation-settings: "opsz" 14, "wght" 400, "ital" 0;
-        font-size: var(--step-3);
+        font-variation-settings: "opsz" 36, "wght" 400, "ital" 0;
+        font-size: var(--step-4);
         font-weight: 400;
         grid-column: 1 / -1;
         place-self: end;
         line-height: 1.1;
-        text-shadow: 0px 0px 5px black;
-        filter: drop-shadow(0px 0px 5px black);
       }
 
       a {
         color: inherit;
         transition: all 200ms ease;
-        font-variation-settings: "opsz" 14, "wght" 400, "ital" 0;
+        font-variation-settings: "opsz" 36, "wght" 400, "ital" 0;
       }
 
       a:hover {
         font-variation-settings: "opsz" 72, "wght" 800, "ital" 1;
       }
 
-      svg {
+      canvas {
         display: block;
         max-width: 100%;
-        position: fixed;
-        z-index: 0;
-        width: calc(100vmin - (var(--grid-gutter) * 2));
-        height: calc(100vmin - (var(--grid-gutter) * 2));
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
       }
 
       @media (orientation: landscape) {
@@ -177,7 +165,7 @@
     <meta name="robots" content="index,follow" />
     <meta name="googlebot" content="index,follow" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="theme-color" content="#f2f2f2" />
+    <meta name="theme-color" content="#ffffff" />
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Kazi’s website" />
     <meta property="og:url" content="https://kazielmanawal.me" />
@@ -225,13 +213,11 @@
             rel="noopener noreferrer"
             data-goatcounter-click
             >Insider</a
-          >. He creative directs, designs, and programs ambitious interactive
-          journalism and researches, prototypes, and launches newsroom tools and
-          products.
+          >. He creative directs, product manages, designs, and develops award
+          winning interactive journalism and newsroom tools and products.
         </p>
       </div>
     </main>
-    <svg aria-hidden="true" viewBox="0 0 100 100">{{rects}}</svg>
     <script type="module" src="./js/main.js"></script>
     <script
       data-goatcounter="https://superkazi.goatcounter.com/count"

@@ -1,6 +1,6 @@
 {
   "name": "kazi-website",
-  "version": "5.10.0",
+  "version": "6.0.0",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
@@ -13,6 +13,8 @@
     "vite": "^4.3.5"
   },
   "dependencies": {
-    "gsap": "^3.11.5"
+    "canvas-sketch-util": "^1.10.0",
+    "gsap": "^3.11.5",
+    "nice-color-palettes": "^3.0.0"
   }
 }

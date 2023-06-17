@@ -3,8 +3,9 @@ import regl from "regl";
 import createQuad from "primitive-quad";
 
 /**
- * @description set up animation
+ * set up animation
  */
+
 const fragmentShader = `
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
@@ -200,8 +201,9 @@ const drawing = draw({
 });
 
 draw.frame(drawing);
+
 /**
- * @description remove leftover workbox sw stuff
+ * remove leftover workbox sw stuff
  */
 
 (async function killServiceWorkers() {
@@ -253,7 +255,7 @@ draw.frame(drawing);
 })();
 
 /**
- * @description polite console
+ * polite console
  */
 
 const politeString =

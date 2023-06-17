@@ -13,8 +13,6 @@
     "vite": "^4.3.5"
   },
   "dependencies": {
-    "canvas-sketch-util": "^1.10.0",
-    "gsap": "^3.11.5",
-    "nice-color-palettes": "^3.0.0"
+    "gsap": "^3.11.5"
   }
 }

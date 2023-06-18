@@ -1,27 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-city="{{geo}}">
   <head>
     <meta name="charset" content="utf-8" />
     <meta
       name="viewport"
       content="width=device-width,initial-scale=1,shrink-to-fit=no,viewport-fit=cover"
     />
-    <title>Kazi Elman Awal</title>
+    <title>Kazi’s website</title>
     <link rel="preconnect" href="https://superkazi.goatcounter.com" />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
-      href="./Baryton-Italic.woff2"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-      href="./PolySansGX.woff2"
+      href="./DegularVariable.woff2"
       fetchpriority="high"
     />
     <script type="application/ld+json">
@@ -39,19 +31,43 @@
     </script>
     <style>
       @font-face {
-        font-family: "Baryton";
-        src: url("/Baryton-Italic.woff2") format("woff2");
-        font-weight: normal;
+        font-family: "Degular";
+        src: url("/DegularVariable.woff2") format("woff2-variations");
+        font-optical-sizing: none;
+        font-weight: 200 800;
+        font-stretch: normal;
+        font-style: normal;
         font-display: auto;
+        font-synthesis: none;
       }
 
-      @font-face {
-        font-family: "PolySans";
-        src: url("/PolySansGX.woff2") format("woff2-variations");
-        font-stretch: 100% 200%;
-        font-style: normal;
-        font-weight: 50 200;
-        font-display: auto;
+      :root {
+        --step--2: clamp(0.78rem, calc(0.77rem + 0.08vw), 0.96rem);
+        --step--1: clamp(0.94rem, calc(0.92rem + 0.11vw), 1.2rem);
+        --step-0: clamp(1.13rem, calc(1.09rem + 0.16vw), 1.5rem);
+        --step-1: clamp(1.35rem, calc(1.31rem + 0.22vw), 1.88rem);
+        --step-2: clamp(1.62rem, calc(1.56rem + 0.31vw), 2.34rem);
+        --step-3: clamp(1.94rem, calc(1.86rem + 0.42vw), 2.93rem);
+        --step-4: clamp(2.33rem, calc(2.22rem + 0.56vw), 3.66rem);
+        --step-5: clamp(2.8rem, calc(2.65rem + 0.75vw), 4.58rem);
+        --step-6: clamp(3.36rem, calc(3.16rem + 1vw), 5.72rem);
+
+        --space-3xs: clamp(0.31rem, calc(0.31rem + 0.03vw), 0.38rem);
+        --space-2xs: clamp(0.56rem, calc(0.55rem + 0.08vw), 0.75rem);
+        --space-xs: clamp(0.88rem, calc(0.85rem + 0.11vw), 1.13rem);
+        --space-s: clamp(1.13rem, calc(1.09rem + 0.16vw), 1.5rem);
+        --space-m: clamp(1.69rem, calc(1.64rem + 0.24vw), 2.25rem);
+        --space-l: clamp(2.25rem, calc(2.19rem + 0.32vw), 3rem);
+        --space-xl: clamp(3.38rem, calc(3.28rem + 0.48vw), 4.5rem);
+        --space-2xl: clamp(4.5rem, calc(4.37rem + 0.64vw), 6rem);
+        --space-3xl: clamp(6.75rem, calc(6.56rem + 0.95vw), 9rem);
+
+        --grid-max-width: 93rem;
+        --grid-gutter: var(
+          --space-s-l,
+          clamp(1.13rem, calc(0.61rem + 2.57vw), 3rem)
+        );
+        --grid-columns: 12;
       }
 
       *,
@@ -60,149 +76,82 @@
         box-sizing: border-box;
       }
 
-      :root {
-        --step--2: clamp(0.69rem, calc(0.63rem + 0.34vw), 2.29rem);
-        --step--1: clamp(0.83rem, calc(0.71rem + 0.61vw), 3.71rem);
-        --step-0: clamp(1rem, calc(0.79rem + 1.06vw), 6rem);
-        --step-1: clamp(1.2rem, calc(0.84rem + 1.81vw), 9.71rem);
-        --step-2: clamp(1.44rem, calc(0.83rem + 3.03vw), 15.71rem);
-        --step-3: clamp(1.73rem, calc(0.72rem + 5.03vw), 25.42rem);
-        --step-4: clamp(2.07rem, calc(0.42rem + 8.29vw), 41.12rem);
-        --step-5: clamp(2.49rem, calc(-0.23rem + 13.59vw), 66.53rem);
-
-        --space-3xs-2xs: clamp(0.25rem, calc(0.14rem + 0.56vw), 1.56rem);
-        --space-2xs-xs: clamp(0.5rem, calc(0.34rem + 0.79vw), 2.38rem);
-        --space-xs-s: clamp(0.75rem, calc(0.55rem + 1.01vw), 3.13rem);
-        --space-s-m: clamp(1rem, calc(0.69rem + 1.56vw), 4.69rem);
-        --space-m-l: clamp(1.5rem, calc(1.1rem + 2.01vw), 6.25rem);
-        --space-l-xl: clamp(2rem, calc(1.38rem + 3.13vw), 9.38rem);
-        --space-xl-2xl: clamp(3rem, calc(2.19rem + 4.03vw), 12.5rem);
-        --space-2xl-3xl: clamp(4rem, calc(2.75rem + 6.25vw), 18.75rem);
-      }
-
-      body,
-      header,
-      main,
-      p {
+      * {
         margin: 0;
-      }
-
-      html:focus-within {
-        scroll-behavior: smooth;
       }
 
       body {
-        min-height: 100vh;
-        text-rendering: optimizeLegibility;
-        font-family: "Polysans", Inter, Roboto, "Helvetica Neue", "Arial Nova",
+        line-height: 1.3;
+        -webkit-font-smoothing: antialiased;
+        font-family: "Degular", Inter, Roboto, "Helvetica Neue", "Arial Nova",
           "Nimbus Sans", Arial, sans-serif;
         font-kerning: normal;
-        font-variant-ligatures: discretionary-ligatures;
-        font-weight: 50;
-        font-stretch: 100%;
-        line-height: 1.1;
-      }
-
-      main {
-        isolation: isolate;
-        width: 100%;
-        max-width: 100%;
-        padding: var(--space-m-l);
-      }
-
-      p {
-        font-size: var(--step-3);
-        letter-spacing: -0.025em;
-        word-spacing: -0.01em;
-        font-optical-sizing: none;
-      }
-
-      p + p {
-        margin-top: var(--space-l-xl);
+        text-rendering: optimizeLegibility;
+        color: hsl(0, 0%, 5%);
       }
 
       p,
-      a {
+      h1 {
+        overflow-wrap: break-word;
+      }
+
+      main {
         position: relative;
-        z-index: 2;
-        color: white;
-        filter: contrast(150%);
-        mix-blend-mode: exclusion;
+        z-index: 1;
+        max-width: var(--grid-max-width);
+        padding-inline: var(--grid-gutter);
+        margin-inline: auto;
+      }
+
+      div {
+        display: grid;
+        gap: var(--grid-gutter);
+        grid-template-columns: repeat(var(--grid-columns), 1fr);
+        height: 100vh;
+        height: 100svh;
+        padding: var(--step-6) 0;
+      }
+
+      h1 {
+        font-variation-settings: "opsz" 72, "wght" 400, "ital" 0;
+        font-size: var(--step-6);
+        line-height: 1;
+        grid-column: 1 / -1;
+        place-self: start;
+      }
+
+      p {
+        font-variation-settings: "opsz" 36, "wght" 400, "ital" 0;
+        font-size: var(--step-4);
+        font-weight: 400;
+        grid-column: 1 / -1;
+        place-self: end;
+        line-height: 1.1;
       }
 
       a {
-        text-decoration: none;
-        font-stretch: 200%;
-        font-weight: 200;
-        background: linear-gradient(0deg, white, white) no-repeat right bottom /
-          0 0;
-        transition: background-size 200ms ease-in-out, color 200ms ease-in-out;
+        color: inherit;
+        transition: all 200ms ease;
+        font-variation-settings: "opsz" 36, "wght" 400, "ital" 0;
       }
 
-      a:focus {
-        outline: none;
+      a:hover {
+        font-variation-settings: "opsz" 72, "wght" 800, "ital" 1;
       }
 
-      a:hover,
-      a:active,
-      a:focus {
-        background-size: 100% 100%;
-        background-position-x: left;
-        color: black;
+      canvas {
+        display: block;
+        max-width: 100%;
       }
 
-      em {
-        font-family: "Baryton";
-        font-weight: normal;
-        font-style: normal;
-        font-optical-sizing: auto;
-        letter-spacing: initial;
-        font-size: calc(var(--step-3) * 1.1);
-      }
-
-      #gradient {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        contain: strict;
-        background-image: conic-gradient(
-            from var(--deg, 0deg) at 50% 50%,
-            hsla(26, 82%, 71%, 0.666),
-            hsla(149, 100%, 71%, 0.5)
-          ),
-          url("data:image/svg+xml,%3Csvg viewBox='0 0 5025 5025' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.15' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        filter: contrast(125%) brightness(105%);
-        background-position: center;
-        background-size: cover;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        html:focus-within {
-          scroll-behavior: auto;
+      @media (orientation: landscape) {
+        h1 {
+          grid-column: 1 / 6;
         }
-        *,
-        *::before,
-        *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0.01ms !important;
-          scroll-behavior: auto !important;
-        }
-      }
 
-      .visually-hidden {
-        border: 0;
-        clip: rect(0 0 0 0);
-        height: auto;
-        margin: 0;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        width: 1px;
-        white-space: nowrap;
+        p {
+          grid-column: 7 / -1;
+        }
       }
     </style>
     <meta
@@ -216,14 +165,17 @@
     <meta name="robots" content="index,follow" />
     <meta name="googlebot" content="index,follow" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="theme-color" content="#6bffb3" />
+    <meta name="theme-color" content="#ffffff" />
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Kazi’s website" />
     <meta property="og:url" content="https://kazielmanawal.me" />
-    <meta property="og:description" content="Learn more about Kazi" />
+    <meta
+      property="og:description"
+      content="Find some more links about Kazi."
+    />
     <meta
       property="og:image:alt"
-      content="Graphic design made using the letter k"
+      content="Typographic design that reads: Kazi Elman Awal is senior creative developer at Insider. He creative directs, product manages, designs, and develops award winning interactive journalism and newsroom tools and products."
     />
     <meta property="og:image" content="https://kazielmanawal.me/og.jpg" />
     <meta property="profile:first_name" content="Kazi" />
@@ -232,7 +184,7 @@
     <meta property="twitter:domain" content="kazielmanawal.me" />
     <meta property="twitter:url" content="https://kazielmanawal.me" />
     <meta name="twitter:title" content="Kazi’s website" />
-    <meta name="twitter:description" content="Find out more about Kazi" />
+    <meta name="twitter:description" content="Find more links about Kazi." />
     <meta
       name="twitter:image:alt"
       content="Graphic design made using the letter k"
@@ -245,64 +197,29 @@
     <link rel="manifest" href="./manifest.webmanifest" />
   </head>
   <body>
-    <header class="visually-hidden">
-      <h1>Kazi Elman Awal&rsquo;s website</h1>
-    </header>
     <main>
-      <p class="balance-text">
-        Hi, thanks for visiting {{geo}} He is a senior creative developer at
-        <a
-          id="insider"
-          href="https://www.insider.com/transgender-violence-deaths-database-murder-cases-2017-2021"
-          data-goatcounter-click
-          >Insider</a
-        >, where he designs and develops ambitious journalism.
-      </p>
-      <p class="balance-text">
-        Before, that he was a front-end developer on the product team at
-        <a id="row" href="https://restofworld.org/" data-goatcounter-click
-          >Rest of World</a
-        >&#32;where he developed experiences for the audience, created
-        <a
-          id="social-card-generator"
-          href="https://restofworld.org/wp-content/projects/card-builder/"
-          data-goatcounter-click
-          >tools for the editorial team</a
-        >, and updated google analytics implementations, among other things.
-      </p>
-      <p class="balance-text">
-        But he&rsquo;s spent most of his career working in various newsrooms on
-        the editorial side designing and developing projects to
-        <a
-          id="sfc"
-          href="https://projects.sfchronicle.com/class-of-2020/spring"
-          data-goatcounter-click
-          >engage readers</a
-        >&#32;and
-        <a
-          id="wapo"
-          href="https://www.washingtonpost.com/graphics/2018/world/reports-of-hate-crime-cases-have-spiked-in-india/"
-          data-goatcounter-click
-          >elevate storytelling</a
-        >.
-      </p>
-      <p class="balance-text">
-        Following him on
-        <a
-          id="twitter"
-          href="https://twitter.com/superkazi"
-          data-goatcounter-click
-          >Twitter</a
-        >&#32;probably isn&rsquo;t worth it, but, if you want, you can find more
-        of <em>Kazi&rsquo;s</em> work on
-        <a
-          id="linkedin"
-          href="https://www.linkedin.com/in/superkazi/"
-          data-goatcounter-click
-          >LinkedIn</a
-        >.
-      </p>
-      <div id="gradient"></div>
+      <div>
+        <h1>Kazi Elman Awal</h1>
+        <p>
+          is a
+          <a
+            id="linkedin"
+            href="https://www.linkedin.com/in/superkazi/"
+            rel="noopener noreferrer"
+            data-goatcounter-click
+            >senior creative developer</a
+          >
+          at
+          <a
+            id="insider"
+            href="https://www.insider.com/transgender-violence-deaths-database-murder-cases-2017-2021"
+            rel="noopener noreferrer"
+            data-goatcounter-click
+            >Insider</a
+          >. He creative directs, product manages, designs, and develops award
+          winning interactive journalism and newsroom tools and products.
+        </p>
+      </div>
     </main>
     <script type="module" src="./js/main.js"></script>
     <script

@@ -46,25 +46,25 @@
   for = "/index.html"
   [headers.values]
 		cache-control = '''
-			max-age=0,
-      no-store,
-      must-revalidate'''
+			max-age=86400,
+      no-cache,
+      public'''
 
 [[headers]]
   for = "/sw.js"
   [headers.values]
 		cache-control = '''
-			max-age=0,
-			no-store,
-			must-revalidate'''
+			max-age=86400,
+			no-cache,
+			public'''
 
 [[headers]]
   for = "/manifest.webmanifest"
   [headers.values]
 		cache-control = '''
-			max-age=0,
-			no-store,
-      must-revalidate'''
+			max-age=86400,
+			no-cache,
+      public'''
 
 [[headers]]
   for = "/.*\\.(png|svg|ico)$"

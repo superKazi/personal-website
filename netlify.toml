@@ -46,8 +46,9 @@
   for = "/index.html"
   [headers.values]
 		cache-control = '''
-			max-age=604800,
-			public'''
+			max-age=0,
+      no-store,
+      must-revalidate'''
 
 [[headers]]
   for = "/sw.js"
@@ -62,28 +63,32 @@
   [headers.values]
 		cache-control = '''
 			max-age=0,
-			no-store'''
+			no-store,
+      must-revalidate'''
 
 [[headers]]
   for = "/.*\\.(png|svg|ico)$"
   [headers.values]
 		cache-control = '''
 			max-age=604800,
-			public'''
+			public,
+      stale-while-revalidate=86400'''
 
 [[headers]]
   for = "/og.jpg"
   [headers.values]
 		cache-control = '''
 			max-age=604800,
-			public'''
+			public,
+      stale-while-revalidate=86400'''
 
 [[headers]]
   for = "/*.woff2"
   [headers.values]
 		cache-control = '''
 			max-age=604800,
-			public'''
+			public,
+      stale-while-revalidate=86400'''
 
 [[headers]]
   for = "/assets/*"

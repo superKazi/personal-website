@@ -5,7 +5,7 @@ export default async (_, context) => {
   const city = context.geo.city || "unknown";
   const updatedPage = page.replace(regex, city);
 
-  response.headers.set("cache-control", "max-age=0, public, must-revalidate");
+  response.headers.set("cache-control", "max-age=0, no-store, must-revalidate");
 
   return new Response(updatedPage, response);
 };

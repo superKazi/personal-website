@@ -165,12 +165,12 @@ float snoise(vec3 v)
     vec2 center = vUv - 0.5;
     center.x *= width / height;
     float dist = length(center);
-    float mobileOrDesktopDistCheck = width > height ? 0.333 : 0.0666; 
+    float mobileOrDesktopDistCheck = width > height ? 0.3 : 0.06; 
     
-    float alpha = smoothstep(mobileOrDesktopDistCheck + 0.666, mobileOrDesktopDistCheck, dist);
+    float alpha = smoothstep(mobileOrDesktopDistCheck + 0.6, mobileOrDesktopDistCheck, dist);
 
-    float noise = snoise(vec3(center, time * .333));
-    vec3 color = hsl2rgb(0.5 + noise * 0.333, 0.666, 0.666);
+    float noise = snoise(vec3(center, time * .6));
+    vec3 color = hsl2rgb(0.6 + noise * 0.3, 0.8, 0.8);
     gl_FragColor = vec4(color, alpha);
   }
 `;

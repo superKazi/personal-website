@@ -63,10 +63,7 @@
         --space-3xl: clamp(6.75rem, calc(6.56rem + 0.95vw), 9rem);
 
         --grid-max-width: 93rem;
-        --grid-gutter: var(
-          --space-s-l,
-          clamp(1.13rem, calc(0.61rem + 2.57vw), 3rem)
-        );
+        --grid-gutter: clamp(1.13rem, calc(0.61rem + 2.57vw), 3rem);
         --grid-columns: 12;
       }
 
@@ -108,7 +105,7 @@
         grid-template-columns: repeat(var(--grid-columns), 1fr);
         min-height: 100vh;
         min-height: 100dvh;
-        padding: var(--step-6) 0;
+        padding: var(--grid-gutter) 0;
       }
 
       h1 {

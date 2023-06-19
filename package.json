@@ -1,6 +1,6 @@
 {
   "name": "kazi-website",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",

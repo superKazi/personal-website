@@ -46,24 +46,24 @@
   for = "/index.html"
   [headers.values]
 		cache-control = '''
-			max-age=86400,
-      no-cache,
+			max-age=0,
+      must-revalidate,
       public'''
 
 [[headers]]
   for = "/sw.js"
   [headers.values]
 		cache-control = '''
-			max-age=86400,
-			no-cache,
+			max-age=0,
+			must-revalidate,
 			public'''
 
 [[headers]]
   for = "/manifest.webmanifest"
   [headers.values]
 		cache-control = '''
-			max-age=86400,
-			no-cache,
+			max-age=0,
+			must-revalidate,
       public'''
 
 [[headers]]

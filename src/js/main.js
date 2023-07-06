@@ -210,12 +210,12 @@ draw.frame(drawing);
   try {
     const registrations = await navigator.serviceWorker.getRegistrations();
     const unregisterPromises = registrations.map((registration) =>
-      registration.unregister()
+      registration.unregister(),
     );
 
     const allCaches = await caches.keys();
     const cacheDeletionPromises = allCaches.map((cache) =>
-      caches.delete(cache)
+      caches.delete(cache),
     );
 
     const clearAttempted = await Promise.allSettled([
@@ -226,7 +226,7 @@ draw.frame(drawing);
     if (clearAttempted.length > 0) {
       if (clearAttempted.includes((p) => p.status === "rejected")) {
         throw new Error(
-          "There was an error clearing google workbox information"
+          "There was an error clearing google workbox information",
         );
       } else {
         window.location.reload();
@@ -266,5 +266,5 @@ const politeString =
 console.log(
   politeString,
   `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
-  "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight: bold; letter-spacing: .12em; font-size: 3rem; color: black;`
+  "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
 );

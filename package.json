@@ -1,6 +1,6 @@
 {
   "name": "kazi-website",
-  "version": "6.5.2",
+  "version": "6.6.0",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
@@ -10,11 +10,13 @@
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^3.0.0",
+    "rollup-plugin-workbox": "^8.0.1",
     "vite": "^4.4.1"
   },
   "dependencies": {
     "primitive-quad": "^2.0.0",
-    "regl": "^2.1.0"
+    "regl": "^2.1.0",
+    "workbox-window": "^7.0.0"
   },
   "eslintConfig": {
     "env": {

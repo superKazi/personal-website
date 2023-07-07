@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { generateSW } from "rollup-plugin-workbox";
 
 export default defineConfig({
   root: "./src",
@@ -7,4 +8,14 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
   },
+  plugins: [
+    generateSW({
+      dontCacheBustURLsMatching: new RegExp(".*assets/.*"),
+      swDest: "./dist/sw.js",
+      globDirectory: "./dist",
+      cleanupOutdatedCaches: true,
+      clientsClaim: true,
+      skipWaiting: true,
+    }),
+  ],
 });

@@ -13,6 +13,7 @@ export default defineConfig({
       dontCacheBustURLsMatching: new RegExp(".*assets/.*"),
       swDest: "./dist/sw.js",
       globDirectory: "./dist",
+      globPatterns: ["**/*.{js,css}"],
       cleanupOutdatedCaches: true,
       clientsClaim: true,
       skipWaiting: true,

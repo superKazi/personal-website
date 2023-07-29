@@ -200,7 +200,14 @@ const drawing = draw({
   elements: quad.cells,
 });
 
-draw.frame(drawing);
+draw.frame(() => {
+  draw.clear({
+    color: [0, 0, 0, 0],
+    depth: 1,
+    stencil: 0,
+  });
+  drawing();
+});
 
 /**
  * handle service worker

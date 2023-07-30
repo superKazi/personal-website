@@ -12,3 +12,4 @@ Netlify builds this code to make my website.
 - [Vite.js](https://vitejs.dev) for my build tooling
 - [Matt DesLauriers'](https://www.mattdesl.com) instruction for fragment shaders
 - Webgl canvas created with [REGL](http://regl.party)
+- [GSAP](https://greensock.com/gsap/) for some animations

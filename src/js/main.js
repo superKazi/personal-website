@@ -1,6 +1,8 @@
 // TODO: Add better comments
 import regl from "regl";
 import createQuad from "primitive-quad";
+import { gsap } from "gsap";
+import { Observer } from "gsap/Observer";
 
 /**
  * set up animation
@@ -156,7 +158,7 @@ float snoise(vec3 v)
       return hsl2rgb(vec3(h, s, l));
   }
 
-  uniform float time;
+  uniform float tick;
   uniform float width;
   uniform float height;
   varying vec2 vUv;
@@ -169,7 +171,7 @@ float snoise(vec3 v)
     
     float alpha = smoothstep(mobileOrDesktopDistCheck + 0.6, mobileOrDesktopDistCheck, dist);
 
-    float noise = snoise(vec3(center, time * .6));
+    float noise = snoise(vec3(center, tick * .6));
     vec3 color = hsl2rgb(0.6 + noise * 0.3, 0.8, 0.8);
     gl_FragColor = vec4(color, alpha);
   }
@@ -193,26 +195,72 @@ const drawing = draw({
     position: quad.positions,
   },
   uniforms: {
-    time: ({ tick }) => 0.005 * tick,
-    width: (context) => context.viewportWidth,
-    height: (context) => context.viewportHeight,
+    tick: draw.prop("tick"),
+    width: draw.prop("w"),
+    height: draw.prop("h"),
   },
   elements: quad.cells,
 });
 
-draw.frame(() => {
-  draw.clear({
-    color: [0, 0, 0, 0],
-    depth: 1,
-    stencil: 0,
+gsap.registerPlugin(Observer);
+
+gsap.ticker.fps(60);
+gsap.ticker.add(
+  (time, deltaTime, frame) => {
+    draw.clear({
+      color: [0, 0, 0, 0],
+      depth: 1,
+      stencil: 0,
+    });
+    draw._refresh();
+    drawing({
+      tick: frame * 0.005,
+      w: window.innerWidth,
+      h: window.innerHeight,
+    });
+  },
+  false,
+  true,
+);
+
+const tween = gsap.to("span", {
+  keyframes: [
+    {
+      y: -10,
+      duration: 0.8,
+      ease: "elastic(.8)",
+    },
+    {
+      y: 0,
+      duration: 0.8,
+      ease: "elastic(.8)",
+    },
+  ],
+  repeat: -1,
+  stagger: 0.2,
+});
+
+tween.pause();
+
+const links = [...document.querySelectorAll("a")];
+
+links.forEach((link) => {
+  Observer.create({
+    target: link,
+    type: "pointer, touch",
+    onHover: () => {
+      tween.play();
+    },
+    onHoverEnd: () => {
+      tween.pause();
+    },
   });
-  drawing();
 });
 
 /**
  * handle service worker
  */
-(async function handleServiceWorker() {
+!(async function handleServiceWorker() {
   if ("serviceWorker" in navigator) {
     try {
       const { Workbox } = await import("workbox-window");

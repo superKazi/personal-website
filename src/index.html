@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-city="{{geo}}">
   <head>
     <meta name="charset" content="utf-8" />
@@ -109,15 +109,25 @@
       }
 
       h1 {
-        font-variation-settings: "opsz" 72, "wght" 500, "ital" 0;
+        font-variation-settings:
+          "opsz" 72,
+          "wght" 500,
+          "ital" 0;
         font-size: var(--step-6);
         line-height: 1;
         grid-column: 1 / -1;
         place-self: start;
       }
 
+      span {
+        display: inline-block;
+      }
+
       p {
-        font-variation-settings: "opsz" 36, "wght" 500, "ital" 0;
+        font-variation-settings:
+          "opsz" 36,
+          "wght" 500,
+          "ital" 0;
         font-size: var(--step-4);
         grid-column: 1 / -1;
         place-self: end;
@@ -127,11 +137,17 @@
       a {
         color: inherit;
         transition: all 200ms ease;
-        font-variation-settings: "opsz" 36, "wght" 500, "ital" 0;
+        font-variation-settings:
+          "opsz" 36,
+          "wght" 500,
+          "ital" 0;
       }
 
       a:hover {
-        font-variation-settings: "opsz" 72, "wght" 800, "ital" 1;
+        font-variation-settings:
+          "opsz" 72,
+          "wght" 800,
+          "ital" 1;
       }
 
       canvas {
@@ -194,7 +210,9 @@
   <body>
     <main>
       <div>
-        <h1>Kazi Elman Awal</h1>
+        <h1>
+          <span>K</span><span>a</span><span>z</span><span>i</span> Elman Awal
+        </h1>
         <p>
           is a
           <a

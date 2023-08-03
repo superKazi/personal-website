@@ -224,20 +224,13 @@ gsap.ticker.add(
 );
 
 const tween = gsap.to("span", {
-  keyframes: [
-    {
-      y: -10,
-      duration: 0.8,
-      ease: "elastic(.8)",
-    },
-    {
-      y: 0,
-      duration: 0.8,
-      ease: "elastic(.8)",
-    },
-  ],
+  "--wght": 750,
   repeat: -1,
-  stagger: 0.2,
+  yoyo: true,
+  ease: "back.inOut(4)",
+  yoyoEase: "back.inOut(4)",
+  duration: 1,
+  stagger: 0.15,
 });
 
 tween.pause();

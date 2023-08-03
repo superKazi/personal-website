@@ -120,7 +120,12 @@
       }
 
       span {
+        --wght: 500;
         display: inline-block;
+        font-variation-settings:
+          "opsz" 72,
+          "wght" var(--wght, 500),
+          "ital" 0;
       }
 
       p {
@@ -147,7 +152,7 @@
         font-variation-settings:
           "opsz" 72,
           "wght" 800,
-          "ital" 1;
+          "ital" 0;
       }
 
       canvas {

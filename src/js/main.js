@@ -235,20 +235,32 @@ const tween = gsap.to("span", {
 
 tween.pause();
 
-const links = [...document.querySelectorAll("a")];
+if (Observer.isTouch === 2 || Observer.isTouch === 0) {
+  const links = [...document.querySelectorAll("a")];
 
-links.forEach((link) => {
+  links.forEach((link) => {
+    Observer.create({
+      target: link,
+      type: "pointer",
+      onHover: () => {
+        tween.play();
+      },
+      onHoverEnd: () => {
+        tween.pause();
+      },
+    });
+  });
+} else {
   Observer.create({
-    target: link,
-    type: "pointer, touch",
-    onHover: () => {
+    type: "touch",
+    onPress: () => {
       tween.play();
     },
-    onHoverEnd: () => {
+    onRelease: () => {
       tween.pause();
     },
   });
-});
+}
 
 /**
  * handle service worker

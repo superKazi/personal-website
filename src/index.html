@@ -100,6 +100,7 @@
       }
 
       div {
+        position: relative;
         display: grid;
         gap: var(--grid-gutter);
         grid-template-columns: repeat(var(--grid-columns), 1fr);
@@ -107,6 +108,7 @@
         min-height: 100vh;
         min-height: 100dvh;
         padding: var(--grid-gutter) 0;
+        z-index: 1;
       }
 
       h1 {
@@ -160,7 +162,12 @@
 
       canvas {
         display: block;
-        max-width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
       }
 
       @media (orientation: landscape) {
@@ -247,6 +254,7 @@
           interactive journalism and newsroom tools and products.
         </p>
       </div>
+      <canvas></canvas>
     </main>
     <script type="module" src="./js/main.js"></script>
     <script

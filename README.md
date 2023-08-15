@@ -11,5 +11,5 @@ Netlify builds this code to make my website.
 - [Goatcounter](https://www.goatcounter.com) by Martin Tournoij to track you if/when you visit
 - [Vite.js](https://vitejs.dev) for my build tooling
 - [Matt DesLauriers'](https://www.mattdesl.com) instruction for fragment shaders
-- Webgl canvas created with [REGL](http://regl.party)
-- [GSAP](https://greensock.com/gsap/) for some animations
+- Webgl canvas created with [ThreeJS](https://threejs.org/)
+- [GSAP](https://greensock.com/gsap/) for animations

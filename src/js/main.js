@@ -1,13 +1,21 @@
 // TODO: Add better comments
-import regl from "regl";
-import createQuad from "primitive-quad";
 import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
+import * as THREE from "three";
 
 /**
- * set up animation
+ * set up animations
  */
 
+const vertexShader = `
+  precision highp float;
+  varying vec2 vUv;
+
+  void main() {
+    vUv = uv;
+    gl_Position = vec4(position, 1.0);
+  }
+`;
 const fragmentShader = `
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
@@ -176,48 +184,57 @@ float snoise(vec3 v)
     gl_FragColor = vec4(color, alpha);
   }
 `;
-const vertShader = `
-  precision highp float;
-  attribute vec3 position;
-  varying vec2 vUv;
 
-  void main () {
-    gl_Position = vec4(position.xyz, 1.0);
-    vUv = gl_Position.xy * 0.5 + 0.5;
-  }
-`;
-const quad = createQuad();
-const draw = regl();
-const drawing = draw({
-  frag: fragmentShader,
-  vert: vertShader,
-  attributes: {
-    position: quad.positions,
-  },
-  uniforms: {
-    tick: draw.prop("tick"),
-    width: draw.prop("w"),
-    height: draw.prop("h"),
-  },
-  elements: quad.cells,
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+  45,
+  window.innerWidth / window.innerHeight,
+  1,
+  10,
+);
+
+const mesh = new THREE.Mesh(
+  new THREE.PlaneGeometry(2, 2),
+  new THREE.ShaderMaterial({
+    vertexShader,
+    fragmentShader,
+    depthWrite: false,
+    depthTest: false,
+    uniforms: {
+      tick: { value: 1.0 },
+      width: { value: window.innerWidth },
+      height: { value: window.innerHeight },
+    },
+  }),
+);
+
+scene.add(mesh);
+scene.background = new THREE.Color(0xffffff);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.querySelector("canvas"),
+  antialias: true,
 });
+
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.compile(scene, camera);
 
 gsap.registerPlugin(Observer);
 
 gsap.ticker.fps(60);
 gsap.ticker.add(
   (time, deltaTime, frame) => {
-    draw.clear({
-      color: [0, 0, 0, 0],
-      depth: 1,
-      stencil: 0,
-    });
-    draw._refresh();
-    drawing({
-      tick: frame * 0.005,
-      w: window.innerWidth,
-      h: window.innerHeight,
-    });
+    mesh.material.uniforms.tick.value = frame * 0.005;
+    mesh.material.uniforms.width.value = window.innerWidth;
+    mesh.material.uniforms.height.value = window.innerHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.compile(scene, camera);
+    renderer.render(scene, camera);
   },
   false,
   true,

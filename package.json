@@ -1,6 +1,6 @@
 {
   "name": "kazi-website",
-  "version": "6.10.0",
+  "version": "6.11.0",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
@@ -15,8 +15,7 @@
   },
   "dependencies": {
     "gsap": "^3.12.2",
-    "primitive-quad": "^2.0.0",
-    "regl": "^2.1.0",
+    "three": "^0.155.0",
     "workbox-window": "^7.0.0"
   },
   "eslintConfig": {

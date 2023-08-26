@@ -244,8 +244,6 @@ ScrollTrigger.config({
   ignoreMobileResize: true,
 });
 
-ScrollTrigger.normalizeScroll(true);
-
 const tl = gsap.timeline({
   scrollTrigger: {
     trigger: "main",

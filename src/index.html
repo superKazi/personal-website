@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width,initial-scale=1,shrink-to-fit=no,viewport-fit=cover"
     />
-    <title>Kazi’s website</title>
+    <title>Kazi&#8216;s website</title>
     <link rel="preconnect" href="https://superkazi.goatcounter.com" />
     <link
       rel="preload"
@@ -99,16 +99,29 @@
         margin-inline: auto;
       }
 
-      div {
+      header,
+      article,
+      footer {
         position: relative;
+        z-index: 1;
+      }
+
+      header,
+      footer {
+        padding: var(--grid-gutter) 0;
         display: grid;
         gap: var(--grid-gutter);
         grid-template-columns: repeat(var(--grid-columns), 1fr);
+      }
+
+      header {
         grid-template-rows: 1fr max-content;
         min-height: 100vh;
-        min-height: 100dvh;
-        padding: var(--grid-gutter) 0;
-        z-index: 1;
+      }
+
+      h1,
+      h2 {
+        line-height: 1;
       }
 
       h1 {
@@ -116,20 +129,10 @@
           "opsz" 72,
           "wght" 500,
           "ital" 0;
-        font-size: var(--step-6);
-        line-height: 1;
         grid-column: 1 / -1;
         grid-row: 1 / 2;
         place-self: start;
-      }
-
-      span {
-        --wght: 500;
-        display: inline-block;
-        font-variation-settings:
-          "opsz" 72,
-          "wght" var(--wght, 500),
-          "ital" 0;
+        font-size: var(--step-6);
       }
 
       p {
@@ -144,13 +147,50 @@
         line-height: 1;
       }
 
+      article {
+        margin-top: var(--space-2xl);
+      }
+
+      h2 {
+        font-variation-settings:
+          "opsz" 36,
+          "wght" 600,
+          "ital" 0;
+        font-size: var(--step--1);
+      }
+
+      dl {
+        margin-top: var(--space-m);
+      }
+
+      div + div {
+        margin-top: var(--space-xs);
+      }
+
+      dt,
+      dd {
+        line-height: 1.2;
+      }
+
+      dt {
+        font-variation-settings:
+          "opsz" 72,
+          "wght" 500,
+          "ital" 0;
+        font-size: var(--step-2);
+      }
+
+      dd {
+        font-variation-settings:
+          "opsz" 36,
+          "wght" 550,
+          "ital" 0;
+        font-size: var(--step-0);
+      }
+
       a {
         color: inherit;
         transition: all 200ms ease;
-        font-variation-settings:
-          "opsz" 36,
-          "wght" 500,
-          "ital" 0;
       }
 
       a:hover {
@@ -158,6 +198,20 @@
           "opsz" 72,
           "wght" 800,
           "ital" 0;
+      }
+
+      footer {
+        height: 40vmin;
+      }
+
+      h3 {
+        font-variation-settings:
+          "opsz" 36,
+          "wght" 600,
+          "ital" 0;
+        font-size: var(--step--1);
+        align-self: end;
+        grid-column: 1 / -1;
       }
 
       canvas {
@@ -171,12 +225,11 @@
       }
 
       @media (orientation: landscape) {
-        div {
+        header {
           grid-template-rows: 4fr max-content 1fr;
         }
         h1,
         p {
-          justify-self: center;
           grid-row: 2 / 3;
         }
 
@@ -186,6 +239,21 @@
 
         p {
           grid-column: 7 / -1;
+        }
+
+        div {
+          display: grid;
+          gap: var(--grid-gutter);
+          grid-template-columns: repeat(var(--grid-columns), 1fr);
+        }
+
+        dt {
+          grid-column: 2 / 7;
+        }
+
+        dd {
+          grid-column: 7 / -1;
+          align-self: center;
         }
       }
     </style>
@@ -233,30 +301,137 @@
   </head>
   <body>
     <main>
-      <div>
-        <h1>
-          <span>K</span><span>a</span><span>z</span><span>i</span> Elman Awal
-        </h1>
+      <header>
+        <h1>Kazi Elman Awal</h1>
         <p>
-          is a
-          <a
-            id="linkedin"
-            href="https://www.linkedin.com/in/superkazi/"
-            rel="noopener noreferrer"
-            data-goatcounter-click
-            >senior creative developer</a
-          >
-          at
-          <a
-            id="insider"
-            href="https://www.insider.com/transgender-violence-deaths-database-murder-cases-2017-2021"
-            rel="noopener noreferrer"
-            data-goatcounter-click
-            >Insider</a
-          >. He creative directs, designs, and develops award winning
-          interactive journalism and newsroom tools and products.
+          is a senior creative developer who has worked at various journalism
+          organizations designing and developing award winning newsroom stories,
+          tools and products.
         </p>
-      </div>
+      </header>
+      <article>
+        <h2>Insider</h2>
+        <dl>
+          <div>
+            <dt>
+              <a
+                data-goatcounter-click="deaths-in-the-family"
+                href="https://www.insider.com/transgender-violence-deaths-database-murder-cases-2017-2021"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Deaths in the family</a
+              >
+            </dt>
+            <dd>creative direction, ux design, web development</dd>
+          </div>
+          <div>
+            <dt>
+              <a
+                data-goatcounter-click="serenas-next-serve"
+                href="https://www.insider.com/serena-williams-interview-cover-story-2022-4"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Serena&#8216;s next serve</a
+              >
+            </dt>
+            <dd>ux design, web development</dd>
+          </div>
+          <div>
+            <dt>
+              <a
+                data-goatcounter-click="king-charles-coronation"
+                href="https://www.insider.com/king-charles-coronation-schedule-guide-timeline-2023-5"
+                target="_blank"
+                rel="noopener noreferrer"
+                >King Charles&#8216; coronation</a
+              >
+            </dt>
+            <dd>creative direction, ux design, web development</dd>
+          </div>
+        </dl>
+      </article>
+      <article>
+        <h2>Rest of World</h2>
+        <dl>
+          <div>
+            <dt>
+              <a
+                data-goatcounter-click="homepage-redesign"
+                href="https://restofworld.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Homepage redesign</a
+              >
+            </dt>
+            <dd>web development</dd>
+          </div>
+          <div>
+            <dt>
+              <a
+                data-goatcounter-click="social-card-generator"
+                href="https://restofworld.org/wp-content/projects/card-builder/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Social card generator</a
+              >
+            </dt>
+            <dd>ux design, web development</dd>
+          </div>
+        </dl>
+      </article>
+      <article>
+        <h2>The San Francisco Chronicle</h2>
+        <dl>
+          <div>
+            <dt>
+              <a
+                data-goatcounter-click="the-fishermans-secret"
+                href="https://projects.sfchronicle.com/2019/the-fishermans-secret/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >The fisherman&#8216;s secret</a
+              >
+            </dt>
+            <dd>ux design, web design and development</dd>
+          </div>
+          <div>
+            <dt>
+              <a
+                data-goatcounter-click="class-of-2020"
+                href="https://projects.sfchronicle.com/class-of-2020/spring/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Class of 2020</a
+              >
+            </dt>
+            <dd>ux design, graphic design, web design and development</dd>
+          </div>
+          <div>
+            <dt>
+              <a
+                data-goatcounter-click="25-must-eats"
+                href="https://projects.sfchronicle.com/2020/25-must-eats/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >25 Must-eats</a
+              >
+            </dt>
+            <dd>ux design, graphic design, web design and development</dd>
+          </div>
+        </dl>
+      </article>
+      <footer>
+        <h3>
+          You can find more of his work on
+          <a
+            data-goatcounter-click="linkedin"
+            href="https://www.linkedin.com/in/superkazi/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >LinkedIn</a
+          >.
+        </h3>
+      </footer>
       <canvas></canvas>
     </main>
     <script type="module" src="./js/main.js"></script>

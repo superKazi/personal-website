@@ -1,6 +1,6 @@
 // TODO: Add better comments
 import { gsap } from "gsap";
-import { Observer } from "gsap/Observer";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
 
 /**
@@ -169,23 +169,28 @@ float snoise(vec3 v)
   uniform float tick;
   uniform float width;
   uniform float height;
+  uniform float size;
+  uniform float color;
   varying vec2 vUv;
 
   void main() {
     vec2 center = vUv - 0.5;
     center.x *= width / height;
     float dist = length(center);
-    float mobileOrDesktopDistCheck = width > height ? 0.3 : 0.06; 
+    float mobileOrDesktopDistCheck = size; 
     
     float alpha = smoothstep(mobileOrDesktopDistCheck + 0.6, mobileOrDesktopDistCheck, dist);
 
     float noise = snoise(vec3(center, tick * .6));
-    vec3 color = hsl2rgb(0.6 + noise * 0.3, 0.8, 0.8);
+    vec3 color = hsl2rgb(color + noise * 0.3, 0.8, 0.8);
     gl_FragColor = vec4(color, alpha);
   }
 `;
 
-const scene = new THREE.Scene();
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.querySelector("canvas"),
+  antialias: true,
+});
 
 const camera = new THREE.PerspectiveCamera(
   45,
@@ -205,23 +210,18 @@ const mesh = new THREE.Mesh(
       tick: { value: 1.0 },
       width: { value: window.innerWidth },
       height: { value: window.innerHeight },
+      color: { value: 0.6 },
+      size: { value: window.innerWidth > window.innerHeight ? 0.3 : 0.1 },
     },
   }),
 );
 
+const scene = new THREE.Scene();
+
 scene.add(mesh);
 scene.background = new THREE.Color(0xffffff);
 
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector("canvas"),
-  antialias: true,
-});
-
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.compile(scene, camera);
-
-gsap.registerPlugin(Observer);
+renderAnimation();
 
 gsap.ticker.fps(60);
 gsap.ticker.add(
@@ -231,52 +231,47 @@ gsap.ticker.add(
     mesh.material.uniforms.height.value = window.innerHeight;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.compile(scene, camera);
-    renderer.render(scene, camera);
+    renderAnimation();
   },
   false,
   true,
 );
 
-const tween = gsap.to("span", {
-  "--wght": 750,
-  repeat: -1,
-  yoyo: true,
-  ease: "back.inOut(4)",
-  yoyoEase: "back.inOut(4)",
-  duration: 1,
-  stagger: 0.15,
+gsap.registerPlugin(ScrollTrigger);
+
+ScrollTrigger.config({
+  limitCallbacks: true,
+  ignoreMobileResize: true,
 });
 
-tween.pause();
+ScrollTrigger.normalizeScroll(true);
 
-if (Observer.isTouch === 2 || Observer.isTouch === 0) {
-  const links = [...document.querySelectorAll("a")];
+const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: "main",
+    start: "top top",
+    end: "bottom bottom",
+    scrub: 2,
+  },
+});
 
-  links.forEach((link) => {
-    Observer.create({
-      target: link,
-      type: "pointer",
-      onHover: () => {
-        tween.play();
-      },
-      onHoverEnd: () => {
-        tween.pause();
-      },
-    });
-  });
-} else {
-  Observer.create({
-    type: "touch",
-    onPress: () => {
-      tween.play();
-    },
-    onRelease: () => {
-      tween.pause();
-    },
-  });
+tl.to(mesh.material.uniforms.color, {
+  value: 0.2,
+  ease: "none",
+}).to(
+  mesh.material.uniforms.size,
+  {
+    value: () => (window.innerWidth > window.innerHeight ? 0.6 : 0.3),
+    ease: "none",
+  },
+  0,
+);
+
+function renderAnimation() {
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.compile(scene, camera);
+  renderer.render(scene, camera);
 }
 
 /**

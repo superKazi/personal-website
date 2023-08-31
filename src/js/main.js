@@ -179,7 +179,7 @@ float snoise(vec3 v)
     float dist = length(center);
     float mobileOrDesktopDistCheck = size; 
     
-    float alpha = smoothstep(mobileOrDesktopDistCheck + 0.6, mobileOrDesktopDistCheck, dist);
+    float alpha = smoothstep(mobileOrDesktopDistCheck + dist, mobileOrDesktopDistCheck, dist);
 
     float noise = snoise(vec3(center, tick * .6));
     vec3 color = hsl2rgb(color + noise * 0.3, 0.8, 0.8);
@@ -211,7 +211,7 @@ const mesh = new THREE.Mesh(
       width: { value: window.innerWidth },
       height: { value: window.innerHeight },
       color: { value: 0.6 },
-      size: { value: window.innerWidth > window.innerHeight ? 0.3 : 0.1 },
+      size: { value: window.innerWidth > window.innerHeight ? 0.3 : 0.15 },
     },
   }),
 );

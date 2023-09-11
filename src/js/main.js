@@ -169,7 +169,7 @@ float snoise(vec3 v)
   uniform float tick;
   uniform float width;
   uniform float height;
-  uniform float size;
+  uniform float mobileOrDesktopDistCheck;
   uniform float color;
   varying vec2 vUv;
 
@@ -177,7 +177,6 @@ float snoise(vec3 v)
     vec2 center = vUv - 0.5;
     center.x *= width / height;
     float dist = length(center);
-    float mobileOrDesktopDistCheck = size; 
     
     float alpha = smoothstep(mobileOrDesktopDistCheck + dist, mobileOrDesktopDistCheck, dist);
 
@@ -211,7 +210,9 @@ const mesh = new THREE.Mesh(
       width: { value: window.innerWidth },
       height: { value: window.innerHeight },
       color: { value: 0.6 },
-      size: { value: window.innerWidth > window.innerHeight ? 0.3 : 0.15 },
+      mobileOrDesktopDistCheck: {
+        value: window.innerWidth > window.innerHeight ? 0.3 : 0.15,
+      },
     },
   }),
 );
@@ -257,9 +258,9 @@ tl.to(mesh.material.uniforms.color, {
   value: 0.2,
   ease: "none",
 }).to(
-  mesh.material.uniforms.size,
+  mesh.material.uniforms.mobileOrDesktopDistCheck,
   {
-    value: () => (window.innerWidth > window.innerHeight ? 0.6 : 0.3),
+    value: () => (window.innerWidth > window.innerHeight ? 0.45 : 0.25),
     ease: "none",
   },
   0,

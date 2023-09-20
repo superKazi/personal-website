@@ -87,6 +87,8 @@
         font-kerning: normal;
         text-rendering: optimizeLegibility;
         color: hsl(0, 0%, 5%);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
       }
 
       main {
@@ -234,10 +236,6 @@
       }
 
       @media (orientation: landscape) {
-        main {
-          padding-left: calc(var(--grid-gutter) + env(safe-area-inset-left));
-          padding-right: calc(var(--grid-gutter) + env(safe-area-inset-right));
-        }
         header {
           grid-template-rows: 4fr max-content 1fr;
         }

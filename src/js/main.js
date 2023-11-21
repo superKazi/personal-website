@@ -221,18 +221,17 @@ const scene = new THREE.Scene();
 
 scene.add(mesh);
 scene.background = new THREE.Color(0xffffff);
-
-renderAnimation();
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.compile(scene, camera);
+renderer.render(scene, camera);
 
 gsap.ticker.fps(60);
 gsap.ticker.add(
   (time, deltaTime, frame) => {
     mesh.material.uniforms.tick.value = frame * 0.005;
-    mesh.material.uniforms.width.value = window.innerWidth;
-    mesh.material.uniforms.height.value = window.innerHeight;
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderAnimation();
+    renderer.compile(scene, camera);
+    renderer.render(scene, camera);
   },
   false,
   true,
@@ -251,6 +250,7 @@ const tl = gsap.timeline({
     start: "top top",
     end: "bottom bottom",
     scrub: 2,
+    invalidateOnRefresh: true,
   },
 });
 
@@ -266,12 +266,21 @@ tl.to(mesh.material.uniforms.color, {
   0,
 );
 
-function renderAnimation() {
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.compile(scene, camera);
-  renderer.render(scene, camera);
-}
+window.addEventListener(
+  "resize",
+  () => {
+    mesh.material.uniforms.width.value = window.innerWidth;
+    mesh.material.uniforms.height.value = window.innerHeight;
+    mesh.material.uniforms.mobileOrDesktopDistCheck.value =
+      window.innerWidth > window.innerHeight ? 0.3 : 0.15;
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  },
+  { passive: true },
+);
 
 /**
  * handle service worker
@@ -298,7 +307,6 @@ function renderAnimation() {
 /**
  * polite console
  */
-
 const politeString =
   document.documentElement.dataset.city === "unknown"
     ? `%cThanks for checking out my site!`

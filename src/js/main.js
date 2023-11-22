@@ -186,6 +186,8 @@ float snoise(vec3 v)
   }
 `;
 
+const landscapeOrientation = window.matchMedia("(orientation: landscape)");
+
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector("canvas"),
   antialias: true,
@@ -211,25 +213,39 @@ const mesh = new THREE.Mesh(
       height: { value: window.innerHeight },
       color: { value: 0.6 },
       mobileOrDesktopDistCheck: {
-        value: window.innerWidth > window.innerHeight ? 0.3 : 0.15,
+        value: landscapeOrientation.matches ? 0.3 : 0.15,
       },
     },
   }),
+);
+
+landscapeOrientation.addEventListener(
+  "change",
+  (e) => {
+    e.matches
+      ? (mesh.material.uniforms.mobileOrDesktopDistCheck.value = 0.3)
+      : (mesh.material.uniforms.mobileOrDesktopDistCheck.value = 0.15);
+  },
+  { passive: true },
 );
 
 const scene = new THREE.Scene();
 
 scene.add(mesh);
 scene.background = new THREE.Color(0xffffff);
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.compile(scene, camera);
-renderer.render(scene, camera);
 
 gsap.ticker.fps(60);
 gsap.ticker.add(
   (time, deltaTime, frame) => {
     mesh.material.uniforms.tick.value = frame * 0.005;
+    mesh.material.uniforms.width.value = window.innerWidth;
+    mesh.material.uniforms.height.value = window.innerHeight;
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.compile(scene, camera);
     renderer.render(scene, camera);
   },
@@ -260,26 +276,10 @@ tl.to(mesh.material.uniforms.color, {
 }).to(
   mesh.material.uniforms.mobileOrDesktopDistCheck,
   {
-    value: () => (window.innerWidth > window.innerHeight ? 0.45 : 0.25),
+    value: () => (landscapeOrientation.matches ? 0.45 : 0.25),
     ease: "none",
   },
   0,
-);
-
-window.addEventListener(
-  "resize",
-  () => {
-    mesh.material.uniforms.width.value = window.innerWidth;
-    mesh.material.uniforms.height.value = window.innerHeight;
-    mesh.material.uniforms.mobileOrDesktopDistCheck.value =
-      window.innerWidth > window.innerHeight ? 0.3 : 0.15;
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  },
-  { passive: true },
 );
 
 /**

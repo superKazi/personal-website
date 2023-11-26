@@ -245,6 +245,11 @@
         contain: strict;
       }
 
+      :is(h1, h2, h3, p, dt, dd, a)::selection {
+        background: hsl(0, 0%, 5%);
+        color: white;
+      }
+
       @media (orientation: landscape) {
         header {
           grid-template-rows: 4fr max-content 1fr;

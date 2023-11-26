@@ -157,6 +157,7 @@
 
       article {
         margin-top: var(--space-2xl);
+        padding-bottom: 6px;
       }
 
       h2 {
@@ -210,6 +211,15 @@
           "ital" 0;
       }
 
+      a:focus-visible {
+        outline: 2px solid hsl(0, 0%, 5%);
+        outline-offset: 2px;
+      }
+
+      a:focus:not(:focus-visible) {
+        outline: none;
+      }
+
       footer {
         height: 40vmin;
       }
@@ -233,6 +243,11 @@
         height: 100%;
         z-index: 0;
         contain: strict;
+      }
+
+      :is(h1, h2, h3, p, dt, dd, a)::selection {
+        background: hsl(0, 0%, 5%);
+        color: white;
       }
 
       @media (orientation: landscape) {

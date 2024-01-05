@@ -19,7 +19,8 @@
     "workbox-window": "^7.0.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.9.3"
+    "@rollup/rollup-linux-x64-gnu": "4.9.3",
+    "@esbuild/linux-x64": "0.19.11"
   },
   "eslintConfig": {
     "env": {

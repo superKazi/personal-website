@@ -18,6 +18,9 @@
     "three": "^0.160.0",
     "workbox-window": "^7.0.0"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.3"
+  },
   "eslintConfig": {
     "env": {
       "browser": true,

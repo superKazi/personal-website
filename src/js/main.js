@@ -1,4 +1,3 @@
-// TODO: Add better comments
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
@@ -6,7 +5,6 @@ import * as THREE from "three";
 /**
  * set up animations
  */
-
 const vertexShader = `
   precision highp float;
   varying vec2 vUv;
@@ -166,6 +164,7 @@ float snoise(vec3 v)
       return hsl2rgb(vec3(h, s, l));
   }
 
+  // values from outside javascript world
   uniform float tick;
   uniform float width;
   uniform float height;
@@ -173,11 +172,14 @@ float snoise(vec3 v)
   uniform float color;
   varying vec2 vUv;
 
+  // creates blobby circle animation
   void main() {
     vec2 center = vUv - 0.5;
+    // maintains aspect ratio
     center.x *= width / height;
     float dist = length(center);
     
+    // creates transparency
     float alpha = smoothstep(mobileOrDesktopDistCheck + dist, mobileOrDesktopDistCheck, dist);
 
     float noise = snoise(vec3(center, tick * .6));
@@ -186,6 +188,9 @@ float snoise(vec3 v)
   }
 `;
 
+/**
+ * threejs boilerplate
+ */
 const landscapeOrientation = window.matchMedia("(orientation: landscape)");
 
 const renderer = new THREE.WebGLRenderer({
@@ -234,6 +239,11 @@ const scene = new THREE.Scene();
 scene.add(mesh);
 scene.background = new THREE.Color(0xffffff);
 
+/**
+ * use gsap to run threejs raf, since it's a relatively simple shader
+ * we can handle resize in the raf instead of worrying about desyncs
+ * during a window resize listener.
+ */
 gsap.ticker.fps(60);
 gsap.ticker.add(
   (time, deltaTime, frame) => {
@@ -253,6 +263,9 @@ gsap.ticker.add(
   true,
 );
 
+/**
+ * setup blobby scroll color and size change interaction
+ */
 gsap.registerPlugin(ScrollTrigger);
 
 ScrollTrigger.config({

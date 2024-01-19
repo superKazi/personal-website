@@ -235,9 +235,8 @@ landscapeOrientation.addEventListener(
 );
 
 const scene = new THREE.Scene();
-
-scene.add(mesh);
 scene.background = new THREE.Color(0xffffff);
+scene.add(mesh);
 
 /**
  * use gsap to run threejs raf, since it's a relatively simple shader
@@ -294,6 +293,52 @@ tl.to(mesh.material.uniforms.color, {
   },
   0,
 );
+
+/**
+ * setup initial text animation
+ */
+const mm = gsap.matchMedia();
+
+mm.add("(prefers-reduced-motion: no-preference)", () => {
+  const mmtl = gsap.timeline({
+    autoRemoveChildren: true,
+  });
+
+  mmtl
+    .to("h1", {
+      keyframes: {
+        "38%": { opacity: 1, ease: "none" },
+        "100%": { opacity: 1, y: 0, ease: "elastic.out(1, 0.5)" },
+      },
+      duration: 2,
+      ease: "none",
+    })
+    .to(
+      "p",
+      {
+        keyframes: {
+          "38%": { opacity: 1, ease: "none" },
+          "100%": { opacity: 1, y: 0, ease: "elastic.out(1, 0.5)" },
+        },
+        duration: 2,
+        ease: "none",
+      },
+      "<10%",
+    )
+    .to(
+      "canvas",
+      {
+        opacity: 1,
+        duration: 3,
+        ease: "power4.out",
+      },
+      "<5%",
+    );
+
+  return () => {
+    mm.revert();
+  };
+});
 
 /**
  * handle service worker

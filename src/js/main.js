@@ -273,7 +273,6 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   gsap.set("div > *", { opacity: 0, y: 25 });
 
   ScrollTrigger.config({
-    limitCallbacks: true,
     ignoreMobileResize: true,
   });
 
@@ -346,7 +345,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
   };
 
-  const observer = new IntersectionObserver(iCb, { threshold: 0.99 });
+  const observer = new IntersectionObserver(iCb, { threshold: 0.75 });
 
   const bodyElements = [...document.querySelectorAll("h2, div, h3")];
 

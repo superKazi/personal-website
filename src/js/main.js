@@ -299,7 +299,6 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
   const iCb = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        console.log(entry);
         if (entry.target.tagName === "H2" || entry.target.tagName === "H3") {
           const articleHedTl = gsap.timeline({
             autoRemoveChildren: true,

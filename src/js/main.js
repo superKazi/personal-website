@@ -263,79 +263,133 @@ gsap.ticker.add(
 );
 
 /**
- * setup blobby scroll color and size change interaction
- */
-gsap.registerPlugin(ScrollTrigger);
-
-ScrollTrigger.config({
-  limitCallbacks: true,
-  ignoreMobileResize: true,
-});
-
-const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: "main",
-    start: "top top",
-    end: "bottom bottom",
-    scrub: 2,
-    invalidateOnRefresh: true,
-  },
-});
-
-tl.to(mesh.material.uniforms.color, {
-  value: 0.2,
-  ease: "none",
-}).to(
-  mesh.material.uniforms.mobileOrDesktopDistCheck,
-  {
-    value: () => (landscapeOrientation.matches ? 0.45 : 0.25),
-    ease: "none",
-  },
-  0,
-);
-
-/**
- * setup initial text animation
+ * setup text animations and blobby scroll color and size change interaction
  */
 const mm = gsap.matchMedia();
 
 mm.add("(prefers-reduced-motion: no-preference)", () => {
-  const mmtl = gsap.timeline({
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.set("h2, h3", { opacity: 0, y: 25 });
+  gsap.set("div > *", { opacity: 0, y: 25 });
+
+  ScrollTrigger.config({
+    limitCallbacks: true,
+    ignoreMobileResize: true,
+  });
+
+  const globalTl = gsap.timeline({
     autoRemoveChildren: true,
   });
 
-  mmtl
-    .to("h1", {
-      keyframes: {
-        "38%": { opacity: 1, ease: "none" },
-        "100%": { opacity: 1, y: 0, ease: "elastic.out(1, 0.5)" },
+  const topTl = gsap.timeline({
+    autoRemoveChildren: true,
+  });
+
+  const meshTl = gsap.timeline({
+    autoRemoveChildren: true,
+    scrollTrigger: {
+      trigger: "main",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 2,
+      invalidateOnRefresh: true,
+    },
+  });
+
+  const iCb = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        if (entry.target.tagName === "H2" || entry.target.tagName === "H3") {
+          const articleHedTl = gsap.timeline({
+            autoRemoveChildren: true,
+          });
+          articleHedTl
+            .to(entry.target, {
+              opacity: 1,
+              duration: 0.2,
+              ease: "linear",
+            })
+            .to(
+              entry.target,
+              {
+                y: 0,
+                duration: 2,
+                ease: "elastic.out(1, 0.5)",
+              },
+              0,
+            );
+        }
+        if (entry.target.tagName === "DIV") {
+          const articleItemTl = gsap.timeline({
+            autoRemoveChildren: true,
+          });
+          articleItemTl
+            .to([...entry.target.children], {
+              opacity: 1,
+              duration: 0.2,
+              ease: "linear",
+              stagger: 0.1,
+            })
+            .to(
+              [...entry.target.children],
+              {
+                y: 0,
+                duration: 2,
+                ease: "elastic.out(1, 0.5)",
+                stagger: 0.1,
+              },
+              0,
+            );
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(iCb, { threshold: 1.0 });
+
+  const bodyElements = [...document.querySelectorAll("h2, div, h3")];
+
+  topTl
+    .to("h1, p", {
+      opacity: 1,
+      duration: 0.2,
+      ease: "linear",
+      stagger: 0.1,
+    })
+    .to(
+      "h1, p",
+      {
+        y: 0,
+        duration: 2,
+        ease: "elastic.out(1, 0.5)",
+        stagger: 0.1,
       },
-      duration: 2,
+      0,
+    );
+
+  meshTl
+    .to(mesh.material.uniforms.color, {
+      value: 0.2,
       ease: "none",
     })
     .to(
-      "p",
+      mesh.material.uniforms.mobileOrDesktopDistCheck,
       {
-        keyframes: {
-          "38%": { opacity: 1, ease: "none" },
-          "100%": { opacity: 1, y: 0, ease: "elastic.out(1, 0.5)" },
-        },
-        duration: 2,
+        value: () => (landscapeOrientation.matches ? 0.45 : 0.25),
         ease: "none",
       },
-      "<10%",
-    )
-    .to(
-      "canvas",
-      {
-        opacity: 1,
-        duration: 3,
-        ease: "power4.out",
-      },
-      "<5%",
+      0,
     );
 
+  globalTl.add(topTl, 0).add(meshTl, 0);
+
+  bodyElements.forEach((el) => {
+    observer.observe(el);
+  });
+
   return () => {
+    observer.disconnect();
     mm.revert();
   };
 });

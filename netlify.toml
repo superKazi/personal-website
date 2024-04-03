@@ -38,7 +38,7 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' gc.zgo.at/count.v4.js app.netlify.com netlify-cdp-loader.netlify.app; child-src 'self' app.netlify.com;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' gc.zgo.at/count.v4.js app.netlify.com netlify-cdp-loader.netlify.app; style-src 'self'; child-src 'self' app.netlify.com;"
 
 [[headers]]
   for = "/index.html"

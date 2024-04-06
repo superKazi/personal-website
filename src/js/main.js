@@ -2,10 +2,18 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
 
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", animations);
+} else {
+  // `DOMContentLoaded` has already fired
+  animations();
+}
+
 /**
  * set up animations
  */
-const vertexShader = `
+function animations() {
+  const vertexShader = `
   precision highp float;
   varying vec2 vUv;
 
@@ -14,7 +22,7 @@ const vertexShader = `
     gl_Position = vec4(position, 1.0);
   }
 `;
-const fragmentShader = `
+  const fragmentShader = `
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -188,210 +196,211 @@ float snoise(vec3 v)
   }
 `;
 
-/**
- * threejs boilerplate
- */
-const landscapeOrientation = window.matchMedia("(orientation: landscape)");
+  /**
+   * threejs boilerplate
+   */
+  const landscapeOrientation = window.matchMedia("(orientation: landscape)");
 
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector("canvas"),
-  antialias: true,
-});
+  const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector("canvas"),
+    antialias: true,
+  });
 
-const camera = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  1,
-  10,
-);
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    1,
+    10,
+  );
 
-const mesh = new THREE.Mesh(
-  new THREE.PlaneGeometry(2, 2),
-  new THREE.ShaderMaterial({
-    vertexShader,
-    fragmentShader,
-    depthWrite: false,
-    depthTest: false,
-    uniforms: {
-      tick: { value: 1.0 },
-      width: { value: window.innerWidth },
-      height: { value: window.innerHeight },
-      color: { value: 0.6 },
-      mobileOrDesktopDistCheck: {
-        value: landscapeOrientation.matches ? 0.3 : 0.15,
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 2),
+    new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      depthWrite: false,
+      depthTest: false,
+      uniforms: {
+        tick: { value: 1.0 },
+        width: { value: window.innerWidth },
+        height: { value: window.innerHeight },
+        color: { value: 0.6 },
+        mobileOrDesktopDistCheck: {
+          value: landscapeOrientation.matches ? 0.3 : 0.15,
+        },
       },
+    }),
+  );
+
+  landscapeOrientation.addEventListener(
+    "change",
+    (e) => {
+      e.matches
+        ? (mesh.material.uniforms.mobileOrDesktopDistCheck.value = 0.3)
+        : (mesh.material.uniforms.mobileOrDesktopDistCheck.value = 0.15);
     },
-  }),
-);
+    { passive: true },
+  );
 
-landscapeOrientation.addEventListener(
-  "change",
-  (e) => {
-    e.matches
-      ? (mesh.material.uniforms.mobileOrDesktopDistCheck.value = 0.3)
-      : (mesh.material.uniforms.mobileOrDesktopDistCheck.value = 0.15);
-  },
-  { passive: true },
-);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xffffff);
+  scene.add(mesh);
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xffffff);
-scene.add(mesh);
+  /**
+   * use gsap to run threejs raf, since it's a relatively simple shader
+   * we can handle resize in the raf instead of worrying about desyncs
+   * during a window resize listener.
+   */
+  gsap.ticker.fps(60);
+  gsap.ticker.add(
+    (time, deltaTime, frame) => {
+      mesh.material.uniforms.tick.value = frame * 0.005;
+      mesh.material.uniforms.width.value = window.innerWidth;
+      mesh.material.uniforms.height.value = window.innerHeight;
 
-/**
- * use gsap to run threejs raf, since it's a relatively simple shader
- * we can handle resize in the raf instead of worrying about desyncs
- * during a window resize listener.
- */
-gsap.ticker.fps(60);
-gsap.ticker.add(
-  (time, deltaTime, frame) => {
-    mesh.material.uniforms.tick.value = frame * 0.005;
-    mesh.material.uniforms.width.value = window.innerWidth;
-    mesh.material.uniforms.height.value = window.innerHeight;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
 
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.compile(scene, camera);
-    renderer.render(scene, camera);
-  },
-  false,
-  true,
-);
-
-/**
- * setup text animations and blobby scroll color and size change interaction
- */
-const mm = gsap.matchMedia();
-
-mm.add("(prefers-reduced-motion: no-preference)", () => {
-  gsap.registerPlugin(ScrollTrigger);
-  gsap.set("h2, h3", { opacity: 0, y: 25 });
-  gsap.set("div > *", { opacity: 0, y: 25 });
-
-  ScrollTrigger.config({
-    ignoreMobileResize: true,
-  });
-
-  const globalTl = gsap.timeline({
-    autoRemoveChildren: true,
-  });
-
-  const topTl = gsap.timeline({
-    autoRemoveChildren: true,
-  });
-
-  const meshTl = gsap.timeline({
-    autoRemoveChildren: true,
-    scrollTrigger: {
-      trigger: "main",
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 2,
-      invalidateOnRefresh: true,
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.compile(scene, camera);
+      renderer.render(scene, camera);
     },
-  });
+    false,
+    true,
+  );
 
-  const iCb = (entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        if (entry.target.tagName === "H2" || entry.target.tagName === "H3") {
-          const articleHedTl = gsap.timeline({
-            autoRemoveChildren: true,
-          });
-          articleHedTl
-            .to(entry.target, {
-              opacity: 1,
-              duration: 0.2,
-              ease: "linear",
-            })
-            .to(
-              entry.target,
-              {
-                y: 0,
-                duration: 2,
-                ease: "elastic.out(1, 0.5)",
-              },
-              0,
-            );
-        }
-        if (entry.target.tagName === "DIV") {
-          const articleItemTl = gsap.timeline({
-            autoRemoveChildren: true,
-          });
-          articleItemTl
-            .to([...entry.target.children], {
-              opacity: 1,
-              duration: 0.2,
-              ease: "linear",
-              stagger: 0.1,
-            })
-            .to(
-              [...entry.target.children],
-              {
-                y: 0,
-                duration: 2,
-                ease: "elastic.out(1, 0.5)",
-                stagger: 0.1,
-              },
-              0,
-            );
-        }
-        observer.unobserve(entry.target);
-      }
+  /**
+   * setup text animations and blobby scroll color and size change interaction
+   */
+  const mm = gsap.matchMedia();
+
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.set("h2, h3", { opacity: 0, y: 25 });
+    gsap.set("div > *", { opacity: 0, y: 25 });
+
+    ScrollTrigger.config({
+      ignoreMobileResize: true,
     });
-  };
 
-  const observer = new IntersectionObserver(iCb, { threshold: 0.75 });
+    const globalTl = gsap.timeline({
+      autoRemoveChildren: true,
+    });
 
-  const bodyElements = [...document.querySelectorAll("h2, div, h3")];
+    const topTl = gsap.timeline({
+      autoRemoveChildren: true,
+    });
 
-  topTl
-    .to("h1, p", {
-      opacity: 1,
-      duration: 0.2,
-      ease: "linear",
-      stagger: 0.1,
-    })
-    .to(
-      "h1, p",
-      {
-        y: 0,
-        duration: 2,
-        ease: "elastic.out(1, 0.5)",
+    const meshTl = gsap.timeline({
+      autoRemoveChildren: true,
+      scrollTrigger: {
+        trigger: "main",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 2,
+        invalidateOnRefresh: true,
+      },
+    });
+
+    const iCb = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target.tagName === "H2" || entry.target.tagName === "H3") {
+            const articleHedTl = gsap.timeline({
+              autoRemoveChildren: true,
+            });
+            articleHedTl
+              .to(entry.target, {
+                opacity: 1,
+                duration: 0.2,
+                ease: "linear",
+              })
+              .to(
+                entry.target,
+                {
+                  y: 0,
+                  duration: 2,
+                  ease: "elastic.out(1, 0.5)",
+                },
+                0,
+              );
+          }
+          if (entry.target.tagName === "DIV") {
+            const articleItemTl = gsap.timeline({
+              autoRemoveChildren: true,
+            });
+            articleItemTl
+              .to([...entry.target.children], {
+                opacity: 1,
+                duration: 0.2,
+                ease: "linear",
+                stagger: 0.1,
+              })
+              .to(
+                [...entry.target.children],
+                {
+                  y: 0,
+                  duration: 2,
+                  ease: "elastic.out(1, 0.5)",
+                  stagger: 0.1,
+                },
+                0,
+              );
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(iCb, { threshold: 0.75 });
+
+    const bodyElements = [...document.querySelectorAll("h2, div, h3")];
+
+    topTl
+      .to("h1, p", {
+        opacity: 1,
+        duration: 0.2,
+        ease: "linear",
         stagger: 0.1,
-      },
-      0,
-    );
+      })
+      .to(
+        "h1, p",
+        {
+          y: 0,
+          duration: 2,
+          ease: "elastic.out(1, 0.5)",
+          stagger: 0.1,
+        },
+        0,
+      );
 
-  meshTl
-    .to(mesh.material.uniforms.color, {
-      value: 0.2,
-      ease: "none",
-    })
-    .to(
-      mesh.material.uniforms.mobileOrDesktopDistCheck,
-      {
-        value: () => (landscapeOrientation.matches ? 0.45 : 0.25),
+    meshTl
+      .to(mesh.material.uniforms.color, {
+        value: 0.2,
         ease: "none",
-      },
-      0,
-    );
+      })
+      .to(
+        mesh.material.uniforms.mobileOrDesktopDistCheck,
+        {
+          value: () => (landscapeOrientation.matches ? 0.45 : 0.25),
+          ease: "none",
+        },
+        0,
+      );
 
-  globalTl.add(topTl, 0).add(meshTl, 0);
+    globalTl.add(topTl, 0).add(meshTl, 0);
 
-  bodyElements.forEach((el) => {
-    observer.observe(el);
+    bodyElements.forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => {
+      observer.disconnect();
+      mm.revert();
+    };
   });
-
-  return () => {
-    observer.disconnect();
-    mm.revert();
-  };
-});
+}
 
 /**
  * handle service worker

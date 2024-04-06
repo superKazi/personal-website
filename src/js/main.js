@@ -5,7 +5,6 @@ import * as THREE from "three";
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", animations);
 } else {
-  // `DOMContentLoaded` has already fired
   animations();
 }
 

@@ -244,7 +244,10 @@ float snoise(vec3 v)
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xffffff);
   scene.add(mesh);
-
+  renderer.outputColorSpace = window.matchMedia("(color-gamut: p3)").matches
+    ? THREE.DisplayP3ColorSpace
+    : THREE.SRGBColorSpace;
+  renderer.compile(scene, camera);
   /**
    * use gsap to run threejs raf, since it's a relatively simple shader
    * we can handle resize in the raf instead of worrying about desyncs
@@ -262,11 +265,10 @@ float snoise(vec3 v)
 
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.compile(scene, camera);
       renderer.render(scene, camera);
     },
     false,
-    true,
+    false,
   );
 
   /**
@@ -296,7 +298,6 @@ float snoise(vec3 v)
       scrollTrigger: {
         trigger: "main",
         start: "top top",
-        end: "bottom bottom",
         scrub: 2,
         invalidateOnRefresh: true,
       },

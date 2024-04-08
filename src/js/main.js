@@ -206,7 +206,7 @@ float snoise(vec3 v)
   });
 
   const camera = new THREE.PerspectiveCamera(
-    45,
+    50,
     window.innerWidth / window.innerHeight,
     1,
     10,
@@ -313,7 +313,7 @@ float snoise(vec3 v)
             articleHedTl
               .to(entry.target, {
                 opacity: 1,
-                duration: 0.2,
+                duration: 0.4,
                 ease: "linear",
               })
               .to(
@@ -333,19 +333,19 @@ float snoise(vec3 v)
             articleItemTl
               .to([...entry.target.children], {
                 opacity: 1,
-                duration: 0.2,
+                duration: 0.4,
                 ease: "linear",
-                stagger: 0.1,
+                stagger: 0.15,
               })
               .to(
                 [...entry.target.children],
                 {
                   y: 0,
-                  duration: 2,
-                  ease: "elastic.out(1, 0.5)",
-                  stagger: 0.1,
+                  duration: 1.8,
+                  ease: "elastic.out(1, 0.4)",
+                  stagger: 0.15,
                 },
-                0,
+                "<10%",
               );
           }
           observer.unobserve(entry.target);
@@ -360,19 +360,19 @@ float snoise(vec3 v)
     topTl
       .to("h1, p", {
         opacity: 1,
-        duration: 0.2,
+        duration: 0.4,
         ease: "linear",
-        stagger: 0.1,
+        stagger: 0.15,
       })
       .to(
         "h1, p",
         {
           y: 0,
-          duration: 2,
-          ease: "elastic.out(1, 0.5)",
-          stagger: 0.1,
+          duration: 1.8,
+          ease: "elastic.out(1, 0.4)",
+          stagger: 0.15,
         },
-        0,
+        "<5%",
       );
 
     meshTl

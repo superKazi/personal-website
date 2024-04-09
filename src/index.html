@@ -292,13 +292,19 @@
       }
 
       @media (prefers-reduced-motion: no-preference) {
-        h1 {
-          opacity: 0;
-          transform: translateY(50px);
-        }
+        h1,
         p {
           opacity: 0;
-          transform: translateY(50px);
+          transform: translateY(var(--space-m));
+        }
+        h2,
+        h3 {
+          opacity: 0;
+          transform: translateY(var(--space-xs));
+        }
+        div > * {
+          opacity: 0;
+          transform: translateY(var(--space-s));
         }
       }
     </style>

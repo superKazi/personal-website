@@ -271,10 +271,10 @@ float snoise(vec3 v)
    */
   const mm = gsap.matchMedia();
 
+  console.log(gsap.getProperty(document.documentElement, "--space-xs"));
+
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     gsap.registerPlugin(ScrollTrigger);
-    gsap.set("h2, h3", { opacity: 0, y: 25 });
-    gsap.set("div > *", { opacity: 0, y: 25 });
 
     ScrollTrigger.config({
       ignoreMobileResize: true,

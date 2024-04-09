@@ -271,8 +271,6 @@ float snoise(vec3 v)
    */
   const mm = gsap.matchMedia();
 
-  console.log(gsap.getProperty(document.documentElement, "--space-xs"));
-
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     gsap.registerPlugin(ScrollTrigger);
 

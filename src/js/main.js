@@ -13,7 +13,6 @@ if (document.readyState === "loading") {
  */
 function animations() {
   const vertexShader = `
-  precision highp float;
   varying vec2 vUv;
 
   void main() {
@@ -32,8 +31,6 @@ function animations() {
 //               Distributed under the MIT License. See LICENSE file.
 //               https://github.com/ashima/webgl-noise
 //
-
-  precision highp float;
 
   vec3 mod289(vec3 x) {
     return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -172,25 +169,25 @@ float snoise(vec3 v)
   }
 
   // values from outside javascript world
-  uniform float tick;
-  uniform float width;
-  uniform float height;
-  uniform float mobileOrDesktopDistCheck;
-  uniform float color;
+  uniform float uTick;
+  uniform float uWidth;
+  uniform float uHeight;
+  uniform float uMobileOrDesktopDistCheck;
+  uniform float uColor;
   varying vec2 vUv;
 
   // creates blobby circle animation
   void main() {
     vec2 center = vUv - 0.5;
     // maintains aspect ratio
-    center.x *= width / height;
+    center.x *= uWidth / uHeight;
     float dist = length(center);
     
     // creates transparency
-    float alpha = smoothstep(mobileOrDesktopDistCheck + dist, mobileOrDesktopDistCheck, dist);
+    float alpha = smoothstep(uMobileOrDesktopDistCheck + dist, uMobileOrDesktopDistCheck, dist);
 
-    float noise = snoise(vec3(center, tick * .6));
-    vec3 color = hsl2rgb(color + noise * 0.3, 0.8, 0.8);
+    float noise = snoise(vec3(center, uTick * .6));
+    vec3 color = hsl2rgb(uColor + noise * 0.3, 0.8, 0.8);
     gl_FragColor = vec4(color, alpha);
   }
 `;
@@ -217,14 +214,12 @@ float snoise(vec3 v)
     new THREE.ShaderMaterial({
       vertexShader,
       fragmentShader,
-      depthWrite: false,
-      depthTest: false,
       uniforms: {
-        tick: { value: 1.0 },
-        width: { value: window.innerWidth },
-        height: { value: window.innerHeight },
-        color: { value: 0.6 },
-        mobileOrDesktopDistCheck: {
+        uTick: { value: 1.0 },
+        uWidth: { value: window.innerWidth },
+        uHeight: { value: window.innerHeight },
+        uColor: { value: 0.6 },
+        uMobileOrDesktopDistCheck: {
           value: landscapeOrientation.matches ? 0.3 : 0.15,
         },
       },
@@ -235,8 +230,8 @@ float snoise(vec3 v)
     "change",
     (e) => {
       e.matches
-        ? (mesh.material.uniforms.mobileOrDesktopDistCheck.value = 0.3)
-        : (mesh.material.uniforms.mobileOrDesktopDistCheck.value = 0.15);
+        ? (mesh.material.uniforms.uMobileOrDesktopDistCheck.value = 0.3)
+        : (mesh.material.uniforms.uMobileOrDesktopDistCheck.value = 0.15);
     },
     { passive: true },
   );
@@ -256,9 +251,9 @@ float snoise(vec3 v)
   gsap.ticker.fps(60);
   gsap.ticker.add(
     (time, deltaTime, frame) => {
-      mesh.material.uniforms.tick.value = frame * 0.005;
-      mesh.material.uniforms.width.value = window.innerWidth;
-      mesh.material.uniforms.height.value = window.innerHeight;
+      mesh.material.uniforms.uTick.value = frame * 0.005;
+      mesh.material.uniforms.uWidth.value = window.innerWidth;
+      mesh.material.uniforms.uHeight.value = window.innerHeight;
 
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -376,12 +371,12 @@ float snoise(vec3 v)
       );
 
     meshTl
-      .to(mesh.material.uniforms.color, {
+      .to(mesh.material.uniforms.uColor, {
         value: 0.2,
         ease: "none",
       })
       .to(
-        mesh.material.uniforms.mobileOrDesktopDistCheck,
+        mesh.material.uniforms.uMobileOrDesktopDistCheck,
         {
           value: () => (landscapeOrientation.matches ? 0.45 : 0.25),
           ease: "none",

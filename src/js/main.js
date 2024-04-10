@@ -278,10 +278,6 @@ float snoise(vec3 v)
       ignoreMobileResize: true,
     });
 
-    const globalTl = gsap.timeline({
-      autoRemoveChildren: true,
-    });
-
     const topTl = gsap.timeline({
       autoRemoveChildren: true,
     });
@@ -295,60 +291,6 @@ float snoise(vec3 v)
         invalidateOnRefresh: true,
       },
     });
-
-    const iCb = (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (entry.target.tagName === "H2" || entry.target.tagName === "H3") {
-            const articleHedTl = gsap.timeline({
-              autoRemoveChildren: true,
-            });
-            articleHedTl
-              .to(entry.target, {
-                opacity: 1,
-                duration: 0.4,
-                ease: "linear",
-              })
-              .to(
-                entry.target,
-                {
-                  y: 0,
-                  duration: 2,
-                  ease: "elastic.out(1, 0.5)",
-                },
-                0,
-              );
-          }
-          if (entry.target.tagName === "DIV") {
-            const articleItemTl = gsap.timeline({
-              autoRemoveChildren: true,
-            });
-            articleItemTl
-              .to([...entry.target.children], {
-                opacity: 1,
-                duration: 0.4,
-                ease: "linear",
-                stagger: 0.15,
-              })
-              .to(
-                [...entry.target.children],
-                {
-                  y: 0,
-                  duration: 1.8,
-                  ease: "elastic.out(1, 0.4)",
-                  stagger: 0.15,
-                },
-                "<10%",
-              );
-          }
-          observer.unobserve(entry.target);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(iCb, { threshold: 0.75 });
-
-    const bodyElements = [...document.querySelectorAll("h2, div, h3")];
 
     topTl
       .to("h1, p", {
@@ -382,16 +324,33 @@ float snoise(vec3 v)
         0,
       );
 
-    globalTl.add(topTl, 0).add(meshTl, 0);
+    ScrollTrigger.batch(["h2", "div > *", "h3"], {
+      start: "top bottom",
+      end: "bottom bottom",
+      invalidateOnRefresh: true,
+      once: true,
+      onEnter: (batch) => {
+        const itemsTl = gsap.timeline({ autoRemoveChildren: true });
 
-    bodyElements.forEach((el) => {
-      observer.observe(el);
+        itemsTl
+          .to(batch, {
+            opacity: 1,
+            duration: 0.4,
+            ease: "linear",
+            stagger: 0.15,
+          })
+          .to(
+            batch,
+            {
+              y: 0,
+              duration: 1.8,
+              ease: "elastic.out(1, 0.4)",
+              stagger: 0.15,
+            },
+            "<5%",
+          );
+      },
     });
-
-    return () => {
-      observer.disconnect();
-      mm.revert();
-    };
   });
 }
 

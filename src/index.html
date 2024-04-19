@@ -209,13 +209,6 @@
         transition: all 200ms ease;
       }
 
-      a:hover {
-        font-variation-settings:
-          "opsz" 72,
-          "wght" 800,
-          "ital" 0;
-      }
-
       a:focus-visible {
         outline: 2px solid hsl(0, 0%, 5%);
         outline-offset: 2px;
@@ -246,8 +239,8 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        /* width: 100%;
+        height: 100%; */
         z-index: 0;
         contain: strict;
       }
@@ -288,6 +281,17 @@
           grid-column: 7 / -1;
           align-self: center;
           margin-block-start: 0;
+        }
+      }
+
+      @media (any-hover: hover) {
+        &:where(:not(:active):hover) {
+          a:hover {
+            font-variation-settings:
+              "opsz" 72,
+              "wght" 800,
+              "ital" 0;
+          }
         }
       }
 

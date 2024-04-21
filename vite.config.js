@@ -10,7 +10,7 @@ export default defineConfig({
   },
   plugins: [
     generateSW({
-      dontCacheBustURLsMatching: new RegExp(".*assets/.*"),
+      dontCacheBustURLsMatching: new RegExp(/.*\/assets\/?(?:[^\/]+\/?)*$/),
       swDest: "./dist/sw.js",
       globDirectory: "./dist",
       globPatterns: ["**/*.{js,css}"],

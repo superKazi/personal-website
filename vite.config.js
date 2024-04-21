@@ -14,28 +14,6 @@ export default defineConfig({
       swDest: "./dist/sw.js",
       globDirectory: "./dist",
       globPatterns: ["**/*.{js,css}"],
-      runtimeCaching: [
-        {
-          urlPattern: ({ request }) => request.destination === "font",
-          handler: "StaleWhileRevalidate",
-          options: {
-            cacheName: "fonts-cache",
-            expiration: {
-              maxEntries: 1,
-            },
-          },
-        },
-        {
-          urlPattern: ({ request }) => request.destination === "document",
-          handler: "NetworkFirst",
-          options: {
-            cacheName: "document-cache",
-            expiration: {
-              maxEntries: 1,
-            },
-          },
-        },
-      ],
       cleanupOutdatedCaches: true,
       clientsClaim: true,
       skipWaiting: true,

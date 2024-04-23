@@ -13,6 +13,28 @@ export default defineConfig({
       dontCacheBustURLsMatching: new RegExp(
         /https\:\/\/kazielmanawal\.me\/assets\/?(?:[^\/]+\/?)*$/,
       ),
+      runtimeCaching: [
+        {
+          urlPattern: ({ request }) => request.destination === "font",
+          handler: "StaleWhileRevalidate",
+          options: {
+            cacheName: "fonts-cache",
+            expiration: {
+              maxEntries: 1,
+            },
+          },
+        },
+        {
+          urlPattern: ({ request }) => request.destination === "document",
+          handler: "NetworkFirst",
+          options: {
+            cacheName: "document-cache",
+            expiration: {
+              maxEntries: 1,
+            },
+          },
+        },
+      ],
       swDest: "./dist/sw.js",
       globDirectory: "./dist",
       globPatterns: ["**/*.{js,css}"],

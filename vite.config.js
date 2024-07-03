@@ -7,6 +7,7 @@ export default defineConfig({
     outDir: "../dist",
     emptyOutDir: true,
     sourcemap: true,
+    target: "es2022",
   },
   plugins: [
     generateSW({

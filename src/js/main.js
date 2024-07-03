@@ -242,6 +242,7 @@ float snoise(vec3 v)
   renderer.outputColorSpace = window.matchMedia("(color-gamut: p3)").matches
     ? THREE.DisplayP3ColorSpace
     : THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.compile(scene, camera);
   /**
    * use gsap to run threejs raf, since it's a relatively simple shader
@@ -251,7 +252,7 @@ float snoise(vec3 v)
   gsap.ticker.fps(60);
   gsap.ticker.add(
     (time, deltaTime, frame) => {
-      mesh.material.uniforms.uTick.value = frame * 0.005;
+      mesh.material.uniforms.uTick.value = frame * 0.0075;
       mesh.material.uniforms.uWidth.value = window.innerWidth;
       mesh.material.uniforms.uHeight.value = window.innerHeight;
 

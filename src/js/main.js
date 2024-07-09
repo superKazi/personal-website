@@ -213,8 +213,6 @@ float snoise(vec3 v)
     antialias: true,
   });
 
-  console.log(renderer.domElement);
-
   const camera = new PerspectiveCamera(
     50,
     renderer.domElement.clientWidth / renderer.domElement.clientHeight,

@@ -91,6 +91,11 @@
         padding-right: env(safe-area-inset-right);
       }
 
+      html,
+      body {
+        block-size: 100%;
+      }
+
       main {
         position: relative;
         z-index: 1;
@@ -240,6 +245,8 @@
         top: 0;
         left: 0;
         z-index: 0;
+        inline-size: 100%;
+        block-size: 100%;
         contain: strict;
       }
 

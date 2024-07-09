@@ -1,6 +1,17 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import * as THREE from "three";
+import {
+  WebGLRenderer,
+  PerspectiveCamera,
+  Mesh,
+  PlaneGeometry,
+  ShaderMaterial,
+  Scene,
+  Color,
+  DisplayP3ColorSpace,
+  SRGBColorSpace,
+  ACESFilmicToneMapping,
+} from "three";
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", animations);
@@ -197,21 +208,21 @@ float snoise(vec3 v)
    */
   const landscapeOrientation = window.matchMedia("(orientation: landscape)");
 
-  const renderer = new THREE.WebGLRenderer({
+  const renderer = new WebGLRenderer({
     canvas: document.querySelector("canvas"),
     antialias: true,
   });
 
-  const camera = new THREE.PerspectiveCamera(
+  const camera = new PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
     1,
     10,
   );
 
-  const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(2, 2),
-    new THREE.ShaderMaterial({
+  const mesh = new Mesh(
+    new PlaneGeometry(2, 2),
+    new ShaderMaterial({
       vertexShader,
       fragmentShader,
       uniforms: {
@@ -236,13 +247,13 @@ float snoise(vec3 v)
     { passive: true },
   );
 
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xffffff);
+  const scene = new Scene();
+  scene.background = new Color(0xffffff);
   scene.add(mesh);
   renderer.outputColorSpace = window.matchMedia("(color-gamut: p3)").matches
-    ? THREE.DisplayP3ColorSpace
-    : THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    ? DisplayP3ColorSpace
+    : SRGBColorSpace;
+  renderer.toneMapping = ACESFilmicToneMapping;
   renderer.compile(scene, camera);
   /**
    * use gsap to run threejs raf, since it's a relatively simple shader

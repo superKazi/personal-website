@@ -213,9 +213,11 @@ float snoise(vec3 v)
     antialias: true,
   });
 
+  console.log(renderer.domElement);
+
   const camera = new PerspectiveCamera(
     50,
-    window.innerWidth / window.innerHeight,
+    renderer.domElement.clientWidth / renderer.domElement.clientHeight,
     1,
     10,
   );
@@ -227,8 +229,8 @@ float snoise(vec3 v)
       fragmentShader,
       uniforms: {
         uTick: { value: 1.0 },
-        uWidth: { value: window.innerWidth },
-        uHeight: { value: window.innerHeight },
+        uWidth: { value: renderer.domElement.clientWidth },
+        uHeight: { value: renderer.domElement.clientHeight },
         uColor: { value: 0.6 },
         uMobileOrDesktopDistCheck: {
           value: landscapeOrientation.matches ? 0.3 : 0.15,
@@ -264,14 +266,15 @@ float snoise(vec3 v)
   gsap.ticker.add(
     (time, deltaTime, frame) => {
       mesh.material.uniforms.uTick.value = frame * 0.0075;
-      mesh.material.uniforms.uWidth.value = window.innerWidth;
-      mesh.material.uniforms.uHeight.value = window.innerHeight;
+      mesh.material.uniforms.uWidth.value = renderer.domElement.clientWidth;
+      mesh.material.uniforms.uHeight.value = renderer.domElement.clientHeight;
 
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
+      if (resizeRendererToDisplaySize(renderer)) {
+        camera.aspect =
+          renderer.domElement.clientWidth / renderer.domElement.clientHeight;
+        camera.updateProjectionMatrix();
+      }
 
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.render(scene, camera);
     },
     false,
@@ -364,6 +367,21 @@ float snoise(vec3 v)
       },
     });
   });
+}
+
+/**
+ * resize helper
+ */
+function resizeRendererToDisplaySize(renderer) {
+  const canvas = renderer.domElement;
+  const pixelRatio = window.devicePixelRatio;
+  const width = Math.floor(canvas.clientWidth * pixelRatio);
+  const height = Math.floor(canvas.clientHeight * pixelRatio);
+  const needResize = canvas.width !== width || canvas.height !== height;
+  if (needResize) {
+    renderer.setSize(width, height, false);
+  }
+  return needResize;
 }
 
 /**

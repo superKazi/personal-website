@@ -38,9 +38,15 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
       },
       "<35%",
     )
-    .set("main", {
-      background: "#0d0d0d",
-    });
+    .to(
+      "main, body",
+      {
+        background: "#0d0d0d",
+        duration: 1,
+        ease: "none",
+      },
+      "<50%",
+    );
 });
 
 /**

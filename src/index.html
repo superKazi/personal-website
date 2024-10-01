@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-city="{{geo}}">
+<html lang="en">
   <head>
     <meta name="charset" content="utf-8" />
     <meta
@@ -42,29 +42,7 @@
       }
 
       :root {
-        --step--2: clamp(0.78rem, calc(0.77rem + 0.08vw), 0.96rem);
-        --step--1: clamp(0.94rem, calc(0.92rem + 0.11vw), 1.2rem);
-        --step-0: clamp(1.13rem, calc(1.09rem + 0.16vw), 1.5rem);
-        --step-1: clamp(1.35rem, calc(1.31rem + 0.22vw), 1.88rem);
-        --step-2: clamp(1.62rem, calc(1.56rem + 0.31vw), 2.34rem);
-        --step-3: clamp(1.94rem, calc(1.86rem + 0.42vw), 2.93rem);
-        --step-4: clamp(2.33rem, calc(2.22rem + 0.56vw), 3.66rem);
-        --step-5: clamp(2.8rem, calc(2.65rem + 0.75vw), 4.58rem);
-        --step-6: clamp(3.36rem, calc(3.16rem + 1vw), 5.72rem);
-
-        --space-3xs: clamp(0.31rem, calc(0.31rem + 0.03vw), 0.38rem);
-        --space-2xs: clamp(0.56rem, calc(0.55rem + 0.08vw), 0.75rem);
-        --space-xs: clamp(0.88rem, calc(0.85rem + 0.11vw), 1.13rem);
-        --space-s: clamp(1.13rem, calc(1.09rem + 0.16vw), 1.5rem);
-        --space-m: clamp(1.69rem, calc(1.64rem + 0.24vw), 2.25rem);
-        --space-l: clamp(2.25rem, calc(2.19rem + 0.32vw), 3rem);
-        --space-xl: clamp(3.38rem, calc(3.28rem + 0.48vw), 4.5rem);
-        --space-2xl: clamp(4.5rem, calc(4.37rem + 0.64vw), 6rem);
-        --space-3xl: clamp(6.75rem, calc(6.56rem + 0.95vw), 9rem);
-
-        --grid-max-width: 93rem;
-        --grid-gutter: clamp(1.13rem, calc(0.61rem + 2.57vw), 3rem);
-        --grid-columns: 12;
+        --type: clamp(1.5rem, 1.2955rem + 1.0227vw, 3.75rem);
       }
 
       *,
@@ -78,6 +56,7 @@
         -moz-text-size-adjust: none;
         -webkit-text-size-adjust: none;
         text-size-adjust: none;
+        overscroll-behavior: none;
       }
 
       body {
@@ -89,231 +68,111 @@
         color: #0d0d0d;
         padding-left: env(safe-area-inset-left);
         padding-right: env(safe-area-inset-right);
-      }
-
-      html,
-      body {
-        block-size: 100%;
-      }
-
-      main {
-        position: relative;
-        z-index: 1;
-        max-inline-size: var(--grid-max-width);
-        padding-inline: var(--grid-gutter);
-        margin-inline: auto;
-      }
-
-      header,
-      article,
-      footer {
-        position: relative;
-        z-index: 1;
-        contain: content;
-        text-transform: uppercase;
-      }
-
-      header,
-      footer {
-        padding: var(--grid-gutter) 0;
-        display: grid;
-        gap: var(--grid-gutter);
-        grid-template-columns: repeat(var(--grid-columns), 1fr);
-      }
-
-      header {
-        grid-template-rows: 1fr max-content;
-        min-block-size: 100vh;
         min-block-size: 100svh;
       }
 
-      p,
-      h1 {
-        overflow-wrap: break-word;
+      main {
+        display: grid;
+        grid-auto-flow: row;
+        grid-template-rows: max-content 1fr 1fr 1fr;
+        min-block-size: 100svh;
+      }
+
+      main div {
+        padding: 1.5rem;
         text-wrap: balance;
+        inline-size: min(100%, var(--type) * 25);
       }
 
-      h1 {
-        font-variation-settings:
-          "opsz" 72,
-          "wght" 500,
-          "ital" 0;
-        grid-column: 1 / -1;
-        grid-row: 1 / 2;
-        place-self: start;
-        font-size: var(--step-6);
-        letter-spacing: 0.02em;
-        line-height: 0.8;
-      }
-
+      h1,
       p {
         font-variation-settings:
           "opsz" 36,
-          "wght" 550,
+          "wght" 500,
           "ital" 0;
-        font-size: var(--step-2);
-        letter-spacing: 0.025em;
-        grid-column: 1 / -1;
-        grid-row: 2 / -1;
-        place-self: end;
-        line-height: 1;
+        font-size: var(--type);
+        line-height: 1.1;
+        display: inline;
+        overflow-wrap: break-word;
       }
 
-      article {
-        margin-block-start: var(--space-2xl);
-        padding-block-end: 6px;
-      }
-
-      h2 {
-        font-variation-settings:
-          "opsz" 36,
-          "wght" 650,
-          "ital" 0;
-        font-size: var(--step--1);
-        letter-spacing: 0.12em;
-        line-height: 1;
-      }
-
-      dl {
-        margin-block-start: var(--space-m);
-      }
-
-      div + div {
-        margin-block-start: var(--space-xs);
-      }
-
-      dt,
-      dd {
-        line-height: 1.2;
-        letter-spacing: 0.05em;
-      }
-
-      dt {
-        font-variation-settings:
-          "opsz" 36,
-          "wght" 600,
-          "ital" 0;
-        font-size: var(--step-0);
-      }
-
-      dd {
-        font-variation-settings:
-          "opsz" 36,
-          "wght" 600,
-          "ital" 0;
-        font-size: var(--step-0);
-        text-wrap: balance;
-        margin-block-start: var(--space-3xs);
-      }
-
-      a {
-        color: currentColor;
-        text-decoration-skip-ink: auto;
-        text-underline-offset: 0.1em;
-        text-decoration-thickness: 0.075em;
-        transition: all 200ms ease;
-      }
-
-      a:focus-visible {
-        outline: 2px solid hsl(0, 0%, 5%);
-        outline-offset: 2px;
-      }
-
-      a:focus:not(:focus-visible) {
-        outline: none;
-      }
-
-      footer {
-        height: 40vmin;
-      }
-
-      h3 {
-        font-variation-settings:
-          "opsz" 36,
-          "wght" 650,
-          "ital" 0;
-        font-size: var(--step--1);
-        letter-spacing: 0.12em;
-        align-self: end;
-        grid-column: 1 / -1;
-        line-height: 1;
-      }
-
-      canvas {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 0;
-        inline-size: 100%;
-        block-size: 100%;
-        contain: strict;
-      }
-
-      :is(h1, h2, h3, p, dt, dd, a)::selection {
+      :is(h1, p)::selection {
         background: #0d0d0d;
         color: #fff;
       }
 
-      @media (orientation: landscape) {
-        header {
-          grid-template-rows: 4fr max-content 1fr;
-        }
-        h1,
-        p {
-          grid-row: 2 / 3;
-        }
-
-        h1 {
-          grid-column: 1 / 7;
-        }
-
-        p {
-          grid-column: 7 / -1;
-        }
-
-        div {
-          display: grid;
-          gap: var(--grid-gutter);
-          grid-template-columns: repeat(var(--grid-columns), 1fr);
-        }
-
-        dt {
-          grid-column: 2 / 7;
-        }
-
-        dd {
-          grid-column: 7 / -1;
-          align-self: center;
-          margin-block-start: 0;
-        }
+      .espn {
+        letter-spacing: 0.025em;
       }
 
+      a {
+        color: #0d0d0d;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 2px;
+        transition: font-variation-settings 400ms ease;
+      }
+
+      /* https://dev.37signals.com/modern-css-patterns-and-techniques-in-campfire/ */
       @media (any-hover: hover) {
         &:where(:not(:active):hover) {
           a:hover {
             font-variation-settings:
               "opsz" 72,
-              "wght" 800,
+              "wght" 700,
               "ital" 0;
           }
         }
       }
 
+      @media (min-width: 48rem) {
+        main div {
+          padding: 3rem;
+        }
+      }
+
       @media (prefers-reduced-motion: no-preference) {
-        h1,
+        .screen {
+          block-size: 100svh;
+          inline-size: 100vw;
+          background: #0d0d0d;
+          transform-origin: bottom;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 2;
+        }
+        .char,
         p {
+          position: relative;
           opacity: 0;
-          transform: translateY(var(--space-m));
+          z-index: 1;
         }
-        h2,
-        h3 {
-          opacity: 0;
-          transform: translateY(var(--space-xs));
+        p {
+          filter: blur(2px);
         }
-        div > * {
-          opacity: 0;
-          transform: translateY(var(--space-s));
+        a {
+          transition:
+            font-variation-settings 400ms ease,
+            color 400ms ease;
+        }
+
+        @media (any-hover: hover) {
+          &:where(:not(:active):hover) {
+            a:hover {
+              color: var(--color);
+              font-variation-settings:
+                "opsz" 72,
+                "wght" 700,
+                "ital" 0;
+            }
+          }
+        }
+        b {
+          display: block;
+          inline-size: 100%;
+          block-size: 100%;
+          transform-origin: left;
+          transform: scaleX(0);
         }
       }
     </style>
@@ -350,7 +209,7 @@
     <meta name="twitter:description" content="Find more links about Kazi." />
     <meta
       name="twitter:image:alt"
-      content="Graphic design made using the letter k"
+      content="Graphic design made using Kazi's name"
     />
     <meta name="twitter:image" content="https://kazielmanawal.me/og.jpg" />
     <link rel="icon" href="./favicon.ico" sizes="any" />
@@ -360,139 +219,39 @@
     <link rel="manifest" href="./manifest.webmanifest" />
   </head>
   <body>
+    <div class="screen" aria-hidden="true"></div>
     <main>
-      <header>
-        <h1>Kazi Elman Awal</h1>
+      <div>
+        <h1 data-splitting>Kazi &#x2728;</h1>
+        &thinsp;
         <p>
-          is a senior creative developer who has worked at various journalism
-          organizations designing and developing award winning newsroom stories,
-          tools and products.
-        </p>
-      </header>
-      <article>
-        <h2>Insider</h2>
-        <dl>
-          <div>
-            <dt>
-              <a
-                data-goatcounter-click="deaths-in-the-family"
-                href="https://www.businessinsider.com/transgender-violence-deaths-database-murder-cases-2017-2021"
-                target="_blank"
-                rel="noopener noreferrer"
-                >Deaths in the family</a
-              >
-            </dt>
-            <dd>creative direction, ux design, web development</dd>
-          </div>
-          <div>
-            <dt>
-              <a
-                data-goatcounter-click="serenas-next-serve"
-                href="https://www.businessinsider.com/serena-williams-interview-cover-story-2022-4"
-                target="_blank"
-                rel="noopener noreferrer"
-                >Serena&#8216;s next serve</a
-              >
-            </dt>
-            <dd>ux design, web development</dd>
-          </div>
-          <div>
-            <dt>
-              <a
-                data-goatcounter-click="king-charles-coronation"
-                href="https://www.businessinsider.com/king-charles-coronation-schedule-guide-timeline-2023-5"
-                target="_blank"
-                rel="noopener noreferrer"
-                >King Charles&#8216; coronation</a
-              >
-            </dt>
-            <dd>creative direction, ux design, web development</dd>
-          </div>
-        </dl>
-      </article>
-      <article>
-        <h2>Rest of World</h2>
-        <dl>
-          <div>
-            <dt>
-              <a
-                data-goatcounter-click="homepage-redesign"
-                href="https://restofworld.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                >Homepage redesign</a
-              >
-            </dt>
-            <dd>web development</dd>
-          </div>
-          <div>
-            <dt>
-              <a
-                data-goatcounter-click="social-card-generator"
-                href="https://restofworld.org/wp-content/projects/card-builder/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >Social card generator</a
-              >
-            </dt>
-            <dd>ux design, web development</dd>
-          </div>
-        </dl>
-      </article>
-      <article>
-        <h2>The San Francisco Chronicle</h2>
-        <dl>
-          <div>
-            <dt>
-              <a
-                data-goatcounter-click="the-fishermans-secret"
-                href="https://projects.sfchronicle.com/2019/the-fishermans-secret/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >The fisherman&#8216;s secret</a
-              >
-            </dt>
-            <dd>ux design, web design and development</dd>
-          </div>
-          <div>
-            <dt>
-              <a
-                data-goatcounter-click="class-of-2020"
-                href="https://projects.sfchronicle.com/class-of-2020/spring/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >Class of 2020</a
-              >
-            </dt>
-            <dd>ux design, graphic design, web design and development</dd>
-          </div>
-          <div>
-            <dt>
-              <a
-                data-goatcounter-click="25-must-eats"
-                href="https://projects.sfchronicle.com/2020/25-must-eats/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >25 Must-eats</a
-              >
-            </dt>
-            <dd>ux design, graphic design, web design and development</dd>
-          </div>
-        </dl>
-      </article>
-      <footer>
-        <h3>
-          You can find more of his work on
+          is a creative web guy. He&rsquo;s spent most of his<wbr /> career at
+          various news organizations helping design<wbr /> and build cool
+          stories and products. Most recently he was <wbr />
+          <a
+            data-goatcounter-click="espn-quiz"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://www.espn.com/espn/feature/story/_/id/40489229/2024-home-run-derby-fan-quiz"
+            >doing</a
+          >
+          <a
+            data-goatcounter-click="espn-invisible"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://www.espn.com/espn/feature/story/_/id/40276381/how-stadiums-help-fans-invisible-disabilities"
+            >that</a
+          >
+          at <span class="espn">ESPN</span>. See more of his work on
           <a
             data-goatcounter-click="linkedin"
-            href="https://www.linkedin.com/in/superkazi/"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
+            href="https://www.linkedin.com/in/superkazi/"
             >LinkedIn</a
           >.
-        </h3>
-      </footer>
-      <canvas></canvas>
+        </p>
+      </div>
     </main>
     <script type="module" src="./js/main.js"></script>
     <script

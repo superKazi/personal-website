@@ -1,5 +1,4 @@
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Splitting from "splitting";
 
 const mm = gsap.matchMedia();
@@ -23,20 +22,11 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
       {
         opacity: 1,
         yPercent: 0,
-        stagger: 0.2,
-        duration: 2,
-        ease: "expo.out",
+        stagger: 0.15,
+        duration: 1.8,
+        ease: "elastic.out(1.1, 0.5)",
       },
       "<50%",
-    )
-    .to(
-      "p",
-      {
-        opacity: 1,
-        duration: 1,
-        ease: "none",
-      },
-      "<35%",
     )
     .to(
       "main, body",
@@ -45,7 +35,17 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
         duration: 1,
         ease: "none",
       },
-      "<50%",
+      "<",
+    )
+    .to(
+      "p",
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        duration: 1,
+        ease: "none",
+      },
+      "<35%",
     );
 });
 

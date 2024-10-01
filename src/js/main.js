@@ -74,13 +74,8 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
 /**
  * polite console
  */
-const politeString =
-  document.documentElement.dataset.city === "unknown"
-    ? `%cThanks for checking out my site!`
-    : `%cThanks for checking out my site all the way from ${document.documentElement.dataset.city}!`;
-
 console.log(
-  politeString,
+  "Thanks for visiting!",
   `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
   "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
 );

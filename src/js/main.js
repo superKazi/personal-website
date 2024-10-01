@@ -1,52 +1,56 @@
-import { gsap } from "gsap";
 import Splitting from "splitting";
+import { timeline, stagger } from "motion";
 
-const mm = gsap.matchMedia();
+const allowsAnimations = window.matchMedia(
+  "(prefers-reduced-motion: no-preference)",
+).matches;
 
-mm.add("(prefers-reduced-motion: no-preference)", () => {
+if (allowsAnimations) {
   Splitting();
 
-  const tl = gsap.timeline();
-
-  tl.set(".char", {
-    display: "inline-block",
-    yPercent: 90,
-  })
-    .to(".screen", {
-      scaleY: 0,
-      duration: 1.5,
-      ease: "power1.in",
-    })
-    .to(
+  const sequence = [
+    [
+      ".screen",
+      { scaleY: 0 },
+      { duration: 1.6, easing: "cubic-bezier(0.11, 0, 0.5, 0)" },
+    ],
+    [
       ".char",
+      { opacity: 0.8 },
       {
-        opacity: 1,
-        yPercent: 0,
-        stagger: 0.15,
-        duration: 1.8,
-        ease: "elastic.out(1.1, 0.5)",
-      },
-      "<20%",
-    )
-    .to(
-      "p",
-      {
-        opacity: 1,
-        filter: "blur(0px)",
+        at: "-1.2",
         duration: 1,
-        ease: "none",
-        onComplete: async () => {
-          try {
-            const { colorThings } = await import("./boxes.js");
-            colorThings();
-          } catch (err) {
-            console.error(err);
-          }
-        },
+        delay: stagger(0.15),
+        easing: "linear",
       },
-      "<15%",
-    );
-});
+    ],
+    [
+      ".char",
+      { transform: "translateY(0)" },
+      {
+        at: "<",
+        duration: 0.8,
+        delay: stagger(0.1),
+        easing: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+      },
+    ],
+    [
+      "p",
+      { opacity: 1, filter: "blur(0px)" },
+      { at: "-0.8", duration: 0.8, easing: "linear" },
+    ],
+  ];
+
+  timeline(sequence).finished.then(async () => {
+    console.log("timeline finished");
+    try {
+      const { colorThings } = await import("./boxes.js");
+      colorThings();
+    } catch (err) {
+      console.error(err);
+    }
+  });
+}
 
 /**
  * handle service worker

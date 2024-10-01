@@ -12,13 +12,13 @@ if (allowsAnimations) {
     [
       ".screen",
       { scaleY: 0 },
-      { duration: 1.6, easing: "cubic-bezier(0.11, 0, 0.5, 0)" },
+      { duration: 1.6, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
     ],
     [
       ".char",
       { opacity: 0.8 },
       {
-        at: "-1.2",
+        at: "-1",
         duration: 1,
         delay: stagger(0.15),
         easing: "linear",
@@ -37,7 +37,7 @@ if (allowsAnimations) {
     [
       "p",
       { opacity: 1, filter: "blur(0px)" },
-      { at: "-0.8", duration: 0.8, easing: "linear" },
+      { at: "-0.5", duration: 0.8, easing: "linear" },
     ],
   ];
 

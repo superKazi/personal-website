@@ -42,7 +42,7 @@
       }
 
       :root {
-        --type: clamp(1.25rem, 1.0227rem + 1.1364vw, 3.75rem);
+        --type: clamp(1.5rem, 1.2955rem + 1.0227vw, 3.75rem);
       }
 
       *,
@@ -72,10 +72,14 @@
       }
 
       main {
-        padding: 1.5rem;
+        display: grid;
+        grid-auto-flow: row;
+        grid-template-rows: max-content 1fr 1fr 1fr;
+        min-block-size: 100svh;
       }
 
       main div {
+        padding: 1.5rem;
         text-wrap: balance;
         inline-size: min(100%, var(--type) * 25);
       }
@@ -84,7 +88,7 @@
       p {
         font-variation-settings:
           "opsz" 36,
-          "wght" 400,
+          "wght" 500,
           "ital" 0;
         font-size: var(--type);
         line-height: 1.1;
@@ -108,6 +112,7 @@
         transition: font-variation-settings 400ms ease;
       }
 
+      /* https://dev.37signals.com/modern-css-patterns-and-techniques-in-campfire/ */
       @media (any-hover: hover) {
         &:where(:not(:active):hover) {
           a:hover {
@@ -120,26 +125,21 @@
       }
 
       @media (min-width: 48rem) {
-        main {
+        main div {
           padding: 3rem;
         }
       }
 
       @media (prefers-reduced-motion: no-preference) {
-        body,
-        a {
-          color: #fff;
-        }
         .screen {
           block-size: 100svh;
           inline-size: 100vw;
           background: #0d0d0d;
           transform-origin: bottom;
-          transform: scaleY(0);
           position: absolute;
           top: 0;
           left: 0;
-          z-index: 0;
+          z-index: 2;
         }
         .char,
         p {
@@ -150,9 +150,29 @@
         p {
           filter: blur(2px);
         }
-        :is(h1, p, span, a)::selection {
-          background: #fff;
-          color: #0d0d0d;
+        a {
+          transition:
+            font-variation-settings 400ms ease,
+            color 400ms ease;
+        }
+
+        @media (any-hover: hover) {
+          &:where(:not(:active):hover) {
+            a:hover {
+              color: var(--color);
+              font-variation-settings:
+                "opsz" 72,
+                "wght" 700,
+                "ital" 0;
+            }
+          }
+        }
+        b {
+          display: block;
+          inline-size: 100%;
+          block-size: 100%;
+          transform-origin: left;
+          transform: scaleX(0);
         }
       }
     </style>
@@ -202,12 +222,12 @@
     <div class="screen" aria-hidden="true"></div>
     <main>
       <div>
-        <h1 data-splitting>Kazi</h1>
+        <h1 data-splitting>Kazi &#x2728;</h1>
         &thinsp;
         <p>
           is a creative web guy. He&rsquo;s spent most of his<wbr /> career at
           various news organizations helping design<wbr /> and build cool
-          stories and products. Most recently he was<wbr />
+          stories and products. Most recently he was <wbr />
           <a
             data-goatcounter-click="espn-quiz"
             rel="noopener noreferrer"

@@ -10,12 +10,12 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
 
   tl.set(".char", {
     display: "inline-block",
-    yPercent: -90,
+    yPercent: 90,
   })
     .to(".screen", {
-      scaleY: 1,
-      duration: 2.5,
-      ease: "expo.out",
+      scaleY: 0,
+      duration: 1.5,
+      ease: "power1.in",
     })
     .to(
       ".char",
@@ -26,16 +26,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
         duration: 1.8,
         ease: "elastic.out(1.1, 0.5)",
       },
-      "<50%",
-    )
-    .to(
-      "main, body",
-      {
-        background: "#0d0d0d",
-        duration: 1,
-        ease: "none",
-      },
-      "<",
+      "<20%",
     )
     .to(
       "p",
@@ -44,8 +35,16 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
         filter: "blur(0px)",
         duration: 1,
         ease: "none",
+        onComplete: async () => {
+          try {
+            const { colorThings } = await import("./boxes.js");
+            colorThings();
+          } catch (err) {
+            console.error(err);
+          }
+        },
       },
-      "<35%",
+      "<15%",
     );
 });
 
@@ -75,7 +74,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
  * polite console
  */
 console.log(
-  "Thanks for visiting!",
+  "%cThanks for visiting!",
   `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
   "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
 );

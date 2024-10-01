@@ -9,4 +9,4 @@ Netlify builds this code to make my website.
 - Andrey Sitnik’s [favicon strategy](https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs)
 - [Goatcounter](https://www.goatcounter.com) by Martin Tournoij to track you if/when you visit
 - [Vite.js](https://vitejs.dev) for my build tooling
-- [GSAP](https://greensock.com/gsap/) for animations
+- [Motion one](https://motion.dev) for animations

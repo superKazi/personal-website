@@ -26,7 +26,7 @@ if (allowsAnimations) {
     ],
     [
       ".char",
-      { transform: ["translateY(200%)", "translateY(0)"] },
+      { transform: "translateY(0)" },
       {
         at: "<",
         duration: 0.8,

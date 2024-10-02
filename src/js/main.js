@@ -16,7 +16,7 @@ if (allowsAnimations) {
     ],
     [
       ".char",
-      { opacity: 0.8 },
+      { opacity: 1 },
       {
         at: "-1",
         duration: 1,
@@ -42,7 +42,6 @@ if (allowsAnimations) {
   ];
 
   timeline(sequence).finished.then(async () => {
-    console.log("timeline finished");
     try {
       const { colorThings } = await import("./boxes.js");
       colorThings();

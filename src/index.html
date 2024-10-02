@@ -159,7 +159,6 @@
             font-variation-settings 400ms ease,
             color 400ms ease;
         }
-
         @media (any-hover: hover) {
           &:where(:not(:active):hover) {
             a:hover {
@@ -169,14 +168,37 @@
                 "wght" 700,
                 "ital" 0;
             }
+            [data-word="\2728"]:hover {
+              cursor: crosshair;
+              animation: sparkle 4s infinite;
+            }
           }
         }
         b {
+          position: relative;
           display: block;
           inline-size: 100%;
           block-size: 100%;
           transform-origin: left;
           transform: scaleX(0);
+          contain: content;
+        }
+        @keyframes sparkle {
+          0% {
+            color: #0d0d0d;
+          }
+          25% {
+            color: var(--color-1);
+          }
+          50% {
+            color: var(--color-2);
+          }
+          75% {
+            color: var(--color-0);
+          }
+          100% {
+            color: #0d0d0d;
+          }
         }
       }
     </style>

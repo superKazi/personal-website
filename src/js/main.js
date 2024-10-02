@@ -11,7 +11,7 @@ if (allowsAnimations) {
   const sequence = [
     [
       ".screen",
-      { scaleY: 0 },
+      { transform: "scaleY(0)" },
       { duration: 1.6, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
     ],
     [

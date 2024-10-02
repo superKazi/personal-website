@@ -24,6 +24,9 @@ function colorThings() {
     document
       .querySelectorAll("a")
       [index].style.setProperty(`--color`, color.hex);
+    document
+      .querySelector("[data-word='\\2728']")
+      .style.setProperty(`--color-${index}`, color.hex);
   });
   document.querySelector("main").insertAdjacentHTML("beforeend", colorMarkup);
 

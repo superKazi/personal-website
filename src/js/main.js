@@ -30,7 +30,7 @@ if (allowsAnimations) {
       {
         at: "<",
         duration: 0.6,
-        delay: stagger(0.1),
+        delay: stagger(0.075),
         easing: "cubic-bezier(0.34, 1.56, 0.64, 1)",
       },
     ],

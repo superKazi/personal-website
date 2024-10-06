@@ -12,15 +12,15 @@ if (allowsAnimations) {
     [
       ".screen",
       { transform: "scaleY(0)" },
-      { duration: 1.6, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
+      { duration: 1, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
     ],
     [
       ".char",
       { opacity: 1 },
       {
-        at: "-1",
-        duration: 1,
-        delay: stagger(0.15),
+        at: "-.8",
+        duration: 0.6,
+        delay: stagger(0.075),
         easing: "linear",
       },
     ],
@@ -29,15 +29,15 @@ if (allowsAnimations) {
       { transform: "translateY(0)" },
       {
         at: "<",
-        duration: 0.8,
-        delay: stagger(0.1),
+        duration: 0.6,
+        delay: stagger(0.075),
         easing: "cubic-bezier(0.34, 1.56, 0.64, 1)",
       },
     ],
     [
       "p",
       { opacity: 1, filter: "blur(0px)" },
-      { at: "-0.5", duration: 0.8, easing: "linear" },
+      { at: "-.4", duration: 0.8, easing: "linear" },
     ],
   ];
 

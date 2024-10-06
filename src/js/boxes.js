@@ -34,9 +34,11 @@ function colorThings() {
     "b",
     { transform: "scaleX(1)" },
     {
-      duration: 1.6,
+      duration: window.matchMedia("(orientation: portrait)").matches
+        ? window.innerHeight * 0.001
+        : window.innerWidth * 0.0008,
       easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-      delay: stagger(0.15),
+      delay: stagger(0.12),
     },
   );
 }

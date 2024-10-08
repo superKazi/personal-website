@@ -10,34 +10,37 @@ if (allowsAnimations) {
 
   const sequence = [
     [
-      ".screen",
-      { transform: "scaleY(0)" },
-      { duration: 1, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
+      ".char",
+      {
+        opacity: 1,
+        transform: "translateY(0)",
+      },
+      {
+        duration: 0.6,
+        delay: stagger(0.075),
+        easing: "linear",
+        transform: { easing: "cubic-bezier(0.34, 1.56, 0.64, 1)" },
+      },
     ],
     [
       ".char",
-      { opacity: 1 },
       {
-        at: "-.8",
+        color: "#0d0d0d",
+      },
+      {
         duration: 0.6,
-        delay: stagger(0.075),
         easing: "linear",
       },
     ],
     [
-      ".char",
-      { transform: "translateY(0)" },
-      {
-        at: "<",
-        duration: 0.6,
-        delay: stagger(0.075),
-        easing: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-      },
+      ".screen",
+      { transform: "scaleY(0)" },
+      { at: "-0.8", duration: 1, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
     ],
     [
       "p",
       { opacity: 1, filter: "blur(0px)" },
-      { at: "-.4", duration: 0.8, easing: "linear" },
+      { at: "-.6", duration: 0.8, easing: "linear" },
     ],
   ];
 

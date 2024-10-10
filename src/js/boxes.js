@@ -1,4 +1,4 @@
-import { animate, stagger } from "motion";
+import { animate, stagger, spring } from "motion";
 import { shuffle, sample } from "es-toolkit";
 import colors from "dictionary-of-colour-combinations";
 
@@ -20,7 +20,19 @@ function colorThings() {
   console.table(finalColors);
   let colorMarkup = "";
   finalColors.forEach((color, index) => {
-    colorMarkup += `<b aria-hidden="true" style="background: ${color.hex};"></b>`;
+    colorMarkup += `
+      <b 
+        aria-hidden="true"
+        style="
+          display: block; 
+          inline-size: 100%; 
+          block-size: 100%; 
+          transform-origin: left; 
+          transform: scaleX(0);
+          background: ${color.hex};"
+      >
+      </b>
+    `;
     document
       .querySelectorAll("a")
       [index].style.setProperty(`--color`, color.hex);
@@ -32,12 +44,16 @@ function colorThings() {
 
   animate(
     "b",
-    { transform: "scaleX(1)" },
     {
-      duration: window.matchMedia("(orientation: portrait)").matches
-        ? window.innerHeight * 0.001
-        : window.innerWidth * 0.0008,
-      easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+      transform: ["scaleX(0)", "scaleX(1)", "scaleX(0.98)", "scaleX(1)"],
+    },
+    {
+      easing: spring({
+        stiffness: 25,
+        mass: 0.5,
+        restSpeed: 0.05,
+        restDistance: 0.1,
+      }),
       delay: stagger(0.12),
     },
   );

@@ -1,5 +1,5 @@
 import Splitting from "splitting";
-import { timeline, stagger } from "motion";
+import { timeline, stagger, spring } from "motion";
 
 const allowsAnimations = window.matchMedia(
   "(prefers-reduced-motion: no-preference)",
@@ -12,14 +12,12 @@ if (allowsAnimations) {
     [
       ".char",
       {
-        opacity: 1,
-        transform: "translateY(0)",
+        opacity: [null, 1],
+        transform: [null, "translateY(-15%)", "translateY(0)"],
       },
       {
-        duration: 0.6,
         delay: stagger(0.075),
-        easing: "linear",
-        transform: { easing: "cubic-bezier(0.34, 1.56, 0.64, 1)" },
+        easing: spring({ stiffness: 35 }),
       },
     ],
     [
@@ -35,7 +33,7 @@ if (allowsAnimations) {
     [
       ".screen",
       { transform: "scaleY(0)" },
-      { at: "-0.8", duration: 1, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
+      { at: "-0.9", duration: 1, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
     ],
     [
       "p",

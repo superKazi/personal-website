@@ -13,11 +13,11 @@ if (allowsAnimations) {
       ".char",
       {
         opacity: [null, 1],
-        transform: [null, "translateY(-15%)", "translateY(0)"],
+        y: ["200%", 0],
       },
       {
         delay: stagger(0.075),
-        easing: spring({ stiffness: 35 }),
+        easing: spring({ stiffness: 200, damping: 16, mass: 0.8 }),
       },
     ],
     [

@@ -28,7 +28,6 @@ function colorThings() {
           inline-size: 100%; 
           block-size: 100%; 
           transform-origin: left; 
-          transform: scaleX(0);
           background: ${color.hex};"
       >
       </b>
@@ -45,14 +44,12 @@ function colorThings() {
   animate(
     "b",
     {
-      transform: ["scaleX(0)", "scaleX(1)", "scaleX(0.98)", "scaleX(1)"],
+      scaleX: [0, 1],
     },
     {
       easing: spring({
-        stiffness: 25,
-        mass: 0.5,
-        restSpeed: 0.05,
-        restDistance: 0.1,
+        damping: 100,
+        mass: 2,
       }),
       delay: stagger(0.12),
     },

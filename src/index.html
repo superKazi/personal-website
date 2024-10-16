@@ -110,14 +110,15 @@
         color: #0d0d0d;
         text-decoration-thickness: 2px;
         text-underline-offset: 2px;
-        border: 2px solid transparent;
-        border-radius: 8px;
         transition: font-variation-settings 400ms ease;
       }
 
       a:focus-visible {
-        outline: none;
-        border-color: #0d0d0d;
+        border-radius: 8px;
+        outline-width: 2px;
+        outline-offset: 2px;
+        outline-style: solid;
+        outline-color: #0d0d0d;
       }
 
       a:focus:not(:focus-visible) {

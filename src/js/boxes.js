@@ -1,4 +1,4 @@
-import { animate, stagger, spring } from "motion";
+import { spring, animate, stagger } from "motion";
 import { shuffle, sample } from "es-toolkit";
 import colors from "dictionary-of-colour-combinations";
 
@@ -47,10 +47,8 @@ function colorThings() {
       scaleX: [0, 1],
     },
     {
-      easing: spring({
-        damping: 100,
-        mass: 2,
-      }),
+      type: spring,
+      bounce: 0,
       delay: stagger(0.12),
     },
   );

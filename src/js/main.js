@@ -1,5 +1,5 @@
 import Splitting from "splitting";
-import { timeline, stagger, spring } from "motion";
+import { spring, cubicBezier, animate, stagger, transform } from "motion";
 
 const allowsAnimations = window.matchMedia(
   "(prefers-reduced-motion: no-preference)",
@@ -12,13 +12,19 @@ if (allowsAnimations) {
     [
       ".char",
       {
-        opacity: [null, 1],
-        y: ["100%", 0],
+        opacity: 1,
+        y: [50, 0],
       },
       {
         delay: stagger(0.075),
-        easing: spring({ stiffness: 70, mass: 0.8 }),
+        type: spring,
+        bounce: 0.32,
       },
+    ],
+    [
+      ".screen",
+      { scaleY: 0 },
+      { at: "-0.6", duration: 1, ease: cubicBezier(0.32, 0, 0.67, 0) },
     ],
     [
       ".char",
@@ -26,23 +32,19 @@ if (allowsAnimations) {
         color: "#0d0d0d",
       },
       {
+        at: "-0.8",
         duration: 0.6,
-        easing: "linear",
+        ease: "linear",
       },
-    ],
-    [
-      ".screen",
-      { transform: "scaleY(0)" },
-      { at: "-0.9", duration: 1, easing: "cubic-bezier(0.32, 0, 0.67, 0)" },
     ],
     [
       "p",
       { opacity: 1, filter: "blur(0px)" },
-      { at: "-.6", duration: 0.8, easing: "linear" },
+      { at: "-0.2", duration: 0.8, ease: "linear" },
     ],
   ];
 
-  timeline(sequence).finished.then(async () => {
+  animate(sequence).then(async () => {
     try {
       const { colorThings } = await import("./boxes.js");
       colorThings();

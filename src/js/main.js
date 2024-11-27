@@ -1,5 +1,5 @@
 import Splitting from "splitting";
-import { spring, cubicBezier, animate, stagger, transform } from "motion";
+import { spring, cubicBezier, animate, stagger } from "motion";
 
 const allowsAnimations = window.matchMedia(
   "(prefers-reduced-motion: no-preference)",

@@ -42,7 +42,7 @@
       }
 
       :root {
-        --type: clamp(1.5rem, 1.2955rem + 1.0227vw, 3.75rem);
+        --type: clamp(1rem, 0.955rem + 0.227vw, 1.5rem);
       }
 
       *,
@@ -80,37 +80,39 @@
       main {
         display: grid;
         grid-auto-flow: row;
-        grid-template-rows: max-content 1fr 1fr 1fr;
+        grid-template-rows: 4fr 6fr;
         min-block-size: 100svh;
+        overflow: clip;
       }
 
       main div {
-        padding: 1.5rem;
+        padding-inline: 3rem;
         text-wrap: balance;
-        inline-size: min(100%, var(--type) * 25);
+        inline-size: min(100%, calc(var(--type) * 25));
+        place-self: center;
       }
 
       h1,
       p {
         font-variation-settings:
-          "opsz" 36,
-          "wght" 500,
+          "opsz" 24,
+          "wght" 600,
           "ital" 0;
         font-size: var(--type);
-        line-height: 1.1;
+        line-height: 1;
         display: inline;
         overflow-wrap: break-word;
       }
 
       .espn {
-        letter-spacing: 0.025em;
+        letter-spacing: 0.05em;
       }
 
       a {
         color: #0d0d0d;
         text-decoration-thickness: 2px;
         text-underline-offset: 2px;
-        transition: font-variation-settings 400ms ease;
+        transition: color 400ms ease;
       }
 
       a:focus-visible {
@@ -129,12 +131,25 @@
       @media (any-hover: hover) {
         &:where(:not(:active):hover) {
           a:hover {
-            font-variation-settings:
-              "opsz" 72,
-              "wght" 700,
-              "ital" 0;
+            color: var(--color);
           }
         }
+      }
+
+      section {
+        position: relative;
+        inline-size: 100%;
+        block-size: 100%;
+        pointer-events: none;
+      }
+
+      b {
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
       }
 
       ::selection {
@@ -143,73 +158,18 @@
         text-decoration-color: #fff;
       }
 
-      @media (min-width: 48rem) {
-        main div {
-          padding: 3rem;
+      @media (prefers-reduced-motion: no-preference) {
+        b {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 1;
         }
       }
 
-      @media (prefers-reduced-motion: no-preference) {
-        .screen {
-          block-size: 100svh;
-          inline-size: 100vw;
-          background: #0d0d0d;
-          transform-origin: bottom;
-          position: absolute;
-          top: 0;
-          left: 0;
-          z-index: 2;
-        }
-        .char,
-        p {
-          position: relative;
-          opacity: 0;
-        }
-        .char {
-          display: inline-block;
-          z-index: 3;
-          color: #fff;
-        }
-        p {
-          z-index: 1;
-          filter: blur(2px);
-        }
-        a {
-          transition:
-            font-variation-settings 400ms ease,
-            color 400ms ease;
-        }
-        @media (any-hover: hover) {
-          &:where(:not(:active):hover) {
-            a:hover {
-              color: var(--color);
-              font-variation-settings:
-                "opsz" 72,
-                "wght" 700,
-                "ital" 0;
-            }
-            [data-word="\2728"]:hover [data-char="\2728"] {
-              cursor: crosshair;
-              animation: sparkle 4s infinite;
-            }
-          }
-        }
-        @keyframes sparkle {
-          0% {
-            color: #0d0d0d;
-          }
-          25% {
-            color: var(--color-1);
-          }
-          50% {
-            color: var(--color-2);
-          }
-          75% {
-            color: var(--color-0);
-          }
-          100% {
-            color: #0d0d0d;
-          }
+      @media (orientation: landscape) {
+        main {
+          grid-template-rows: 1fr;
+          grid-template-columns: 4fr 6fr;
+          grid-auto-flow: column;
         }
       }
     </style>
@@ -256,14 +216,13 @@
     <link rel="manifest" href="./manifest.webmanifest" />
   </head>
   <body>
-    <div class="screen" aria-hidden="true"></div>
     <main>
       <div>
-        <h1 data-splitting>Kazi &#x2728;</h1>
+        <h1>Kazi</h1>
         <p>
-          &thinsp;is a creative web guy. He&rsquo;s spent most of his
-          <wbr />career at various news organizations helping design <wbr />and
-          build cool stories and products. Most recently he was <wbr />
+          &thinsp;is a creative web guy. He&rsquo;s spent most of his career at
+          various news organizations helping design and build cool stories and
+          products. Most recently he was
           <a
             data-goatcounter-click="espn-quiz"
             rel="noopener noreferrer"
@@ -288,6 +247,11 @@
           >.
         </p>
       </div>
+      <section aria-hidden="true">
+        <b></b>
+        <b></b>
+        <b></b>
+      </section>
     </main>
     <script type="module" src="./js/main.js"></script>
     <script

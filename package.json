@@ -1,6 +1,6 @@
 {
   "name": "kazi-website",
-  "version": "7.6.8",
+  "version": "7.7.0",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
@@ -17,8 +17,7 @@
   "dependencies": {
     "dictionary-of-colour-combinations": "^1.0.2",
     "es-toolkit": "^1.27.0",
-    "motion": "^11.11.17",
-    "splitting": "^1.1.0",
+    "gsap": "^3.12.7",
     "workbox-window": "^7.3.0"
   },
   "optionalDependencies": {

@@ -1,57 +1,151 @@
-import Splitting from "splitting";
-import { spring, cubicBezier, animate, stagger } from "motion";
+import { shuffle, sample, debounce } from "es-toolkit";
+import { gsap } from "gsap";
+import { Observer } from "gsap/Observer";
+import colors from "./colors.json";
 
-const allowsAnimations = window.matchMedia(
-  "(prefers-reduced-motion: no-preference)",
-).matches;
+gsap.registerPlugin(Observer);
 
-if (allowsAnimations) {
-  Splitting();
+let swatch = shuffle(sample(colors));
+const mm = gsap.matchMedia();
 
-  const sequence = [
-    [
-      ".char",
-      {
-        opacity: 1,
-        y: [50, 0],
-      },
-      {
-        delay: stagger(0.075),
-        type: spring,
-        bounce: 0.32,
-      },
-    ],
-    [
-      ".screen",
-      { scaleY: 0 },
-      { at: "-0.6", duration: 1, ease: cubicBezier(0.32, 0, 0.67, 0) },
-    ],
-    [
-      ".char",
-      {
-        color: "#0d0d0d",
-      },
-      {
-        at: "-0.8",
-        duration: 0.6,
-        ease: "linear",
-      },
-    ],
-    [
-      "p",
-      { opacity: 1, filter: "blur(0px)" },
-      { at: "-0.2", duration: 0.8, ease: "linear" },
-    ],
-  ];
+boxSize();
+window.addEventListener("resize", debounce(boxSize, 50));
+gsap.set("a", {
+  "--color": (index) => swatch[index].hex,
+});
+gsap.set("b", {
+  backgroundColor: (index) => swatch[index].hex,
+});
 
-  animate(sequence).then(async () => {
-    try {
-      const { colorThings } = await import("./boxes.js");
-      colorThings();
-    } catch (err) {
-      console.error(err);
-    }
+/**
+ * animations
+ */
+
+mm.add("(prefers-reduced-motion: no-preference)", () => {
+  gsap.to("b", {
+    scale: 1,
+    duration: 3,
+    ease: "elastic.out(1, 0.75)",
+    stagger: 0.15,
+    onComplete: () => {
+      let animating = false;
+      Observer.create({
+        target: window,
+        type: "wheel,touch,scroll",
+        onChangeY: () => {
+          if (animating === false) {
+            gsap.to("b", {
+              scale: 0,
+              duration: 0.8,
+              ease: "circ.in",
+              stagger: 0.15,
+              onStart: () => (animating = true),
+              onComplete: () => {
+                swatch = shuffle(sample(colors));
+                gsap.set("b", {
+                  backgroundColor: (index) => swatch[index].hex,
+                });
+                gsap.set("a", {
+                  "--color": (index) => swatch[index].hex,
+                });
+                gsap.to("b", {
+                  scale: 1,
+                  duration: 3,
+                  ease: "elastic.out(1, 0.75)",
+                  stagger: 0.15,
+                  onComplete: () => {
+                    console.log(
+                      "%cHere's the Sanzo Wada color swatch:",
+                      `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+                        "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
+                    );
+                    console.table(swatch);
+                    animating = false;
+                  },
+                });
+              },
+            });
+          }
+        },
+      });
+    },
   });
+});
+
+mm.add("(prefers-reduced-motion)", () => {
+  gsap.to("b", {
+    opacity: 1,
+    duration: 1,
+    ease: "none",
+    stagger: 0.15,
+    onComplete: () => {
+      let animating = false;
+      Observer.create({
+        target: window,
+        type: "wheel,touch,scroll",
+        onChangeY: () => {
+          if (animating === false) {
+            gsap.to("b", {
+              opacity: 0,
+              duration: 0.4,
+              ease: "none",
+              stagger: 0.15,
+              onStart: () => (animating = true),
+              onComplete: () => {
+                swatch = shuffle(sample(colors));
+                gsap.set("b", {
+                  backgroundColor: (index) => swatch[index].hex,
+                });
+                gsap.set("a", {
+                  "--color": (index) => swatch[index].hex,
+                });
+                gsap.to("b", {
+                  opacity: 1,
+                  duration: 1,
+                  ease: "none",
+                  stagger: 0.15,
+                  onComplete: () => {
+                    console.log(
+                      "%cHere's the Sanzo Wada color swatch:",
+                      `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+                        "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
+                    );
+                    console.table(swatch);
+                    animating = false;
+                  },
+                });
+              },
+            });
+          }
+        },
+      });
+    },
+  });
+});
+
+/**
+ * sets up boxes and resizes them later
+ */
+function boxSize() {
+  const { width, height } = document
+    .querySelector("section")
+    .getBoundingClientRect();
+
+  if (width > height || width === height) {
+    gsap.set("b", {
+      width: (index) =>
+        `calc(${height / (index === 0 ? index + 1 : index + 0.5)}px - 3rem)`,
+      height: (index) =>
+        `calc(${height / (index === 0 ? index + 1 : index + 0.5)}px - 3rem)`,
+    });
+  } else {
+    gsap.set("b", {
+      width: (index) =>
+        `calc(${width / (index === 0 ? index + 1 : index + 0.5)}px - 3rem)`,
+      height: (index) =>
+        `calc(${width / (index === 0 ? index + 1 : index + 0.5)}px - 3rem)`,
+    });
+  }
 }
 
 /**
@@ -84,3 +178,9 @@ console.log(
   `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
   "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
 );
+console.log(
+  "%cHere's the Sanzo Wada color swatch:",
+  `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+		"Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
+);
+console.table(swatch);

@@ -5,13 +5,14 @@ import colors from "./colors.json";
 
 gsap.registerPlugin(Observer);
 
-let swatch = shuffle(sample(colors));
+const colorBoxContainer = document.querySelector("section");
 const mm = gsap.matchMedia();
+let swatch = shuffle(sample(colors));
 
 boxSize();
-window.addEventListener("resize", debounce(boxSize, 50));
+window.addEventListener("resize", debounce(boxSize, 100));
 gsap.set("a", {
-  "--color": (index) => swatch[index].hex,
+  "--color": (index: number) => swatch[index].hex,
 });
 gsap.set("b", {
   backgroundColor: (index) => swatch[index].hex,
@@ -39,14 +40,16 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
               duration: 0.8,
               ease: "circ.in",
               stagger: 0.15,
-              onStart: () => (animating = true),
+              onStart: () => {
+                animating = true;
+              },
               onComplete: () => {
                 swatch = shuffle(sample(colors));
                 gsap.set("b", {
                   backgroundColor: (index) => swatch[index].hex,
                 });
                 gsap.set("a", {
-                  "--color": (index) => swatch[index].hex,
+                  "--color": (index: number) => swatch[index].hex,
                 });
                 gsap.to("b", {
                   scale: 1,
@@ -90,14 +93,16 @@ mm.add("(prefers-reduced-motion)", () => {
               duration: 0.4,
               ease: "none",
               stagger: 0.15,
-              onStart: () => (animating = true),
+              onStart: () => {
+                animating = true;
+              },
               onComplete: () => {
                 swatch = shuffle(sample(colors));
                 gsap.set("b", {
                   backgroundColor: (index) => swatch[index].hex,
                 });
                 gsap.set("a", {
-                  "--color": (index) => swatch[index].hex,
+                  "--color": (index: number) => swatch[index].hex,
                 });
                 gsap.to("b", {
                   opacity: 1,
@@ -127,9 +132,10 @@ mm.add("(prefers-reduced-motion)", () => {
  * sets up boxes and resizes them later
  */
 function boxSize() {
-  const { width, height } = document
-    .querySelector("section")
-    .getBoundingClientRect();
+  const dimensions = colorBoxContainer?.getBoundingClientRect();
+  const { width, height } = dimensions
+    ? { width: dimensions.width, height: dimensions.height }
+    : { width: 0, height: 0 };
 
   if (width > height || width === height) {
     gsap.set("b", {

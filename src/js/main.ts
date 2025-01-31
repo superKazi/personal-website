@@ -5,7 +5,7 @@ import colors from "./colors.json";
 
 gsap.registerPlugin(Observer);
 
-const colorBoxContainer = document.querySelector("section");
+const colorBoxContainer = document.querySelector("figure");
 const mm = gsap.matchMedia();
 let swatch = shuffle(sample(colors));
 
@@ -16,6 +16,9 @@ gsap.set("a", {
 });
 gsap.set("b", {
   backgroundColor: (index) => swatch[index].hex,
+});
+gsap.set("b span", {
+  innerText: (index: number) => swatch[index].name,
 });
 
 /**
@@ -45,11 +48,14 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
               },
               onComplete: () => {
                 swatch = shuffle(sample(colors));
+                gsap.set("a", {
+                  "--color": (index: number) => swatch[index].hex,
+                });
                 gsap.set("b", {
                   backgroundColor: (index) => swatch[index].hex,
                 });
-                gsap.set("a", {
-                  "--color": (index: number) => swatch[index].hex,
+                gsap.set("b span", {
+                  innerText: (index: number) => swatch[index].name,
                 });
                 gsap.to("b", {
                   scale: 1,

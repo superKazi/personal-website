@@ -147,7 +147,7 @@
         }
       }
 
-      section {
+      figure {
         position: relative;
         inline-size: 100%;
         block-size: 100%;
@@ -161,6 +161,16 @@
         top: 50%;
         transform: translate(-50%, -50%);
         opacity: 0;
+      }
+
+      .vis-hidden {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
       }
 
       ::selection {
@@ -259,11 +269,18 @@
         </p>
         <aside>Swipe up or down for more colors.</aside>
       </div>
-      <section aria-hidden="true">
-        <b></b>
-        <b></b>
-        <b></b>
-      </section>
+      <figure aria-live="polite">
+        <b role="presentation"><span class="vis-hidden"></span></b>
+        <b role="presentation"><span class="vis-hidden"></span></b>
+        <b role="presentation"><span class="vis-hidden"></span></b>
+        <figcaption class="vis-hidden">
+          A graphic composition made of three squares, each a color from Sanzo
+          Wada&rsquo;s dictionary of colors.
+        </figcaption>
+        <noscript>
+          The square color animation interaction requires JavaScript.
+        </noscript>
+      </figure>
     </main>
     <script type="module" src="./js/main.ts"></script>
     <script

@@ -80,7 +80,7 @@
       main {
         display: grid;
         grid-auto-flow: row;
-        grid-template-rows: 4fr 6fr;
+        grid-template-rows: 1fr 1.618fr;
         min-block-size: 100svh;
         overflow: clip;
       }
@@ -93,15 +93,26 @@
       }
 
       h1,
-      p {
+      p,
+      aside {
         font-variation-settings:
           "opsz" 24,
           "wght" 600,
           "ital" 0;
         font-size: var(--type);
         line-height: 1;
-        display: inline;
         overflow-wrap: break-word;
+      }
+
+      h1,
+      p {
+        display: inline;
+      }
+
+      aside {
+        display: block;
+        margin-block-start: var(--type);
+        margin-block-start: 1lh;
       }
 
       .espn {
@@ -168,7 +179,7 @@
       @media (orientation: landscape) {
         main {
           grid-template-rows: 1fr;
-          grid-template-columns: 4fr 6fr;
+          grid-template-columns: 1fr 1.618fr;
           grid-auto-flow: column;
         }
       }
@@ -246,6 +257,7 @@
             >LinkedIn</a
           >.
         </p>
+        <aside>Swipe up or down for more colors.</aside>
       </div>
       <section aria-hidden="true">
         <b></b>

@@ -46,12 +46,16 @@ mm.add(
         duration: allowScaleAnimation ? 3 : 1,
         ease: allowScaleAnimation ? "elastic.out(1, 0.75)" : "none",
         stagger: 0.15,
+        onStart: () => {
+          isAnimating = true;
+        },
         onComplete: () => {
           Observer.create({
             target: window,
             type: "wheel,touch,scroll",
             onChangeY: interactionAnimation,
           });
+          isAnimating = false;
         },
       });
     }

@@ -47,6 +47,12 @@ mm.add(
         ease: allowScaleAnimation ? "elastic.out(1, 0.75)" : "none",
         stagger: 0.15,
         onStart: () => {
+          gsap.to("aside span", {
+            opacity: 0.4,
+            stagger: 0.15,
+            duration: 0.4,
+            ease: "none",
+          });
           isAnimating = true;
         },
         onComplete: () => {
@@ -55,7 +61,15 @@ mm.add(
             type: "wheel,touch,scroll",
             onChangeY: interactionAnimation,
           });
-          isAnimating = false;
+          gsap.to("aside span", {
+            opacity: 1,
+            stagger: 0.15,
+            duration: 0.4,
+            ease: "none",
+            onComplete: () => {
+              isAnimating = false;
+            },
+          });
         },
       });
     }
@@ -75,6 +89,12 @@ function interactionAnimation() {
       stagger: 0.15,
       onStart: () => {
         isAnimating = true;
+        gsap.to("aside span", {
+          opacity: 0.4,
+          stagger: 0.15,
+          duration: 0.4,
+          ease: "none",
+        });
       },
       onComplete: () => {
         swatch = shuffle(sample(colors));
@@ -100,7 +120,15 @@ function interactionAnimation() {
                   "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
             );
             console.table(swatch);
-            isAnimating = false;
+            gsap.to("aside span", {
+              opacity: 1,
+              stagger: 0.15,
+              duration: 0.4,
+              ease: "none",
+              onComplete: () => {
+                isAnimating = false;
+              },
+            });
           },
         });
       },

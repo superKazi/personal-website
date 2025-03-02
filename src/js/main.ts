@@ -19,13 +19,13 @@ window.addEventListener("keydown", ({ key }) => {
   }
 });
 gsap.set("a", {
-  "--color": (index: number) => swatch[index].hex,
+  "--color": (index: number): string => swatch[index].hex,
 });
 gsap.set("b", {
-  backgroundColor: (index) => swatch[index].hex,
+  backgroundColor: (index): string => swatch[index].hex,
 });
 gsap.set("b span", {
-  innerText: (index: number) => swatch[index].name,
+  innerText: (index: number): string => swatch[index].name,
 });
 
 /**
@@ -40,13 +40,17 @@ mm.add(
     let conditions = context?.conditions;
     if (conditions) {
       allowScaleAnimation = conditions.allowsAnimation;
+      gsap.set("b", {
+        scale: allowScaleAnimation ? 0 : 1,
+        opacity: allowScaleAnimation ? 1 : 0,
+      });
       gsap.to("b", {
         opacity: 1,
         scale: 1,
         duration: allowScaleAnimation ? 3 : 1,
         ease: allowScaleAnimation ? "elastic.out(1, 0.75)" : "none",
         stagger: 0.15,
-        onStart: () => {
+        onStart: (): void => {
           gsap.to("aside span", {
             opacity: 0.4,
             stagger: 0.15,
@@ -55,7 +59,7 @@ mm.add(
           });
           isAnimating = true;
         },
-        onComplete: () => {
+        onComplete: (): void => {
           Observer.create({
             target: window,
             type: "wheel,touch,scroll",
@@ -66,7 +70,7 @@ mm.add(
             stagger: 0.15,
             duration: 0.4,
             ease: "none",
-            onComplete: () => {
+            onComplete: (): void => {
               isAnimating = false;
             },
           });
@@ -79,7 +83,7 @@ mm.add(
 /**
  * sets up interactionAnimation
  */
-function interactionAnimation() {
+function interactionAnimation(): void {
   if (!isAnimating) {
     gsap.to("b", {
       opacity: allowScaleAnimation ? 1 : 0,
@@ -87,7 +91,7 @@ function interactionAnimation() {
       duration: allowScaleAnimation ? 0.8 : 0.4,
       ease: allowScaleAnimation ? "circ.in" : "none",
       stagger: 0.15,
-      onStart: () => {
+      onStart: (): void => {
         isAnimating = true;
         gsap.to("aside span", {
           opacity: 0.4,
@@ -96,16 +100,16 @@ function interactionAnimation() {
           ease: "none",
         });
       },
-      onComplete: () => {
+      onComplete: (): void => {
         swatch = shuffle(sample(colors));
         gsap.set("a", {
-          "--color": (index: number) => swatch[index].hex,
+          "--color": (index: number): string => swatch[index].hex,
         });
         gsap.set("b", {
-          backgroundColor: (index) => swatch[index].hex,
+          backgroundColor: (index): string => swatch[index].hex,
         });
         gsap.set("b span", {
-          innerText: (index: number) => swatch[index].name,
+          innerText: (index: number): string => swatch[index].name,
         });
         gsap.to("b", {
           opacity: 1,
@@ -113,7 +117,7 @@ function interactionAnimation() {
           duration: allowScaleAnimation ? 3 : 1,
           ease: allowScaleAnimation ? "elastic.out(1, 0.75)" : "none",
           stagger: 0.15,
-          onComplete: () => {
+          onComplete: (): void => {
             console.log(
               "%cHere's the Sanzo Wada color swatch:",
               `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
@@ -125,7 +129,7 @@ function interactionAnimation() {
               stagger: 0.15,
               duration: 0.4,
               ease: "none",
-              onComplete: () => {
+              onComplete: (): void => {
                 isAnimating = false;
               },
             });
@@ -139,7 +143,7 @@ function interactionAnimation() {
 /**
  * sets up boxes and sizes them
  */
-function boxSize() {
+function boxSize(): void {
   let dimensions = colorBoxContainer?.getBoundingClientRect();
   let { width, height } = dimensions
     ? { width: dimensions.width, height: dimensions.height }
@@ -165,7 +169,7 @@ function boxSize() {
 /**
  * handle service worker
  */
-!(async function handleServiceWorker() {
+!(async function handleServiceWorker(): Promise<void> {
   if ("serviceWorker" in navigator) {
     try {
       const { Workbox } = await import("workbox-window");

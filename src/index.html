@@ -152,14 +152,14 @@
         inline-size: 100%;
         block-size: 100%;
         pointer-events: none;
+        display: grid;
+        grid-template-areas: "boxes";
+        place-items: center;
       }
 
       b {
         display: block;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        grid-area: boxes;
         opacity: 0;
       }
 
@@ -181,7 +181,7 @@
 
       @media (prefers-reduced-motion: no-preference) {
         b {
-          transform: translate(-50%, -50%) scale(0);
+          scale: 0;
           opacity: 1;
         }
       }

@@ -7,17 +7,12 @@ gsap.registerPlugin(Observer);
 
 const colorBoxContainer = document.querySelector("figure");
 const mm = gsap.matchMedia();
-let allowScaleAnimation = true;
 let isAnimating = false;
 let swatch = shuffle(sample(colors));
+let interactionTween: GSAPTween;
 
 boxSize();
-window.addEventListener("resize", debounce(boxSize, 100));
-window.addEventListener("keydown", ({ key }) => {
-  if (key === "ArrowUp" || key === "ArrowDown") {
-    interactionAnimation();
-  }
-});
+
 gsap.set("a", {
   "--color": (index: number): string => swatch[index].hex,
 });
@@ -26,6 +21,15 @@ gsap.set("b", {
 });
 gsap.set("b span", {
   innerText: (index: number): string => swatch[index].name,
+});
+
+window.addEventListener("resize", debounce(boxSize, 100));
+window.addEventListener("keydown", ({ key }) => {
+  if (key === "ArrowUp" || key === "ArrowDown") {
+    if (!isAnimating) {
+      interactionTween.play(0);
+    }
+  }
 });
 
 /**
@@ -39,7 +43,60 @@ mm.add(
   (context) => {
     let conditions = context?.conditions;
     if (conditions) {
-      allowScaleAnimation = conditions.allowsAnimation;
+      let allowScaleAnimation = conditions.allowsAnimation;
+      interactionTween = gsap.to("b", {
+        opacity: allowScaleAnimation ? 1 : 0,
+        scale: allowScaleAnimation ? 0 : 1,
+        duration: allowScaleAnimation ? 0.8 : 0.4,
+        ease: allowScaleAnimation ? "circ.in" : "none",
+        stagger: 0.15,
+        paused: true,
+        onStart: (): void => {
+          isAnimating = true;
+          gsap.to("aside span", {
+            opacity: 0.4,
+            stagger: 0.15,
+            duration: 0.4,
+            ease: "none",
+          });
+        },
+        onComplete: (): void => {
+          swatch = shuffle(sample(colors));
+          gsap.set("a", {
+            "--color": (index: number): string => swatch[index].hex,
+          });
+          gsap.set("b", {
+            backgroundColor: (index): string => swatch[index].hex,
+          });
+          gsap.set("b span", {
+            innerText: (index: number): string => swatch[index].name,
+          });
+          gsap.to("b", {
+            opacity: 1,
+            scale: 1,
+            duration: allowScaleAnimation ? 3 : 1,
+            ease: allowScaleAnimation ? "elastic.out(1, 0.75)" : "none",
+            stagger: 0.15,
+            onComplete: (): void => {
+              console.log(
+                "%cHere's the Sanzo Wada color swatch:",
+                `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+                    "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
+              );
+              console.table(swatch);
+              gsap.to("aside span", {
+                opacity: 1,
+                stagger: 0.15,
+                duration: 0.4,
+                ease: "none",
+                onComplete: (): void => {
+                  isAnimating = false;
+                },
+              });
+            },
+          });
+        },
+      });
       gsap.set("b", {
         scale: allowScaleAnimation ? 0 : 1,
         opacity: allowScaleAnimation ? 1 : 0,
@@ -63,7 +120,11 @@ mm.add(
           Observer.create({
             target: window,
             type: "wheel,touch,scroll",
-            onChangeY: interactionAnimation,
+            onChangeY: (): void => {
+              if (!isAnimating) {
+                interactionTween.play(0);
+              }
+            },
           });
           gsap.to("aside span", {
             opacity: 1,
@@ -79,66 +140,6 @@ mm.add(
     }
   },
 );
-
-/**
- * sets up interactionAnimation
- */
-function interactionAnimation(): void {
-  if (!isAnimating) {
-    gsap.to("b", {
-      opacity: allowScaleAnimation ? 1 : 0,
-      scale: allowScaleAnimation ? 0 : 1,
-      duration: allowScaleAnimation ? 0.8 : 0.4,
-      ease: allowScaleAnimation ? "circ.in" : "none",
-      stagger: 0.15,
-      onStart: (): void => {
-        isAnimating = true;
-        gsap.to("aside span", {
-          opacity: 0.4,
-          stagger: 0.15,
-          duration: 0.4,
-          ease: "none",
-        });
-      },
-      onComplete: (): void => {
-        swatch = shuffle(sample(colors));
-        gsap.set("a", {
-          "--color": (index: number): string => swatch[index].hex,
-        });
-        gsap.set("b", {
-          backgroundColor: (index): string => swatch[index].hex,
-        });
-        gsap.set("b span", {
-          innerText: (index: number): string => swatch[index].name,
-        });
-        gsap.to("b", {
-          opacity: 1,
-          scale: 1,
-          duration: allowScaleAnimation ? 3 : 1,
-          ease: allowScaleAnimation ? "elastic.out(1, 0.75)" : "none",
-          stagger: 0.15,
-          onComplete: (): void => {
-            console.log(
-              "%cHere's the Sanzo Wada color swatch:",
-              `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
-                  "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
-            );
-            console.table(swatch);
-            gsap.to("aside span", {
-              opacity: 1,
-              stagger: 0.15,
-              duration: 0.4,
-              ease: "none",
-              onComplete: (): void => {
-                isAnimating = false;
-              },
-            });
-          },
-        });
-      },
-    });
-  }
-}
 
 /**
  * sets up boxes and sizes them

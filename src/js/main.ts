@@ -24,7 +24,7 @@ gsap.set("b span", {
 });
 
 window.addEventListener("resize", debounce(boxSize, 100));
-window.addEventListener("keydown", ({ key }) => {
+window.addEventListener("keydown", ({ key }): void => {
   if (key === "ArrowUp" || key === "ArrowDown") {
     if (!isAnimating) {
       interactionTween.play(0);

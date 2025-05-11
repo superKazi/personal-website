@@ -50,6 +50,7 @@ document.fonts.ready.then(() => {
       charsClass: "char",
     });
     let tl = gsap.timeline();
+    gsap.set("main", { opacity: 1 });
 
     tl.fromTo(
       splitLinks.chars,

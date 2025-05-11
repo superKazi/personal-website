@@ -24,7 +24,7 @@ document.fonts.ready.then(() => {
       repeat: -1,
       duration: 0.8,
       repeatRefresh: true,
-      ease: "none",
+      ease: "sine.in",
       paused: true,
       stagger: 0.05,
     });
@@ -65,9 +65,9 @@ document.fonts.ready.then(() => {
         x: 0,
         y: 0,
         rotation: 0,
-        ease: "expo.out",
+        ease: "back.out(1)",
         stagger: {
-          amount: 8,
+          amount: 6,
         },
       },
     )
@@ -84,7 +84,7 @@ document.fonts.ready.then(() => {
           x: 0,
           y: 0,
           rotation: 0,
-          ease: "expo.out",
+          ease: "back.out(1)",
           duration: 0.6,
           stagger: 0.1,
           onComplete: () => {
@@ -96,7 +96,7 @@ document.fonts.ready.then(() => {
             });
           },
         },
-        "-=100%",
+        "-=150%",
       )
       .fromTo(
         splitSub.chars,
@@ -111,14 +111,14 @@ document.fonts.ready.then(() => {
           x: 0,
           y: 0,
           rotation: 0,
-          ease: "expo.out",
+          ease: "back.out(1)",
           duration: 0.4,
           stagger: 0.1,
           onComplete: () => {
             splitSub.revert();
           },
         },
-        "<10%",
+        "-=100%",
       );
   });
 });

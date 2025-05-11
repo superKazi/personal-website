@@ -42,7 +42,14 @@
       }
 
       :root {
-        --type: clamp(1rem, 0.955rem + 0.227vw, 1.5rem);
+        --step--2: clamp(0.7813rem, 0.7723rem + 0.0449vw, 0.8442rem);
+        --step--1: clamp(0.9375rem, 0.9107rem + 0.1341vw, 1.1253rem);
+        --step-0: clamp(1.125rem, 1.0714rem + 0.2679vw, 1.5rem);
+        --step-1: clamp(1.35rem, 1.2572rem + 0.4639vw, 1.9995rem);
+        --step-2: clamp(1.62rem, 1.4707rem + 0.7467vw, 2.6653rem);
+        --step-3: clamp(1.944rem, 1.7142rem + 1.1492vw, 3.5529rem);
+        --step-4: clamp(2.3328rem, 1.9895rem + 1.7166vw, 4.736rem);
+        --step-5: clamp(2.7994rem, 2.2974rem + 2.5098vw, 6.3131rem);
       }
 
       *,
@@ -79,98 +86,80 @@
       }
 
       main {
-        display: grid;
-        grid-auto-flow: row;
-        grid-template-rows: 1fr 1.618fr;
-        min-block-size: 100svh;
-        overflow: clip;
-      }
-
-      main div {
-        padding-inline: 3rem;
-        text-wrap: balance;
-        inline-size: min(100%, calc(var(--type) * 25));
-        place-self: center;
-      }
-
-      h1,
-      p,
-      aside {
-        font-variation-settings:
-          "opsz" 24,
-          "wght" 600,
-          "ital" 0;
-        font-size: var(--type);
+        text-transform: uppercase;
         line-height: 1;
-        overflow-wrap: break-word;
+        padding: 1rem;
       }
 
-      h1,
-      p {
-        display: inline;
+      h1 {
+        font-size: var(--step-5);
+        font-variation-settings:
+          "opsz" 72,
+          "wght" 600;
+        line-height: 0.725;
       }
 
-      aside {
-        display: block;
-        margin-block-start: var(--type);
-        margin-block-start: 1lh;
+      h2 {
+        font-variation-settings:
+          "opsz" 36,
+          "wght" 600;
+        margin-block-start: 0.25rem;
+        margin-block-start: 0.25lh;
       }
 
-      .espn {
-        letter-spacing: 0.05em;
+      ul[role="list"] {
+        list-style: none;
+        padding: 0;
+        margin-block-start: 3rem;
+        font-size: var(--step-0);
+        font-variation-settings:
+          "opsz" 6,
+          "wght" 500;
       }
 
       a {
         color: #0d0d0d;
-        text-decoration-thickness: 2px;
-        text-underline-offset: 2px;
-        transition: color 400ms ease;
+        text-decoration: none;
       }
 
       a:focus-visible {
-        border-radius: 8px;
-        outline-width: 2px;
-        outline-offset: 2px;
+        border-radius: 4px;
+        outline-width: 1px;
+        outline-offset: 1px;
         outline-style: solid;
         outline-color: #0d0d0d;
+      }
+
+      a:visited {
+        color: #0d0d0d;
       }
 
       a:focus:not(:focus-visible) {
         outline: none;
       }
 
-      /* https://dev.37signals.com/modern-css-patterns-and-techniques-in-campfire/ */
-      @media (any-hover: hover) {
-        &:where(:not(:active):hover) {
-          a:hover {
-            color: var(--color);
-          }
-        }
-      }
-
-      figure {
-        position: relative;
-        inline-size: 100%;
-        block-size: 100%;
-        pointer-events: none;
-        display: grid;
-        grid-template-areas: "boxes";
-        place-items: center;
-      }
-
-      b {
-        grid-area: boxes;
+      .char {
         opacity: 0;
       }
 
-      .vis-hidden {
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
+      .list-char {
+        --wght: 500;
+        font-variation-settings:
+          "opsz" 6,
+          "wght" var(--wght);
+      }
+
+      @media (min-width: 80rem) {
+        main {
+          display: grid;
+          grid-template-columns: 1fr 1.333fr;
+          grid-auto-flow: column;
+          gap: 1rem;
+        }
+
+        ul[role="list"] {
+          margin-block-start: 0;
+        }
       }
 
       ::selection {
@@ -179,18 +168,9 @@
         text-decoration-color: #fff;
       }
 
-      @media (prefers-reduced-motion: no-preference) {
-        b {
-          scale: 0;
+      @media (prefers-reduced-motion: reduce) {
+        .char {
           opacity: 1;
-        }
-      }
-
-      @media (orientation: landscape) {
-        main {
-          grid-template-rows: 1fr;
-          grid-template-columns: 1fr 1.618fr;
-          grid-auto-flow: column;
         }
       }
     </style>
@@ -215,21 +195,11 @@
     />
     <meta
       property="og:image:alt"
-      content="Typographic design that reads: Kazi Elman Awal is senior creative developer at Insider. He creative directs, product manages, designs, and develops award winning interactive journalism and newsroom tools and products."
+      content="Typographic design that reads: Kazi."
     />
     <meta property="og:image" content="https://kazielmanawal.me/og.jpg" />
     <meta property="profile:first_name" content="Kazi" />
     <meta property="profile:last_name" content="Awal" />
-    <meta name="twitter:card" content="summary" />
-    <meta property="twitter:domain" content="kazielmanawal.me" />
-    <meta property="twitter:url" content="https://kazielmanawal.me" />
-    <meta name="twitter:title" content="Kazi’s website" />
-    <meta name="twitter:description" content="Find more links about Kazi." />
-    <meta
-      name="twitter:image:alt"
-      content="Graphic design made using Kazi's name"
-    />
-    <meta name="twitter:image" content="https://kazielmanawal.me/og.jpg" />
     <link rel="icon" href="./favicon.ico" sizes="any" />
     <link rel="icon" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./apple.png" />
@@ -238,52 +208,132 @@
   </head>
   <body>
     <main>
-      <div>
-        <h1>Kazi</h1>
-        <p>
-          &thinsp;is a creative web guy. He&rsquo;s spent most of his career at
-          various news organizations helping design and build cool stories and
-          products. Most recently he was
+      <header>
+        <h1>Kazi Elman Awal</h1>
+        <h2>Dev, Data Viz, Design</h2>
+      </header>
+      <ul role="list">
+        <li>
+          <a
+            data-goatcounter-click="cdc-activity-levels"
+            rel="noreferrer"
+            href="https://www.cdc.gov/respiratory-viruses/data/activity-levels.html"
+            >CDC: Respiratory Virus Activity Levels
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="cdc-data-channel"
+            rel="noreferrer"
+            href="https://www.cdc.gov/respiratory-viruses/data/index.html"
+            >CDC: Respiratory Illness Data Channel
+          </a>
+        </li>
+        <li>
           <a
             data-goatcounter-click="espn-quiz"
-            rel="noopener noreferrer"
-            target="_blank"
+            rel="noreferrer"
             href="https://www.espn.com/espn/feature/story/_/id/43781608/30th-anniversary-quiz"
-            >doing</a
-          >
+            >ESPN: 30th Anniversary Quiz
+          </a>
+        </li>
+        <li>
           <a
             data-goatcounter-click="espn-invisible"
-            rel="noopener noreferrer"
-            target="_blank"
+            rel="noreferrer"
             href="https://www.espn.com/espn/feature/story/_/id/40276381/how-stadiums-help-fans-invisible-disabilities"
-            >that</a
-          >
-          at <span class="espn">ESPN</span>. See more of his work on
+            >ESPN: Invisible
+          </a>
+        </li>
+        <li>
           <a
-            data-goatcounter-click="linkedin"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://www.linkedin.com/in/superkazi/"
-            >LinkedIn</a
-          >.
-        </p>
-        <aside>
-          <span>Swipe</span> <span>up</span> or <span>down</span> for more
-          colors.
-        </aside>
-      </div>
-      <figure aria-live="polite">
-        <b role="presentation"><span class="vis-hidden"></span></b>
-        <b role="presentation"><span class="vis-hidden"></span></b>
-        <b role="presentation"><span class="vis-hidden"></span></b>
-        <figcaption class="vis-hidden">
-          A graphic composition made of three squares, each a color from Sanzo
-          Wada&rsquo;s dictionary of colors.
-        </figcaption>
-        <noscript>
-          The square color animation interaction requires JavaScript.
-        </noscript>
-      </figure>
+            data-goatcounter-click="bi-ai-lover"
+            rel="noreferrer"
+            href="https://www.businessinsider.com/when-your-ai-says-she-loves-you-2023-10"
+            >Business Insider: App, Lover, Muse
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="bi-king-charles"
+            rel="noreferrer"
+            href="https://www.businessinsider.com/king-charles-coronation-schedule-guide-timeline-2023-5"
+            >Business Insider: King Charles&#8217; Coronation
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="bi-albertina"
+            rel="noreferrer"
+            href="https://www.businessinsider.com/artificial-intelligence-albertina-geller-deepfake-gan-images-online-scams-2022-10"
+            >Business Insider: Who in the world is Albertina Geller?
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="row-collection"
+            rel="noreferrer"
+            href="https://restofworld.org/collection/english-as-a-second-language/"
+            >Rest of World: Collection Page
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="row-home"
+            rel="noreferrer"
+            href="https://restofworld.org"
+            >Rest of World: Homepage
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="row-social"
+            rel="noreferrer"
+            href="https://restofworld.org/wp-content/projects/card-builder/"
+            >Rest of World: Social Card Tool
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="sfc-covid"
+            rel="noreferrer"
+            href="https://www.sfchronicle.com/projects/coronavirus-map/"
+            >San Francisco Chronicle: Coronavirus Tracker
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="sfc-fire"
+            rel="noreferrer"
+            href="https://projects.sfchronicle.com/2019/kincade-fire-origin/"
+            >San Francisco Chronicle: A Spark on Burned Mountain
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="sfc-restaurant"
+            rel="noreferrer"
+            href="https://projects.sfchronicle.com/2020/sushi-yoshizumi-review/"
+            >San Francisco Chronicle: Sushi Yoshizumi Review
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="wapo-flip-house"
+            rel="noreferrer"
+            href="https://www.washingtonpost.com/graphics/2018/politics/how-to-flip-the-house-2018/"
+            >Washington Post: How to Flip the House
+          </a>
+        </li>
+        <li>
+          <a
+            data-goatcounter-click="wapo-india-hate"
+            rel="noreferrer"
+            href="https://www.washingtonpost.com/graphics/2018/world/reports-of-hate-crime-cases-have-spiked-in-india/"
+            >Washington Post: Rising Hate in India
+          </a>
+        </li>
+      </ul>
     </main>
     <script type="module" src="./js/main.ts"></script>
     <script

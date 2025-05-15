@@ -43,13 +43,14 @@ document.fonts.ready.then(() => {
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     let splitHed = SplitText.create("h1", {
       type: "words, chars",
-      charsClass: "char",
+      charsClass: "char++",
     });
     let splitSub = SplitText.create("h2", {
       type: "words, chars",
       charsClass: "char",
     });
     let tl = gsap.timeline();
+    let dragItems: GSAPTween[] | undefined[] = [];
     gsap.set("main", { opacity: 1 });
 
     tl.fromTo(
@@ -93,6 +94,49 @@ document.fonts.ready.then(() => {
               inertia: true,
               throwResistance: 2000,
               overshootTolerance: 2,
+              onDragStart: function () {
+                let elem = this.target as HTMLDivElement;
+                let id = elem.classList[1];
+                let found = splitHed.chars.find((char) =>
+                  char.classList.contains(id),
+                );
+                if (found) {
+                  dragItems[splitHed.chars.indexOf(found)]?.kill();
+                }
+              },
+              onThrowComplete: function () {
+                let absDistanceTraveled = gsap.utils.clamp(
+                  0,
+                  2000,
+                  Math.abs(this.endX) + Math.abs(this.endY),
+                );
+                let travelTime = gsap.utils.mapRange(
+                  0,
+                  2000,
+                  0.4,
+                  1,
+                  absDistanceTraveled,
+                );
+                let elem = this.target as HTMLDivElement;
+                let id = elem.classList[1];
+                let found = splitHed.chars.find((char) =>
+                  char.classList.contains(id),
+                );
+                if (found) {
+                  dragItems[splitHed.chars.indexOf(found)]?.kill();
+                  dragItems[splitHed.chars.indexOf(found)] = gsap.delayedCall(
+                    gsap.utils.random(1.25, 2.25, 0.25),
+                    () => {
+                      gsap.to(this.target, {
+                        x: 0,
+                        y: 0,
+                        ease: "back.out(1)",
+                        duration: travelTime,
+                      });
+                    },
+                  );
+                }
+              },
             });
           },
         },
@@ -127,21 +171,19 @@ document.fonts.ready.then(() => {
  * handle service worker
  */
 !(async function handleServiceWorker(): Promise<void> {
-  if ("serviceWorker" in navigator) {
-    try {
-      const { Workbox } = await import("workbox-window");
-      const wb = new Workbox("/sw.js");
+  try {
+    const { Workbox } = await import("workbox-window");
+    const wb = new Workbox("/sw.js");
 
-      wb.addEventListener("installed", (event) => {
-        if (event.isUpdate) {
-          window.location.reload();
-        }
-      });
+    wb.addEventListener("installed", (event) => {
+      if (event.isUpdate) {
+        window.location.reload();
+      }
+    });
 
-      wb.register();
-    } catch (err) {
-      console.error(err);
-    }
+    wb.register();
+  } catch (err) {
+    console.error(err);
   }
 })();
 

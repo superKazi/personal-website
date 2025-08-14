@@ -10,12 +10,12 @@ const mm = gsap.matchMedia();
 
 document.fonts.ready.then(() => {
   mm.add("(prefers-reduced-motion: no-preference)", () => {
-    let splitHed = SplitText.create("h1", {
+    SplitText.create("h1", {
       type: "words, chars",
       wordsClass: "wrd",
       charsClass: "char",
     });
-    let splitSub = SplitText.create("h2", {
+    SplitText.create("h2", {
       type: "words, chars",
       wordsClass: "wrd",
       charsClass: "char",

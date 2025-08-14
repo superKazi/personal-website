@@ -1,169 +1,134 @@
 import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Observer } from "gsap/Observer";
-import { Draggable } from "gsap/Draggable";
-import { InertiaPlugin } from "gsap/InertiaPlugin";
 
 /**
  * accessible animations
  */
-gsap.registerPlugin(SplitText, Observer, Draggable, InertiaPlugin);
+gsap.registerPlugin(SplitText, Observer);
 const mm = gsap.matchMedia();
 
 document.fonts.ready.then(() => {
-  let splitLinks = SplitText.create("a", {
-    type: "words, chars",
-    charsClass: "char list-char",
-  });
-  splitLinks.elements.forEach((elem) => {
-    let selector = gsap.utils.selector(elem);
-    let rippleTween = gsap.to(selector(".list-char"), {
-      keyframes: {
-        "--wght": [800, 500],
-      },
-      repeat: -1,
-      duration: 0.8,
-      repeatRefresh: true,
-      ease: "sine.in",
-      paused: true,
-      stagger: 0.05,
-    });
-    Observer.create({
-      target: elem,
-      type: "pointer",
-      onHover: () => {
-        rippleTween.play();
-      },
-      onHoverEnd: () => {
-        rippleTween.pause();
-      },
-    });
-  });
-
   mm.add("(prefers-reduced-motion: no-preference)", () => {
-    let splitHed = SplitText.create("h1", {
+    SplitText.create("h1", {
       type: "words, chars",
-      charsClass: "char++",
-    });
-    let splitSub = SplitText.create("h2", {
-      type: "words, chars",
+      wordsClass: "wrd",
       charsClass: "char",
     });
-    let tl = gsap.timeline();
-    let dragItems: GSAPTween[] | undefined[] = [];
-    gsap.set("main", { opacity: 1 });
+    SplitText.create("h2", {
+      type: "words, chars",
+      wordsClass: "wrd",
+      charsClass: "char",
+    });
+    let splitLinks = SplitText.create("a", {
+      type: "words, chars",
+      wordsClass: "wrd",
+      charsClass: "char",
+    });
 
-    tl.fromTo(
-      splitLinks.chars,
-      {
-        autoAlpha: 0,
-        x: () => gsap.utils.random(-150, 150),
-        y: () => gsap.utils.random(-150, 150),
-        rotation: () => gsap.utils.random(-45, 45),
-      },
-      {
-        autoAlpha: 1,
-        x: 0,
-        y: 0,
-        rotation: 0,
-        ease: "back.out(1)",
-        stagger: {
-          amount: 6,
-        },
-      },
-    )
-      .fromTo(
-        splitHed.chars,
+    gsap.set(".wrd", { pointerEvents: "none" });
+    gsap.set(".char", { opacity: 0, yPercent: 100, pointerEvents: "none" });
+    gsap.set("header, ul[role='list']", { opacity: 1 });
+
+    let tl = gsap.timeline();
+
+    tl.to("b", {
+      scaleX: 1,
+      duration: 1,
+      ease: "expo.inOut",
+    })
+      .to(
+        "header .char",
         {
-          autoAlpha: 0,
-          x: () => gsap.utils.random(-50, 50),
-          y: () => gsap.utils.random(-50, 50),
-          rotation: () => gsap.utils.random(-15, 15),
+          opacity: 1,
+          yPercent: 0,
+          duration: 0.2,
+          ease: "sine.out",
+          stagger: 0.015,
         },
-        {
-          autoAlpha: 1,
-          x: 0,
-          y: 0,
-          rotation: 0,
-          ease: "back.out(1)",
-          duration: 0.6,
-          stagger: 0.1,
-          onComplete: () => {
-            Draggable.create(splitHed.chars, {
-              bounds: "body",
-              inertia: true,
-              throwResistance: 2000,
-              overshootTolerance: 2,
-              onDragStart: function () {
-                let elem = this.target as HTMLDivElement;
-                let id = elem.classList[1];
-                let found = splitHed.chars.find((char) =>
-                  char.classList.contains(id),
-                );
-                if (found) {
-                  dragItems[splitHed.chars.indexOf(found)]?.kill();
-                }
-              },
-              onThrowComplete: function () {
-                let absDistanceTraveled = gsap.utils.clamp(
-                  0,
-                  2000,
-                  Math.abs(this.endX) + Math.abs(this.endY),
-                );
-                let travelTime = gsap.utils.mapRange(
-                  0,
-                  2000,
-                  0.4,
-                  1,
-                  absDistanceTraveled,
-                );
-                let elem = this.target as HTMLDivElement;
-                let id = elem.classList[1];
-                let found = splitHed.chars.find((char) =>
-                  char.classList.contains(id),
-                );
-                if (found) {
-                  dragItems[splitHed.chars.indexOf(found)]?.kill();
-                  dragItems[splitHed.chars.indexOf(found)] = gsap.delayedCall(
-                    gsap.utils.random(1.25, 2.25, 0.25),
-                    () => {
-                      gsap.to(this.target, {
-                        x: 0,
-                        y: 0,
-                        ease: "back.out(1)",
-                        duration: travelTime,
-                      });
-                    },
-                  );
-                }
-              },
-            });
-          },
-        },
-        "-=150%",
+        "<40%",
       )
-      .fromTo(
-        splitSub.chars,
+      .to(
+        "ul[role='list'] .char",
         {
-          autoAlpha: 0,
-          x: () => gsap.utils.random(-150, 150),
-          y: () => gsap.utils.random(-150, 150),
-          rotation: () => gsap.utils.random(-45, 45),
-        },
-        {
-          autoAlpha: 1,
-          x: 0,
-          y: 0,
-          rotation: 0,
-          ease: "back.out(1)",
-          duration: 0.4,
-          stagger: 0.1,
-          onComplete: () => {
-            splitSub.revert();
+          opacity: 1,
+          yPercent: 0,
+          duration: 0.3,
+          ease: "sine.out",
+          stagger: {
+            each: 0.0025,
+            ease: "sine",
           },
         },
-        "-=100%",
+        "<60%",
       );
+
+    splitLinks.elements.forEach((elem) => {
+      let q = gsap.utils.selector(elem);
+      console.log(splitLinks);
+      let chars = q(".char");
+      let xTweens = chars.map((char) => {
+        let radius =
+          Math.random() < 0.35
+            ? gsap.utils.random(20, 40)
+            : gsap.utils.random(10, 20);
+        let xTween = gsap.to(char, {
+          paused: true,
+          x: `+=${Math.PI * 2}`,
+          repeat: -1,
+          ease: "none",
+          duration: () => gsap.utils.random(1, 3),
+          modifiers: {
+            x: gsap.utils.unitize((x: number) => Math.cos(x) * radius),
+          },
+        });
+        return xTween;
+      });
+      let yTweens = chars.map((char) => {
+        let radius =
+          Math.random() < 0.35
+            ? gsap.utils.random(20, 40)
+            : gsap.utils.random(10, 20);
+
+        let yTween = gsap.to(char, {
+          paused: true,
+          y: `+=${Math.PI * 2}`,
+          repeat: -1,
+          ease: "none",
+          duration: () => gsap.utils.random(1, 3),
+          modifiers: {
+            y: gsap.utils.unitize((y: number) => Math.sin(y) * radius),
+          },
+        });
+        return yTween;
+      });
+
+      Observer.create({
+        target: elem,
+        type: "pointer",
+        onHover: () => {
+          if (Observer.isTouch !== 1) {
+            xTweens.forEach((tween) => tween.restart());
+            yTweens.forEach((tween) => tween.restart());
+          }
+        },
+        onHoverEnd: () => {
+          if (Observer.isTouch !== 1) {
+            xTweens.forEach((tween) => tween.pause());
+            yTweens.forEach((tween) => tween.pause());
+
+            chars.forEach((char) => {
+              gsap.to(char, {
+                x: 0,
+                y: 0,
+                duration: 0.2,
+                ease: "power2.out",
+              });
+            });
+          }
+        },
+      });
+    });
   });
 });
 

@@ -29,7 +29,7 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' gc.zgo.at app.netlify.com netlify-cdp-loader.netlify.app; style-src 'self' 'unsafe-inline'; child-src 'self' app.netlify.com; connect-src 'self' superkazi.goatcounter.com *.washingtonpost.com *.sfchronicle.com *.restofworld.org *.businessinsider.com *.espn.com *.cdc.gov; img-src 'self' superkazi.goatcounter.com;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' gc.zgo.at app.netlify.com netlify-cdp-loader.netlify.app; style-src 'self' 'unsafe-inline'; child-src 'self' app.netlify.com; connect-src 'self' superkazi.goatcounter.com *.washingtonpost.com *.sfchronicle.com restofworld.org *.businessinsider.com *.espn.com *.cdc.gov; img-src 'self' superkazi.goatcounter.com;"
 
 [[headers]]
   for = "/index.html"

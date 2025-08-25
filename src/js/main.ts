@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Observer } from "gsap/Observer";
+import "instant.page";
 
 /**
  * accessible animations
@@ -65,7 +66,6 @@ document.fonts.ready.then(() => {
 
     splitLinks.elements.forEach((elem) => {
       let q = gsap.utils.selector(elem);
-      console.log(splitLinks);
       let chars = q(".char");
       let xTweens = chars.map((char) => {
         let radius =

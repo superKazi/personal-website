@@ -13,22 +13,25 @@ document.fonts.ready.then(() => {
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     SplitText.create("h1", {
       type: "words, chars",
+      mask: "words",
       wordsClass: "wrd",
       charsClass: "char",
     });
     SplitText.create("h2", {
       type: "words, chars",
+      mask: "words",
       wordsClass: "wrd",
       charsClass: "char",
     });
     let splitLinks = SplitText.create("a", {
       type: "words, chars",
+      mask: "words",
       wordsClass: "wrd",
       charsClass: "char",
     });
 
-    gsap.set(".wrd", { pointerEvents: "none" });
-    gsap.set(".char", { opacity: 0, yPercent: 100, pointerEvents: "none" });
+    gsap.set(".wrd", { pointerEvents: "none", opacity: 0, yPercent: 100 });
+    gsap.set(".wrd-mask, .char", { pointerEvents: "none" });
     gsap.set("header, ul[role='list']", { opacity: 1 });
 
     let tl = gsap.timeline();
@@ -39,25 +42,25 @@ document.fonts.ready.then(() => {
       ease: "expo.inOut",
     })
       .to(
-        "header .char",
-        {
-          opacity: 1,
-          yPercent: 0,
-          duration: 0.2,
-          ease: "sine.out",
-          stagger: 0.015,
-        },
-        "<40%",
-      )
-      .to(
-        "ul[role='list'] .char",
+        "header .wrd",
         {
           opacity: 1,
           yPercent: 0,
           duration: 0.3,
-          ease: "sine.out",
+          ease: "circ.out",
+          stagger: 0.05,
+        },
+        "<40%",
+      )
+      .to(
+        "ul[role='list'] .wrd",
+        {
+          opacity: 1,
+          yPercent: 0,
+          duration: 0.3,
+          ease: "circ.out",
           stagger: {
-            each: 0.0025,
+            each: 0.0333,
             ease: "sine",
           },
         },
@@ -70,8 +73,8 @@ document.fonts.ready.then(() => {
       let xTweens = chars.map((char) => {
         let radius =
           Math.random() < 0.35
-            ? gsap.utils.random(20, 40)
-            : gsap.utils.random(10, 20);
+            ? gsap.utils.random(1, 4)
+            : gsap.utils.random(1, 4);
         let xTween = gsap.to(char, {
           paused: true,
           x: `+=${Math.PI * 2}`,
@@ -87,8 +90,8 @@ document.fonts.ready.then(() => {
       let yTweens = chars.map((char) => {
         let radius =
           Math.random() < 0.35
-            ? gsap.utils.random(20, 40)
-            : gsap.utils.random(10, 20);
+            ? gsap.utils.random(1, 4)
+            : gsap.utils.random(1, 4);
 
         let yTween = gsap.to(char, {
           paused: true,

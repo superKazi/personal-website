@@ -34,7 +34,9 @@ document.fonts.ready.then(() => {
     gsap.set(".wrd-mask, .char", { pointerEvents: "none" });
     gsap.set("header, ul[role='list']", { opacity: 1 });
 
-    let tl = gsap.timeline();
+    let tl = gsap.timeline({ paused: true });
+
+    let seenAnimation = localStorage.getItem("seenAnimation");
 
     tl.to("b", {
       scaleX: 1,
@@ -46,7 +48,7 @@ document.fonts.ready.then(() => {
         {
           opacity: 1,
           yPercent: 0,
-          duration: 0.3,
+          duration: 1,
           ease: "circ.out",
           stagger: 0.05,
         },
@@ -57,15 +59,25 @@ document.fonts.ready.then(() => {
         {
           opacity: 1,
           yPercent: 0,
-          duration: 0.3,
+          duration: 0.8,
           ease: "circ.out",
           stagger: {
-            each: 0.0333,
+            each: 0.02,
             ease: "sine",
           },
         },
-        "<60%",
+        "<40%",
       );
+
+    if (
+      !seenAnimation ||
+      (seenAnimation && Date.now() - Number(seenAnimation) > 86400000)
+    ) {
+      localStorage.setItem("seenAnimation", String(Date.now()));
+      tl.play();
+    } else {
+      tl.progress(1);
+    }
 
     splitLinks.elements.forEach((elem) => {
       let q = gsap.utils.selector(elem);

@@ -8,19 +8,18 @@
   },
   "type": "module",
   "devDependencies": {
-    "@eslint/js": "^9.38.0",
-    "es-toolkit": "^1.41.0",
-    "eslint": "^9.38.0",
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.6.2",
     "rollup-plugin-workbox": "^8.1.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.2",
-    "vite": "^7.1.12"
+    "typescript-eslint": "^8.46.4",
+    "vite": "^7.2.2"
   },
   "optionalDependencies": {
-    "@esbuild/linux-x64": "0.25.11",
-    "@rollup/rollup-linux-x64-gnu": "4.52.5"
+    "@esbuild/linux-x64": "0.27.0",
+    "@rollup/rollup-linux-x64-gnu": "4.53.2"
   },
   "dependencies": {
     "gsap": "^3.13.0",

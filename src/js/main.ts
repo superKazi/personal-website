@@ -36,7 +36,13 @@ document.fonts.ready.then(() => {
 
     let tl = gsap.timeline({ paused: true });
 
-    let seenAnimation = localStorage.getItem("seenAnimation");
+    let seenAnimation: string | null = null;
+
+    try {
+      seenAnimation = localStorage.getItem("seenAnimation");
+    } catch (error) {
+      console.log("storage unavailable (privacy mode, blocked storage, etc.)");
+    }
 
     tl.to("b", {
       scaleX: 1,
@@ -73,7 +79,13 @@ document.fonts.ready.then(() => {
       !seenAnimation ||
       (seenAnimation && Date.now() - Number(seenAnimation) > 86400000)
     ) {
-      localStorage.setItem("seenAnimation", String(Date.now()));
+      try {
+        localStorage.setItem("seenAnimation", String(Date.now()));
+      } catch (error) {
+        console.log(
+          "storage unavailable (privacy mode, blocked storage, etc.)",
+        );
+      }
       tl.play();
     } else {
       tl.progress(1);

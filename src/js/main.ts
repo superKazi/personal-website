@@ -1,7 +1,6 @@
 import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Observer } from "gsap/Observer";
-import "instant.page";
 
 /**
  * accessible animations

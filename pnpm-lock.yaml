@@ -11,9 +11,6 @@ importers:
       gsap:
         specifier: ^3.15.0
         version: 3.15.0
-      instant.page:
-        specifier: ^5.2.0
-        version: 5.2.0
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
@@ -1443,9 +1440,6 @@ packages:
   imurmurhash@0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
-
-  instant.page@5.2.0:
-    resolution: {integrity: sha512-DUSwWyoHFOQnmEwJtg9vzDx8Ef8uNNvTxTmHjd0vN9/XEIb5EQkm/itpZMypoH3dJLJvtkrD97WOCKuMqDdMHQ==}
 
   internal-slot@1.1.0:
     resolution: {integrity: sha512-4gd7VpWNQNB4UKKCFFVcp1AVv+FMOgs9NKzjHKusc8jTMhd5eL1NqQqOpE0KzMds804/yHlglp3uxgluOqAPLw==}
@@ -3780,8 +3774,6 @@ snapshots:
   ignore@7.0.5: {}
 
   imurmurhash@0.1.4: {}
-
-  instant.page@5.2.0: {}
 
   internal-slot@1.1.0:
     dependencies:

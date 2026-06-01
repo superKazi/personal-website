@@ -316,8 +316,18 @@
     <link rel="apple-touch-icon" href="./apple.png" />
     <link rel="canonical" href="https://kazielmanawal.me" />
     <link rel="manifest" href="./manifest.webmanifest" />
+    <script type="speculationrules">
+      {
+        "prefetch": [
+          {
+            "where": { "selector_matches": "ul[role='list'] a[href]" },
+            "eagerness": "moderate"
+          }
+        ]
+      }
+    </script>
   </head>
-  <body data-instant-allow-external-links>
+  <body>
     <main>
       <b aria-hidden="true"></b>
       <header>

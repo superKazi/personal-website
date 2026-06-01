@@ -48,6 +48,14 @@
 			public'''
 
 [[headers]]
+  for = "/registerSW.js"
+  [headers.values]
+		Cache-Control = '''
+			max-age=0,
+			must-revalidate,
+			public'''
+
+[[headers]]
   for = "/manifest.webmanifest"
   [headers.values]
 		Cache-Control = '''

@@ -160,26 +160,6 @@ document.fonts.ready.then(() => {
 });
 
 /**
- * handle service worker
- */
-!(async function handleServiceWorker(): Promise<void> {
-  try {
-    const { Workbox } = await import("workbox-window");
-    const wb = new Workbox("/sw.js");
-
-    wb.addEventListener("installed", (event) => {
-      if (event.isUpdate) {
-        window.location.reload();
-      }
-    });
-
-    wb.register();
-  } catch (err) {
-    console.error(err);
-  }
-})();
-
-/**
  * polite console
  */
 console.log(

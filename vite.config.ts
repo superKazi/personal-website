@@ -16,6 +16,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,woff2}"],
         cleanupOutdatedCaches: true,
+        navigateFallback: null,
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.destination === "document",

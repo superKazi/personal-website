@@ -1,23 +1,15 @@
 allowBuilds:
   esbuild: false
 minimumReleaseAgeExclude:
-  - minimatch@5.1.7
-  - minimatch@10.2.1
+  - minimatch@5.1.7 || 5.1.8 || 10.2.1 || 10.2.3
   - rollup@2.80.0
-  - minimatch@5.1.8
-  - minimatch@10.2.3
-  - serialize-javascript@7.0.3
-  - flatted@3.4.0
-  - flatted@3.4.2
-  - brace-expansion@2.0.3
-  - brace-expansion@5.0.5
-  - picomatch@2.3.2
-  - picomatch@4.0.4
+  - serialize-javascript@7.0.3 || 7.0.5
+  - flatted@3.4.0 || 3.4.2
+  - brace-expansion@2.0.3 || 5.0.5 || 5.0.6
+  - picomatch@2.3.2 || 4.0.4
   - lodash@4.17.24
   - vite@8.0.5
   - postcss@8.5.10
-  - fast-uri@3.1.1
-  - fast-uri@3.1.2
+  - fast-uri@3.1.1 || 3.1.2
   - '@babel/plugin-transform-modules-systemjs@7.29.4'
-  - brace-expansion@5.0.6
-  - serialize-javascript@7.0.5
+  - eslint@10.7.0

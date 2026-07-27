@@ -40,7 +40,9 @@ document.fonts.ready.then(() => {
     try {
       seenAnimation = localStorage.getItem("seenAnimation");
     } catch (error) {
-      console.log("storage unavailable (privacy mode, blocked storage, etc.)");
+      console.error(
+        "storage unavailable (privacy mode, blocked storage, etc.)",
+      );
     }
 
     tl.to("b", {
@@ -81,7 +83,7 @@ document.fonts.ready.then(() => {
       try {
         localStorage.setItem("seenAnimation", String(Date.now()));
       } catch (error) {
-        console.log(
+        console.error(
           "storage unavailable (privacy mode, blocked storage, etc.)",
         );
       }

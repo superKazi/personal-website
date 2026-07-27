@@ -1,0 +1,5 @@
+# Kazi's website
+
+> Design engineer Kazi Elman Awal's website.
+
+- [Homepage](https://kazielmanawal.me/): Kazi's personal site and portfolio.

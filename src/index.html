@@ -18,15 +18,70 @@
     />
     <script type="application/ld+json">
       {
-        "@context": "http://schema.org/",
-        "@type": "Person",
-        "name": "Kazi Elman Awal",
-        "jobTitle": "Senior Creative Developer",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Brooklyn",
-          "addressRegion": "NY"
-        }
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://kazielmanawal.me/#website",
+            "url": "https://kazielmanawal.me/",
+            "name": "Kazi Elman Awal",
+            "alternateName": ["kazielmanawal.me", "Kazi's website"],
+            "description": "Design engineer Kazi Elman Awal’s website",
+            "inLanguage": "en",
+            "publisher": {
+              "@id": "https://kazielmanawal.me/#person"
+            }
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://kazielmanawal.me/#webpage",
+            "url": "https://kazielmanawal.me/",
+            "name": "Kazi Elman Awal — Dev, Design, Data Viz",
+            "isPartOf": {
+              "@id": "https://kazielmanawal.me/#website"
+            },
+            "inLanguage": "en",
+            "mainEntity": {
+              "@id": "https://kazielmanawal.me/#person"
+            }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://kazielmanawal.me/#person",
+            "url": "https://kazielmanawal.me/",
+            "name": "Kazi Elman Awal",
+            "givenName": "Kazi",
+            "familyName": "Awal",
+            "jobTitle": "Senior Design Engineer",
+            "description": "Design engineer, Brooklyn guy.",
+            "knowsAbout": [
+              "Web Development",
+              "Design",
+              "Data Visualization",
+              "Journalism"
+            ],
+            "homeLocation": {
+              "@type": "Place",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "US",
+                "addressLocality": "Brooklyn",
+                "addressRegion": "NY"
+              }
+            },
+            "image": {
+              "@type": "ImageObject",
+              "@id": "https://kazielmanawal.me/#person-image",
+              "url": "https://kazielmanawal.me/kazi.jpeg",
+              "caption": "Kazi Elman Awal"
+            },
+            "sameAs": [
+              "https://github.com/superKazi",
+              "https://www.linkedin.com/in/superkazi/",
+              "https://bsky.app/profile/superkazi.bsky.social"
+            ]
+          }
+        ]
       }
     </script>
     <style>
@@ -291,7 +346,7 @@
     />
     <meta
       name="description"
-      content="Journalist, designer, developer Kazi Elman Awal’s website"
+      content="Design engineer Kazi Elman Awal’s website"
     />
     <meta name="robots" content="index,follow" />
     <meta name="googlebot" content="index,follow" />

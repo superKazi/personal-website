@@ -65,15 +65,7 @@
     Content-Type = "application/manifest+json"
 
 [[headers]]
-  for = "/.*\\.(png|svg|ico)$"
-  [headers.values]
-		Cache-Control = '''
-			max-age=604800,
-			public,
-      stale-while-revalidate=86400'''
-
-[[headers]]
-  for = "/og.jpg"
+  for = "/.*\\.(png|svg|ico|jpg|jpeg)$"
   [headers.values]
 		Cache-Control = '''
 			max-age=604800,

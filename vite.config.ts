@@ -11,23 +11,11 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: "autoUpdate",
-      injectRegister: "script-defer",
+      injectRegister: "auto",
       manifest: false,
       workbox: {
-        globPatterns: ["**/*.{js,css,woff2}"],
+        globPatterns: ["**/*.{html,js,css,woff2}"],
         cleanupOutdatedCaches: true,
-        navigateFallback: null,
-        runtimeCaching: [
-          {
-            urlPattern: ({ request }) => request.destination === "document",
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "document-cache",
-              networkTimeoutSeconds: 3,
-              expiration: { maxEntries: 1 },
-            },
-          },
-        ],
       },
     }),
   ],

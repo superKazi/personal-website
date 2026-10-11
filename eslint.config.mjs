@@ -6,12 +6,12 @@ import prettier from "eslint-config-prettier";
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   eslint.configs.recommended,
-  tseslint.configs.strict,
-  tseslint.configs.stylistic,
+  ...tseslint.configs.strict,
+  ...tseslint.configs.stylistic,
   {
-    files: ["**/*.js"],
+    files: ["src/**/*.ts"],
     languageOptions: {
-      globals: { ...globals.browser, ...globals.node },
+      globals: globals.browser,
     },
   },
   prettier,

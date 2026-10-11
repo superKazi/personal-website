@@ -23,13 +23,13 @@ document.fonts.ready.then(() => {
     gsap.set(".wrd-mask, .char", { pointerEvents: "none" });
     gsap.set("header, ul[role='list']", { opacity: 1 });
 
-    let tl = gsap.timeline({ paused: true });
+    const tl = gsap.timeline({ paused: true });
 
     let seenAnimation: string | null = null;
 
     try {
       seenAnimation = localStorage.getItem("seenAnimation");
-    } catch (error) {
+    } catch {
       console.error(
         "storage unavailable (privacy mode, blocked storage, etc.)",
       );
@@ -71,7 +71,7 @@ document.fonts.ready.then(() => {
     ) {
       try {
         localStorage.setItem("seenAnimation", String(Date.now()));
-      } catch (error) {
+      } catch {
         console.error(
           "storage unavailable (privacy mode, blocked storage, etc.)",
         );
@@ -82,8 +82,8 @@ document.fonts.ready.then(() => {
     }
 
     splitLinks.elements.forEach((elem) => {
-      let q = gsap.utils.selector(elem);
-      let chars = q(".char");
+      const q = gsap.utils.selector(elem);
+      const chars = q(".char");
       const radius = () => gsap.utils.random(1, 4);
       const tweens = chars.map((char) => {
         const rx = radius(),

@@ -10,24 +10,14 @@ const mm = gsap.matchMedia();
 
 document.fonts.ready.then(() => {
   mm.add("(prefers-reduced-motion: no-preference)", () => {
-    SplitText.create("h1", {
+    const opts = {
       type: "words, chars",
-      mask: "words",
+      mask: "words" as const,
       wordsClass: "wrd",
       charsClass: "char",
-    });
-    SplitText.create("h2", {
-      type: "words, chars",
-      mask: "words",
-      wordsClass: "wrd",
-      charsClass: "char",
-    });
-    let splitLinks = SplitText.create("a", {
-      type: "words, chars",
-      mask: "words",
-      wordsClass: "wrd",
-      charsClass: "char",
-    });
+    };
+    SplitText.create("h1, h2", opts);
+    const splitLinks = SplitText.create("a", opts);
 
     gsap.set(".wrd", { pointerEvents: "none", opacity: 0, yPercent: 100 });
     gsap.set(".wrd-mask, .char", { pointerEvents: "none" });
@@ -77,8 +67,7 @@ document.fonts.ready.then(() => {
       );
 
     if (
-      !seenAnimation ||
-      (seenAnimation && Date.now() - Number(seenAnimation) > 86400000)
+      !seenAnimation || Date.now() - Number(seenAnimation) > 86400000
     ) {
       try {
         localStorage.setItem("seenAnimation", String(Date.now()));
@@ -95,40 +84,22 @@ document.fonts.ready.then(() => {
     splitLinks.elements.forEach((elem) => {
       let q = gsap.utils.selector(elem);
       let chars = q(".char");
-      let xTweens = chars.map((char) => {
-        let radius =
-          Math.random() < 0.35
-            ? gsap.utils.random(1, 4)
-            : gsap.utils.random(1, 4);
-        let xTween = gsap.to(char, {
+      const radius = () => gsap.utils.random(1, 4);
+      const tweens = chars.map((char) => {
+        const rx = radius(),
+          ry = radius();
+        return gsap.to(char, {
           paused: true,
           x: `+=${Math.PI * 2}`,
-          repeat: -1,
-          ease: "none",
-          duration: () => gsap.utils.random(1, 3),
-          modifiers: {
-            x: gsap.utils.unitize((x: number) => Math.cos(x) * radius),
-          },
-        });
-        return xTween;
-      });
-      let yTweens = chars.map((char) => {
-        let radius =
-          Math.random() < 0.35
-            ? gsap.utils.random(1, 4)
-            : gsap.utils.random(1, 4);
-
-        let yTween = gsap.to(char, {
-          paused: true,
           y: `+=${Math.PI * 2}`,
           repeat: -1,
           ease: "none",
           duration: () => gsap.utils.random(1, 3),
           modifiers: {
-            y: gsap.utils.unitize((y: number) => Math.sin(y) * radius),
+            x: gsap.utils.unitize((x: number) => Math.cos(x) * rx),
+            y: gsap.utils.unitize((y: number) => Math.sin(y) * ry),
           },
         });
-        return yTween;
       });
 
       Observer.create({
@@ -136,14 +107,12 @@ document.fonts.ready.then(() => {
         type: "pointer",
         onHover: () => {
           if (Observer.isTouch !== 1) {
-            xTweens.forEach((tween) => tween.restart());
-            yTweens.forEach((tween) => tween.restart());
+            tweens.forEach((tween) => tween.restart());
           }
         },
         onHoverEnd: () => {
           if (Observer.isTouch !== 1) {
-            xTweens.forEach((tween) => tween.pause());
-            yTweens.forEach((tween) => tween.pause());
+            tweens.forEach((tween) => tween.pause());
 
             chars.forEach((char) => {
               gsap.to(char, {

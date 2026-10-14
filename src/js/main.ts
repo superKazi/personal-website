@@ -8,7 +8,7 @@ import { Observer } from "gsap/Observer";
 gsap.registerPlugin(SplitText, Observer);
 const mm = gsap.matchMedia();
 
-document.fonts.ready.then(() => {
+void document.fonts.ready.then(() => {
   mm.add("(prefers-reduced-motion: no-preference)", () => {
     const opts = {
       type: "words, chars",
@@ -25,15 +25,16 @@ document.fonts.ready.then(() => {
 
     const tl = gsap.timeline({ paused: true });
 
-    let seenAnimation: string | null = null;
-
-    try {
-      seenAnimation = localStorage.getItem("seenAnimation");
-    } catch {
-      console.error(
-        "storage unavailable (privacy mode, blocked storage, etc.)",
-      );
-    }
+    const seenAnimation = (() => {
+      try {
+        return localStorage.getItem("seenAnimation");
+      } catch {
+        console.error(
+          "storage unavailable (privacy mode, blocked storage, etc.)",
+        );
+        return null;
+      }
+    })();
 
     tl.to("b", {
       scaleX: 1,
@@ -66,9 +67,7 @@ document.fonts.ready.then(() => {
         "<40%",
       );
 
-    if (
-      !seenAnimation || Date.now() - Number(seenAnimation) > 86400000
-    ) {
+    if (!seenAnimation || Date.now() - Number(seenAnimation) > 86400000) {
       try {
         localStorage.setItem("seenAnimation", String(Date.now()));
       } catch {
@@ -107,12 +106,12 @@ document.fonts.ready.then(() => {
         type: "pointer",
         onHover: () => {
           if (Observer.isTouch !== 1) {
-            tweens.forEach((tween) => tween.restart());
+            tweens.forEach((tween) => void tween.restart());
           }
         },
         onHoverEnd: () => {
           if (Observer.isTouch !== 1) {
-            tweens.forEach((tween) => tween.pause());
+            tweens.forEach((tween) => void tween.pause());
 
             chars.forEach((char) => {
               gsap.to(char, {

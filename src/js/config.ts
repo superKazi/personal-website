@@ -5,22 +5,22 @@
 export const defaults = {
   view: {
     /** degrees */
-    yaw: 30,
-    pitch: 25,
-    roll: 15,
+    yaw: 35,
+    pitch: -30,
+    roll: 55,
     /** fraction of the viewport kept clear around the word */
-    padding: 0.12,
+    padding: 0.05,
   },
   panels: {
     /** Panels per cap height */
-    density: 14,
+    density: 25,
     /** Panel depth, in cap heights */
-    depth: 0.3,
+    depth: 0.9,
     /** gap between Stacks, in cap heights */
-    tracking: 0.14,
+    tracking: 0.05,
   },
   color: {
-    seed: 113,
+    seed: 475,
     runMin: 2,
     runMax: 5,
     /** chance a run uses the deep accent */

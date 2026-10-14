@@ -14,6 +14,14 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 
 Infer the repo from `git remote -v`; `gh` does this automatically when run inside a clone.
 
+## Closing tickets
+
+GitHub only honours closing keywords on PRs into the default branch (`main`), but slice PRs target `develop`. So:
+
+- Slice PRs into `develop` reference their ticket ("Implements #N"), not "Closes #N".
+- When a slice PR merges into `develop`, remove that ticket's native blocking edges from its dependents (`gh api --method DELETE repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by/<blocker-db-id>`) so they become unblocked.
+- The `develop` → `main` ship PR lists "Closes #N" for every ticket it ships.
+
 ## Pull requests as a triage surface
 
 **PRs as a request surface: no.** _(Set to `yes` if this repo treats external PRs as feature requests; `/triage` reads this flag.)_

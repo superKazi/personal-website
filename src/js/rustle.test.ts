@@ -18,7 +18,7 @@ const run = (frameMs: number) => {
   const dt = frameMs / 1000;
   // a fast swipe across the whole word, then let go
   const swipe = Math.max(1, Math.round(0.4 / dt));
-  // the pointer's own velocity, as GSAP Observer reports it from event timestamps
+  // the pointer's velocity, as GSAP Observer reports it
   const vx = 4 / (swipe * dt);
   for (let i = 0; i <= swipe; i++)
     step(rustle, { ...ray, x: (i / swipe) * 4, vx }, dt, defaults);

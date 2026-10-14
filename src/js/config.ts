@@ -69,8 +69,8 @@ export const defaults = {
     root: 293.66,
     /** how many scale steps Panel lengths span: longest Panel rings the root */
     notes: 10,
-    /** overall level; each voice gets volume / voices, and a soft clipper rounds off rare pile-ups */
-    volume: 1.2,
+    /** overall level, 0..1; each voice gets volume / voices, so even every voice at full strike sums to at most full scale */
+    volume: 0.8,
     /** pointer speeds (cap heights per second) mapped to soft/mellow through loud/bright */
     minSpeed: 0.2,
     maxSpeed: 10,

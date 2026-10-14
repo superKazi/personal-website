@@ -8,7 +8,6 @@ import { buildPanels, loadFont, type Panel } from "./panels.ts";
 import { createRustle, step, type Pointer } from "./rustle.ts";
 import { createScene } from "./scene.ts";
 import { createSoundToggle } from "./toggle.ts";
-import { createVelocity } from "./velocity.ts";
 
 gsap.registerPlugin(Observer);
 
@@ -29,10 +28,11 @@ if (canvas && button) {
   let rustle = createRustle([]);
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
-  // where the pointer is on screen, null when it's away, and its velocity from event timestamps
+  // where the pointer is on screen, null when it's away, and the Observer tracking its velocity
   // eslint-disable-next-line functional/no-let
   let client: Readonly<{ x: number; y: number }> | null = null;
-  const velocity = createVelocity();
+  // eslint-disable-next-line functional/no-let
+  let observer: Observer | undefined;
   // eslint-disable-next-line functional/no-let
   let lengths = { min: 0, max: 0 };
   // eslint-disable-next-line functional/no-let
@@ -69,25 +69,20 @@ if (canvas && button) {
 
   const track = (self: Observer) => {
     client = reduced ? null : { x: self.x ?? 0, y: self.y ?? 0 };
-    if (client)
-      velocity.add(
-        self.event?.timeStamp ?? performance.now(),
-        client.x,
-        client.y,
-      );
   };
   const leave = () => {
     client = null;
-    velocity.clear();
   };
-  /** The pointer ray in word space, with its velocity projected onto the word. */
+  /** The pointer ray in word space, with Observer's velocity projected onto the word. */
   const pointerNow = (): Pointer | null => {
-    if (!client) return null;
+    if (!client || !observer) return null;
     const ray = scene.toWord(client.x, client.y);
     if (!ray) return null;
-    const v = velocity.at(performance.now());
     const h = 0.01;
-    const ahead = scene.toWord(client.x + v.x * h, client.y + v.y * h);
+    const ahead = scene.toWord(
+      client.x + observer.velocityX * h,
+      client.y + observer.velocityY * h,
+    );
     return { ...ray, vx: ahead ? (ahead.x - ray.x) / h : 0 };
   };
 
@@ -155,7 +150,7 @@ if (canvas && button) {
     });
     replay();
 
-    Observer.create({
+    observer = Observer.create({
       target: canvas,
       type: "pointer,touch",
       onMove: track,

@@ -48,14 +48,24 @@ export const createGui = (
     palette.addColor(config.color.palette, i).onChange(rebuild),
   );
 
-  gui.add({ export: () => void exportJson(config) }, "export");
+  const exportButton = gui.add(
+    {
+      export: () =>
+        void exportJson(config).then((copied) => {
+          if (!copied) return;
+          exportButton.name("copied ✓");
+          setTimeout(() => exportButton.name("export"), 1500);
+        }),
+    },
+    "export",
+  );
 };
 
 const exportJson = async (config: Readonly<Config>) => {
   const json = JSON.stringify(config, null, 2);
   try {
     await navigator.clipboard.writeText(json);
-    console.log("config copied to clipboard");
+    return true;
   } catch {
     // clipboard needs a secure context, which the phone-over-LAN dev URL isn't
     const box = document.createElement("textarea");
@@ -67,5 +77,6 @@ const exportJson = async (config: Readonly<Config>) => {
     document.body.append(box);
     box.focus();
     box.select();
+    return false;
   }
 };

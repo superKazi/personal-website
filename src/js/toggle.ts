@@ -97,18 +97,41 @@ export const createSoundToggle = (
     draw();
   });
 
-  button.addEventListener("click", () => {
-    on = !on;
-    // the label states the action, so there's no aria-pressed to announce the state twice
-    const label = button.querySelector(".visually-hidden");
-    if (label) label.textContent = `Turn ${on ? "off" : "on"} audio experience`;
+  /** Kick the bar at `at` (0 = first, 1 = last) and a little of its neighbours, e.g. when a Chime plays. */
+  const bump = (amount: number, at: number) => {
+    const centre = at * (BARS - 1);
+    for (let i = 0; i < BARS; i++) {
+      const near = Math.max(0, 1 - Math.abs(i - centre) / 1.5);
+      bumps[i] = Math.min(1, bumps[i] + amount * near * 0.6);
+    }
+  };
+  const ease = (to: number) =>
     gsap.to(state, {
-      on: on ? 1 : 0,
+      on: to,
       duration: 0.5,
       ease: "power2.inOut",
       overwrite: true,
       onUpdate: draw,
     });
+
+  // hover Rustles the bars left to right and, while off, lets Panel colors peek through;
+  // mouse and pen only, so a tap doesn't peek just before it toggles
+  button.addEventListener("pointerenter", (e) => {
+    if (e.pointerType === "touch") return;
+    for (let i = 0; i < BARS; i++)
+      gsap.delayedCall(i * 0.04, bump, [0.5, i / (BARS - 1)]);
+    if (!on) ease(0.3);
+  });
+  button.addEventListener("pointerleave", () => {
+    if (!on) ease(0);
+  });
+
+  button.addEventListener("click", () => {
+    on = !on;
+    // the label states the action, so there's no aria-pressed to announce the state twice
+    const label = button.querySelector(".visually-hidden");
+    if (label) label.textContent = `Turn ${on ? "off" : "on"} audio experience`;
+    ease(on ? 1 : 0);
     onChange(on);
   });
 
@@ -122,14 +145,7 @@ export const createSoundToggle = (
       );
       draw();
     },
-    /** Kick the bar at `at` (0 = first, 1 = last) and a little of its neighbours, e.g. when a Chime plays. */
-    bump: (amount: number, at: number) => {
-      const centre = at * (BARS - 1);
-      for (let i = 0; i < BARS; i++) {
-        const near = Math.max(0, 1 - Math.abs(i - centre) / 1.5);
-        bumps[i] = Math.min(1, bumps[i] + amount * near * 0.6);
-      }
-    },
+    bump,
     isOn: () => on,
     turnOff: () => {
       if (on) button.click();

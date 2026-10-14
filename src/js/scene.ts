@@ -24,10 +24,13 @@ uniform float uDepth;
 uniform float uRiseDistance;
 uniform float uBendSharpness;
 uniform float uBendWidth;
+uniform float uSwayAmp;
+uniform float uSwayPhase;
+uniform float uSwayWave;
 out vec2 vUv;
 out vec3 vColor;
 out float vRise;
-// share of the full tilt reached at depth u: even curve, or concentrated at the bend height
+// share of the full tilt reached at depth u: even curve, or concentrated at the bend position
 float profile(float u, float h) {
   return mix(u, smoothstep(h - uBendWidth, h + uBendWidth, u), uBendSharpness);
 }
@@ -37,11 +40,15 @@ void main() {
   vRise = aRise;
   // Panels stand in the y-z plane; uv.x runs along depth, uv.y up the height
   float y = mix(aPanel.y, aPanel.z, uv.y);
+  // Sway: two slow waves travelling along the word, added on top of any Rustle
+  float sway = uSwayAmp * (0.7 * sin(uSwayPhase + aPanel.x * uSwayWave)
+    + 0.3 * sin(1.7 * uSwayPhase + aPanel.x * uSwayWave * 0.6 + 1.3));
+  float tilt = aBend.x + sway;
   // walk out from the Spine (z = 0) so the sheet keeps its length as it bends
   float s = uv.x;
   vec2 q = vec2(0.0);
   for (int i = 0; i < 12; i++) {
-    float phi = aBend.x * profile((float(i) + 0.5) / 12.0 * s, aBend.y);
+    float phi = tilt * profile((float(i) + 0.5) / 12.0 * s, aBend.y);
     q += vec2(sin(phi), cos(phi));
   }
   q *= uDepth * s / 12.0;
@@ -100,6 +107,9 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     uRiseDistance: { value: 1 },
     uBendSharpness: { value: 0 },
     uBendWidth: { value: 0.3 },
+    uSwayAmp: { value: 0 },
+    uSwayPhase: { value: 0 },
+    uSwayWave: { value: 1 },
     uFade: { value: 0 },
     uBackShade: { value: 1 },
     uEdgeWidth: { value: 1 },
@@ -198,6 +208,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     uniforms.uFade.value = cfg.intro.fade;
     uniforms.uBendSharpness.value = cfg.rustle.bendSharpness;
     uniforms.uBendWidth.value = cfg.rustle.bendWidth;
+    uniforms.uSwayWave.value = cfg.sway.wave;
     uniforms.uBackShade.value = cfg.color.backShade;
     uniforms.uEdgeWidth.value = cfg.color.edgeWidth * renderer.dpr;
     uniforms.uEdge.value.set(cfg.color.edge);
@@ -219,6 +230,11 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     if (mesh) mesh.geometry.attributes.aRise.needsUpdate = true;
   };
 
+  /** Sway size (radians) and phase (radians) for this frame. */
+  const setSway = (amplitude: number, phase: number) => {
+    uniforms.uSwayAmp.value = amplitude;
+    uniforms.uSwayPhase.value = phase;
+  };
   /** Per-Panel Rustle as [tilt, bend position]; write into it, then call `commitBend`. */
   const getBend = () => bend;
   const commitBend = () => {
@@ -258,6 +274,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     commitRise,
     getBend,
     commitBend,
+    setSway,
     toWord,
   };
 };

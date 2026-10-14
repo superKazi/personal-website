@@ -49,6 +49,17 @@ export const defaults = {
     /** width of the bend zone, as a fraction of the depth */
     bendWidth: 0.5,
   },
+  sway: {
+    /** tilt in radians */
+    amplitude: 0.06,
+    /** cycles per second */
+    speed: 0.15,
+    /** phase shift along the word, per cap height */
+    wave: 1.5,
+    /** used when the visitor prefers reduced motion */
+    reducedAmplitude: 0.03,
+    reducedSpeed: 0.07,
+  },
   color: {
     seed: 475,
     runMin: 2,

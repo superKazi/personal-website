@@ -1,13 +1,15 @@
 import GUI from "lil-gui";
 import type { Config } from "./config.ts";
+import { EASES } from "./intro.ts";
 
-/** Dev-only tuning panel. `rebuild` re-slices Panels, `update` only re-renders. */
+/** Dev-only tuning panel. `rebuild` re-slices Panels, `update` only re-renders, `replay` restarts the intro. */
 export const createGui = (
   // lil-gui edits config in place
   // eslint-disable-next-line functional/prefer-immutable-types
   config: Config,
   rebuild: () => void,
   update: () => void,
+  replay: () => void,
 ) => {
   const gui = new GUI({ title: "KAZI" });
 
@@ -22,6 +24,14 @@ export const createGui = (
   panels.add(config.panels, "density", 2, 40, 1).onFinishChange(rebuild);
   panels.add(config.panels, "tracking", 0, 0.6, 0.01).onFinishChange(rebuild);
   panels.add(config.panels, "depth", 0.05, 3, 0.01).onChange(rebuild);
+
+  const intro = gui.addFolder("Intro");
+  intro.add(config.intro, "duration", 0.1, 3, 0.05);
+  intro.add(config.intro, "stagger", 0, 3, 0.05);
+  intro.add(config.intro, "ease", EASES);
+  intro.add(config.intro, "distance", 0, 4, 0.05).onChange(update);
+  intro.add(config.intro, "fade", 0, 1, 0.01).onChange(update);
+  intro.add({ replay }, "replay").name("replay intro");
 
   const color = gui.addFolder("Color");
   color.add(config.color, "seed", 0, 1000, 1).onChange(rebuild);
@@ -38,14 +48,24 @@ export const createGui = (
     palette.addColor(config.color.palette, i).onChange(rebuild),
   );
 
-  gui.add({ export: () => void exportJson(config) }, "export");
+  const exportButton = gui.add(
+    {
+      export: () =>
+        void exportJson(config).then((copied) => {
+          if (!copied) return;
+          exportButton.name("copied ✓");
+          setTimeout(() => exportButton.name("export"), 1500);
+        }),
+    },
+    "export",
+  );
 };
 
 const exportJson = async (config: Readonly<Config>) => {
   const json = JSON.stringify(config, null, 2);
   try {
     await navigator.clipboard.writeText(json);
-    console.log("config copied to clipboard");
+    return true;
   } catch {
     // clipboard needs a secure context, which the phone-over-LAN dev URL isn't
     const box = document.createElement("textarea");
@@ -57,5 +77,6 @@ const exportJson = async (config: Readonly<Config>) => {
     document.body.append(box);
     box.focus();
     box.select();
+    return false;
   }
 };

@@ -15,16 +15,21 @@ const vertex = /* glsl */ `#version 300 es
 in vec2 uv;
 in vec4 aPanel; // x, y0, y1, stack
 in vec3 aColor;
+in float aRise; // intro progress, 0 = hidden below, 1 = at rest
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform float uDepth;
+uniform float uRiseDistance;
 out vec2 vUv;
 out vec3 vColor;
+out float vRise;
 void main() {
   vUv = uv;
   vColor = aColor;
+  vRise = aRise;
   // Panels stand in the y-z plane; uv.x runs along depth, uv.y up the height
   vec3 p = vec3(aPanel.x, mix(aPanel.y, aPanel.z, uv.y), uv.x * uDepth);
+  p.y -= (1.0 - aRise) * uRiseDistance;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 }`;
 
@@ -32,11 +37,17 @@ const fragment = /* glsl */ `#version 300 es
 precision highp float;
 in vec2 vUv;
 in vec3 vColor;
+in float vRise;
+uniform float uFade;
 uniform float uBackShade;
 uniform float uEdgeWidth;
 uniform vec3 uEdge;
 out vec4 fragColor;
 void main() {
+  // dithered fade keeps depth testing correct without sorting Panels
+  float alpha = mix(1.0, clamp(vRise, 0.0, 1.0), uFade);
+  float noise = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
+  if (alpha < 1.0 && noise >= alpha) discard;
   vec3 color = gl_FrontFacing ? vColor : vColor * uBackShade;
   // distance to the nearest Panel edge, in screen pixels
   vec2 px = min(vUv, 1.0 - vUv) / fwidth(vUv);
@@ -69,6 +80,8 @@ export const createScene = (canvas: HTMLCanvasElement) => {
 
   const uniforms = {
     uDepth: { value: 1 },
+    uRiseDistance: { value: 1 },
+    uFade: { value: 0 },
     uBackShade: { value: 1 },
     uEdgeWidth: { value: 1 },
     uEdge: { value: new Color() },
@@ -82,6 +95,8 @@ export const createScene = (canvas: HTMLCanvasElement) => {
 
   // eslint-disable-next-line functional/no-let
   let mesh: Mesh | undefined;
+  // eslint-disable-next-line functional/no-let
+  let rise = new Float32Array();
   // eslint-disable-next-line functional/no-let
   let bounds = { min: new Vec3(), max: new Vec3() };
 
@@ -124,11 +139,13 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     const color = new Float32Array(
       panels.flatMap((p) => [...new Color(p.color)]),
     );
+    rise = new Float32Array(panels.length).fill(1);
     const geometry = new Plane(gl, {
       heightSegments: 24,
       attributes: {
         aPanel: { instanced: 1, size: 4, data: panel },
         aColor: { instanced: 1, size: 3, data: color },
+        aRise: { instanced: 1, size: 1, data: rise },
       },
     });
     mesh = new Mesh(gl, { geometry, program });
@@ -154,6 +171,8 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   /** Apply everything that doesn't need new Panels. */
   const update = (cfg: Readonly<Config>) => {
     uniforms.uDepth.value = cfg.panels.depth;
+    uniforms.uRiseDistance.value = cfg.intro.distance;
+    uniforms.uFade.value = cfg.intro.fade;
     uniforms.uBackShade.value = cfg.color.backShade;
     uniforms.uEdgeWidth.value = cfg.color.edgeWidth * renderer.dpr;
     uniforms.uEdge.value.set(cfg.color.edge);
@@ -169,5 +188,11 @@ export const createScene = (canvas: HTMLCanvasElement) => {
 
   const render = () => renderer.render({ scene: roll, camera });
 
-  return { build, update, resize, render };
+  /** Per-Panel intro progress; write into it, then call `commitRise`. */
+  const getRise = () => rise;
+  const commitRise = () => {
+    if (mesh) mesh.geometry.attributes.aRise.needsUpdate = true;
+  };
+
+  return { build, update, resize, render, getRise, commitRise };
 };

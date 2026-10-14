@@ -19,6 +19,17 @@ export const defaults = {
     /** gap between Stacks, in cap heights */
     tracking: 0.05,
   },
+  intro: {
+    /** seconds each Panel takes to rise */
+    duration: 1.8,
+    /** seconds between the first and last Panel starting */
+    stagger: 1,
+    ease: "elastic.out(1,0.75)",
+    /** how far below rest Panels start, in cap heights */
+    distance: 0.55,
+    /** 0 = movement only, 1 = full fade from transparent */
+    fade: 1,
+  },
   color: {
     seed: 475,
     runMin: 2,

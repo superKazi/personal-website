@@ -18,14 +18,23 @@ Synthetic swipe along the word's diagonal at 1280×800 (`k` from 0 to 1):
 ```js
 const c = document.querySelector("canvas");
 const fire = (type, x, y) =>
-  c.dispatchEvent(new PointerEvent(type, { clientX: x, clientY: y, pointerType: "mouse", bubbles: true }));
+  c.dispatchEvent(
+    new PointerEvent(type, {
+      clientX: x,
+      clientY: y,
+      pointerType: "mouse",
+      bubbles: true,
+    }),
+  );
 fire("pointerenter", 300, 620);
 for (let i = 0; i <= 30; i++) {
   const k = i / 30;
   fire("pointermove", 300 + k * 650, 620 - k * 440);
   await new Promise((r) => setTimeout(r, 16));
 }
-c.dispatchEvent(new PointerEvent("pointerleave", { pointerType: "mouse", bubbles: true }));
+c.dispatchEvent(
+  new PointerEvent("pointerleave", { pointerType: "mouse", bubbles: true }),
+);
 ```
 
 Gap-free output tap, as an `initScript`: it records the peak, the largest sample-to-sample jump, and click counts on everything reaching the speakers.

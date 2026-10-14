@@ -1,5 +1,6 @@
 import GUI from "lil-gui";
 import type { Config } from "./config.ts";
+import { MATERIALS, SCALES } from "./chime.ts";
 import { EASES } from "./intro.ts";
 
 /** Dev-only tuning panel. `rebuild` re-slices Panels, `update` only re-renders, `replay` restarts the intro. */
@@ -10,6 +11,7 @@ export const createGui = (
   rebuild: () => void,
   update: () => void,
   replay: () => void,
+  mix: () => void,
 ) => {
   // starts collapsed so it never covers the Sound toggle
   const gui = new GUI({ title: "KAZI", closeFolders: true }).close();
@@ -52,17 +54,21 @@ export const createGui = (
   sway.add(config.sway, "reducedAmplitude", 0, 0.2, 0.001);
   sway.add(config.sway, "reducedSpeed", 0, 1, 0.01);
 
-  const flick = gui.addFolder("Flick");
-  flick.add(config.flick, "volume", 0, 2, 0.01);
-  flick.add(config.flick, "minSpeed", 0, 5, 0.05);
-  flick.add(config.flick, "maxSpeed", 1, 40, 0.5);
-  flick.add(config.flick, "lowCutoff", 100, 8000, 10);
-  flick.add(config.flick, "highCutoff", 100, 12000, 10);
-  flick.add(config.flick, "edge", 0, 1, 0.01);
-  flick.add(config.flick, "attack", 0.001, 0.08, 0.001);
-  flick.add(config.flick, "decay", 0.01, 0.6, 0.005);
-  flick.add(config.flick, "variation", 0, 1, 0.01);
-  flick.add(config.flick, "voices", 1, 32, 1);
+  const chime = gui.addFolder("Chime");
+  chime.add(config.chime, "material", Object.keys(MATERIALS));
+  chime.add(config.chime, "scale", Object.keys(SCALES));
+  chime.add(config.chime, "root", 55, 1760, 0.01);
+  chime.add(config.chime, "notes", 3, 30, 1);
+  chime.add(config.chime, "volume", 0, 3, 0.01);
+  chime.add(config.chime, "minSpeed", 0, 5, 0.05);
+  chime.add(config.chime, "maxSpeed", 1, 40, 0.5);
+  chime.add(config.chime, "strike", 0.001, 0.05, 0.001);
+  chime.add(config.chime, "ring", 0.1, 3, 0.05);
+  chime.add(config.chime, "brightness", 0, 1.5, 0.01);
+  chime.add(config.chime, "knock", 0, 2, 0.01);
+  chime.add(config.chime, "detune", 0, 30, 0.5);
+  chime.add(config.chime, "reverb", 0, 1, 0.01).onChange(mix);
+  chime.add(config.chime, "voices", 1, 24, 1);
 
   const color = gui.addFolder("Color");
   color.add(config.color, "seed", 0, 1000, 1).onChange(rebuild);

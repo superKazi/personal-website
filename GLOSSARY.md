@@ -24,10 +24,10 @@ _Avoid_: Flip, wobble, deform
 The gentle ambient motion of Panels when no pointer drives them.
 _Avoid_: Wind, idle animation
 
-**Flick**:
-The short synthesized paper sound a Panel makes when Rustled past.
-_Avoid_: Click, tick, rustle sound
+**Chime**:
+The note a stretch of the word plays when Rustled past; stretches rise through a scale from left to right.
+_Avoid_: Flick, click, tick, note
 
 **Sound toggle**:
-The corner button, drawn as a tiny Stack, that turns Flicks on or off.
+The corner button, drawn as a tiny Stack, that turns Chimes on or off.
 _Avoid_: Mute button, speaker icon

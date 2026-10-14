@@ -26,7 +26,9 @@ export const createSoundToggle = (
     return p;
   });
   // 0 = off, 1 = on; tweened so color and ripple ease between states
-  const state = { on: 0, bump: 0, phase: 0 };
+  const state = { on: 0, phase: 0 };
+  // per-bar kick from Chimes, decaying every frame
+  const bumps = new Float32Array(BARS);
   // eslint-disable-next-line functional/no-let
   let axes: readonly Axis[] = [
     [1, 0, 0],
@@ -61,8 +63,7 @@ export const createSoundToggle = (
 
     bars.forEach((bar, i) => {
       const wave = 0.5 + 0.5 * Math.sin(state.phase + i * 0.9);
-      const level =
-        0.35 + 0.65 * (state.on * (0.25 + 0.6 * wave) + state.bump * wave);
+      const level = 0.35 + 0.65 * (state.on * (0.25 + 0.6 * wave) + bumps[i]);
       const h = 6 * Math.min(1, level);
       bar.setAttribute(
         "points",
@@ -83,9 +84,16 @@ export const createSoundToggle = (
   // eslint-disable-next-line functional/no-let
   let on = false;
   gsap.ticker.add((_t, deltaMs) => {
+    const dt = deltaMs / 1000;
+    // eslint-disable-next-line functional/no-let
+    let kicked = false;
+    for (let i = 0; i < BARS; i++) {
+      bumps[i] = bumps[i] < 0.001 ? 0 : bumps[i] * Math.exp(-dt * 7);
+      kicked ||= bumps[i] > 0;
+    }
     // a still, off toggle needs no redraw
-    if (state.on === 0 && state.bump === 0 && !on) return;
-    state.phase += (deltaMs / 1000) * 2.4;
+    if (state.on === 0 && !kicked && !on) return;
+    state.phase += dt * 2.4;
     draw();
   });
 
@@ -113,11 +121,13 @@ export const createSoundToggle = (
       );
       draw();
     },
-    /** Kick the bars, e.g. when a Flick plays. */
-    bump: (amount = 1) => {
-      gsap.killTweensOf(state, "bump");
-      state.bump = Math.min(1, state.bump + amount * 0.5);
-      gsap.to(state, { bump: 0, duration: 0.35, ease: "power2.out" });
+    /** Kick the bar at `at` (0 = first, 1 = last) and a little of its neighbours, e.g. when a Chime plays. */
+    bump: (amount: number, at: number) => {
+      const centre = at * (BARS - 1);
+      for (let i = 0; i < BARS; i++) {
+        const near = Math.max(0, 1 - Math.abs(i - centre) / 1.5);
+        bumps[i] = Math.min(1, bumps[i] + amount * near * 0.6);
+      }
     },
     isOn: () => on,
     turnOff: () => {

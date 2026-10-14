@@ -2,6 +2,8 @@
  * Every tunable in one place. In dev, lil-gui edits a copy and its export
  * button produces JSON to paste over these defaults.
  */
+import type { Material, Scale } from "./chime.ts";
+
 export const defaults = {
   view: {
     /** degrees */
@@ -60,23 +62,32 @@ export const defaults = {
     reducedAmplitude: 0.03,
     reducedSpeed: 0.07,
   },
-  flick: {
-    volume: 0.6,
-    /** pointer speeds (cap heights per second) mapped to quiet/dark through loud/bright */
-    minSpeed: 0.3,
+  chime: {
+    material: "bamboo" as Material,
+    scale: "yo" as Scale,
+    /** frequency of the lowest note, Hz (D4) */
+    root: 293.66,
+    /** how many stretches the word is divided into, left to right */
+    notes: 12,
+    /** overall level; each voice gets volume / voices, and a limiter catches rare pile-ups */
+    volume: 1.6,
+    /** pointer speeds (cap heights per second) mapped to soft/mellow through loud/bright */
+    minSpeed: 0.2,
     maxSpeed: 10,
-    /** low-pass cutoff, Hz: dull at slow speeds, brighter at fast */
-    lowCutoff: 800,
-    highCutoff: 3200,
-    /** loudness of the faint edge tick, relative to the swish; 0 = none */
-    edge: 0.08,
-    /** seconds: fade-in, and how long each Flick lingers */
-    attack: 0.015,
-    decay: 0.14,
-    /** random spread of brightness and length, 0..1 */
-    variation: 0.4,
-    /** most Flicks sounding at once */
-    voices: 12,
+    /** seconds the strike takes to reach full volume; longer is softer */
+    strike: 0.004,
+    /** how long notes ring, as a multiple of the material's natural ring */
+    ring: 0.7,
+    /** level of the overtones, 0 = pure tone */
+    brightness: 0.8,
+    /** level of the strike's wooden knock, 0 = none */
+    knock: 0.5,
+    /** random detune per partial, cents */
+    detune: 6,
+    /** reverb send level */
+    reverb: 0.25,
+    /** most notes ringing at once; each gets an equal share of the volume */
+    voices: 8,
   },
   color: {
     seed: 475,

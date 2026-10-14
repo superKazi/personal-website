@@ -71,6 +71,18 @@ export const createAudio = () => {
     });
   };
 
+  /** Drop voices that have finished, then make room: the same note, or else the oldest, gives way. */
+  const makeRoom = (note: number, t: number, now: number, max: number) => {
+    for (let i = voices.length - 1; i >= 0; i--)
+      if (voices[i].end <= now) voices.splice(i, 1);
+    const same = voices.findIndex((v) => v.note === note);
+    if (same >= 0) silence(voices.splice(same, 1)[0], t);
+    while (voices.length >= max) {
+      const oldest = voices.shift();
+      if (oldest) silence(oldest, t);
+    }
+  };
+
   /**
    * One Chime for `note` at `freq` Hz. `s` (0..1) is how hard it's struck:
    * louder and brighter. Returns false if sound is off.
@@ -89,15 +101,7 @@ export const createAudio = () => {
     if (t - lastStart < MIN_GAP) return false;
     lastStart = t;
 
-    // drop voices that have finished, then make room: the same note, or else the oldest, gives way
-    for (let i = voices.length - 1; i >= 0; i--)
-      if (voices[i].end <= ctx.currentTime) voices.splice(i, 1);
-    const same = voices.findIndex((v) => v.note === note);
-    if (same >= 0) silence(voices.splice(same, 1)[0], t);
-    while (voices.length >= c.voices) {
-      const oldest = voices.shift();
-      if (oldest) silence(oldest, t);
-    }
+    makeRoom(note, t, ctx.currentTime, c.voices);
 
     const material = MATERIALS[c.material];
     const ring = c.ring * material.ring;
@@ -186,5 +190,3 @@ export const createAudio = () => {
 
   return { enable, disable, chime, mix };
 };
-
-export type Audio = ReturnType<typeof createAudio>;

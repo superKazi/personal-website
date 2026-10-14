@@ -1,17 +1,26 @@
 import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import { config } from "./config.ts";
+import { createAudio } from "./audio.ts";
 import { playIntro } from "./intro.ts";
 import { buildPanels, loadFont, type Panel } from "./panels.ts";
 import { createRustle, step, type Pointer } from "./rustle.ts";
 import { createScene } from "./scene.ts";
+import { createSoundToggle } from "./toggle.ts";
 
 gsap.registerPlugin(Observer);
 
 const canvas = document.querySelector("canvas");
+const button = document.querySelector<HTMLButtonElement>("button.sound");
 
-if (canvas) {
+if (canvas && button) {
   const scene = createScene(canvas);
+  const audio = createAudio();
+  const toggle = createSoundToggle(button, config.color.palette, (on) =>
+    on ? void audio.enable() : audio.disable(),
+  );
+  const showToggle = () =>
+    void gsap.to(button, { autoAlpha: 1, duration: 0.6, ease: "power2.out" });
   // eslint-disable-next-line functional/no-let
   let panels: readonly Panel[] = [];
   // eslint-disable-next-line functional/no-let
@@ -33,11 +42,19 @@ if (canvas) {
     scene.build(panels, config);
     rustle = createRustle(panels);
   };
-  const update = () => scene.update(config);
+  const update = () => {
+    scene.update(config);
+    toggle.layout(scene.axes());
+  };
+  const resize = () => {
+    scene.resize(config);
+    toggle.layout(scene.axes());
+  };
   const replay = () => {
     intro?.kill();
     if (reduced) return;
     intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
+    void intro.then(showToggle);
   };
 
   const track = (self: Observer) => {
@@ -71,15 +88,19 @@ if (canvas) {
 
   void loadFont().then(() => {
     rebuild();
-    scene.resize(config);
-    addEventListener("resize", () => scene.resize(config));
+    resize();
+    addEventListener("resize", resize);
     gsap.ticker.add(tick);
     gsap.matchMedia().add("(prefers-reduced-motion: reduce)", () => {
       reduced = true;
       pointer = null;
       intro?.progress(1).kill();
+      // no Rustle means no Flicks, so the Sound toggle has nothing to switch
+      toggle.turnOff();
+      gsap.set(button, { autoAlpha: 0 });
       return () => {
         reduced = false;
+        showToggle();
       };
     });
     replay();

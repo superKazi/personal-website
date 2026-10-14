@@ -74,6 +74,8 @@ export const defaults = {
     /** pointer speeds (cap heights per second) mapped to soft/mellow through loud/bright */
     minSpeed: 0.2,
     maxSpeed: 10,
+    /** how much Rustle speed changes loudness: 0 = every Chime equal, 1 = soft to loud */
+    dynamics: 0.4,
     /** seconds the strike takes to reach full volume; longer is softer */
     strike: 0.004,
     /** how long notes ring, as a multiple of the material's natural ring */

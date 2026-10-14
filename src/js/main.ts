@@ -33,6 +33,8 @@ if (canvas && button) {
   // eslint-disable-next-line functional/no-let
   let lengths = { min: 0, max: 0 };
   // eslint-disable-next-line functional/no-let
+  let strike = 0;
+  // eslint-disable-next-line functional/no-let
   let reduced = false;
   // eslint-disable-next-line functional/no-let
   let swayPhase = 0;
@@ -92,13 +94,16 @@ if (canvas && button) {
           lengths.max,
           chime.notes,
         );
-        const s = Math.min(
+        const target = Math.min(
           1,
           Math.max(
             0,
             (c.speed - chime.minSpeed) / (chime.maxSpeed - chime.minSpeed),
           ),
         );
+        // uneven pointer events can spike one crossing's speed; follow it over a few Chimes instead
+        strike += (target - strike) * 0.25;
+        const s = strike;
         const freq = frequency(note, chime.root, chime.scale);
         // spread a frame's Chimes across the frame so a fast swipe plays a run, not a chord
         if (audio.chime(note, freq, s, config, (i / crossed.length) * dt))

@@ -106,7 +106,7 @@ export const createAudio = () => {
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0, t);
     gain.gain.linearRampToValueAtTime(
-      (c.volume / c.voices) * (0.3 + 0.7 * s),
+      (c.volume / c.voices) * (1 - c.dynamics + c.dynamics * s),
       t + c.strike,
     );
     gain.gain.setTargetAtTime(0, t + c.strike, ring / 4);

@@ -62,6 +62,7 @@ export const createGui = (
   chime.add(config.chime, "volume", 0, 3, 0.01);
   chime.add(config.chime, "minSpeed", 0, 5, 0.05);
   chime.add(config.chime, "maxSpeed", 1, 40, 0.5);
+  chime.add(config.chime, "dynamics", 0, 1, 0.01);
   chime.add(config.chime, "strike", 0.001, 0.05, 0.001);
   chime.add(config.chime, "ring", 0.1, 3, 0.05);
   chime.add(config.chime, "brightness", 0, 1.5, 0.01);

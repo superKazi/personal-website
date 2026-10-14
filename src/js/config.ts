@@ -51,13 +51,13 @@ export const defaults = {
   },
   sway: {
     /** tilt in radians */
-    amplitude: 0.02,
+    amplitude: 0.06,
     /** cycles per second */
     speed: 0.15,
     /** phase shift along the word, per cap height */
-    wave: 1.2,
+    wave: 1.5,
     /** used when the visitor prefers reduced motion */
-    reducedAmplitude: 0.012,
+    reducedAmplitude: 0.03,
     reducedSpeed: 0.07,
   },
   color: {

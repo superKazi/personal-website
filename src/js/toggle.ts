@@ -25,6 +25,9 @@ export const createSoundToggle = (
     svg.append(p);
     return p;
   });
+  const fills = bars.map((_, i) =>
+    gsap.utils.interpolate(OFF, palette[i % palette.length]),
+  );
   // 0 = off, 1 = on; tweened so color and ripple ease between states
   const state = { on: 0, phase: 0 };
   // per-bar kick from Chimes, decaying every frame
@@ -74,10 +77,7 @@ export const createSoundToggle = (
           )
           .join(" "),
       );
-      bar.setAttribute(
-        "fill",
-        gsap.utils.interpolate(OFF, palette[i % palette.length], state.on),
-      );
+      bar.setAttribute("fill", fills[i](state.on));
     });
   };
 
@@ -106,6 +106,7 @@ export const createSoundToggle = (
       on: on ? 1 : 0,
       duration: 0.5,
       ease: "power2.inOut",
+      overwrite: true,
       onUpdate: draw,
     });
     onChange(on);

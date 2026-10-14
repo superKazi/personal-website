@@ -8,6 +8,7 @@ import { buildPanels, loadFont, type Panel } from "./panels.ts";
 import { createRustle, step, type Pointer } from "./rustle.ts";
 import { createScene } from "./scene.ts";
 import { createSoundToggle } from "./toggle.ts";
+import { createVelocity } from "./velocity.ts";
 
 gsap.registerPlugin(Observer);
 
@@ -28,12 +29,12 @@ if (canvas && button) {
   let rustle = createRustle([]);
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
+  // where the pointer is on screen, null when it's away, and its velocity from event timestamps
   // eslint-disable-next-line functional/no-let
-  let pointer: Pointer | null = null;
+  let client: Readonly<{ x: number; y: number }> | null = null;
+  const velocity = createVelocity();
   // eslint-disable-next-line functional/no-let
   let lengths = { min: 0, max: 0 };
-  // eslint-disable-next-line functional/no-let
-  let strike = 0;
   // eslint-disable-next-line functional/no-let
   let reduced = false;
   // eslint-disable-next-line functional/no-let
@@ -67,10 +68,27 @@ if (canvas && button) {
   };
 
   const track = (self: Observer) => {
-    pointer = reduced ? null : scene.toWord(self.x ?? 0, self.y ?? 0);
+    client = reduced ? null : { x: self.x ?? 0, y: self.y ?? 0 };
+    if (client)
+      velocity.add(
+        self.event?.timeStamp ?? performance.now(),
+        client.x,
+        client.y,
+      );
   };
   const leave = () => {
-    pointer = null;
+    client = null;
+    velocity.clear();
+  };
+  /** The pointer ray in word space, with its velocity projected onto the word. */
+  const pointerNow = (): Pointer | null => {
+    if (!client) return null;
+    const ray = scene.toWord(client.x, client.y);
+    if (!ray) return null;
+    const v = velocity.at(performance.now());
+    const h = 0.01;
+    const ahead = scene.toWord(client.x + v.x * h, client.y + v.y * h);
+    return { ...ray, vx: ahead ? (ahead.x - ray.x) / h : 0 };
   };
 
   const tick = (_time: number, deltaMs: number) => {
@@ -83,7 +101,7 @@ if (canvas && button) {
     scene.setSway(swayAmp, swayPhase);
 
     const wasMoving = rustle.moving;
-    const crossed = step(rustle, pointer, dt, config);
+    const crossed = step(rustle, pointerNow(), dt, config);
     if (toggle.isOn() && crossed.length) {
       const { chime } = config;
       // every Panel is a chime: each one crossed plays its own note, set by its length
@@ -94,16 +112,13 @@ if (canvas && button) {
           lengths.max,
           chime.notes,
         );
-        const target = Math.min(
+        const s = Math.min(
           1,
           Math.max(
             0,
             (c.speed - chime.minSpeed) / (chime.maxSpeed - chime.minSpeed),
           ),
         );
-        // uneven pointer events can spike one crossing's speed; follow it over a few Chimes instead
-        strike += (target - strike) * 0.25;
-        const s = strike;
         const freq = frequency(note, chime.root, chime.scale);
         // spread a frame's Chimes across the frame so a fast swipe plays a run, not a chord
         if (audio.chime(note, freq, s, config, (i / crossed.length) * dt))
@@ -128,7 +143,7 @@ if (canvas && button) {
     gsap.ticker.add(tick);
     gsap.matchMedia().add("(prefers-reduced-motion: reduce)", () => {
       reduced = true;
-      pointer = null;
+      client = null;
       intro?.progress(1).kill();
       // no Rustle means no Chimes, so the Sound toggle has nothing to switch
       toggle.turnOff();

@@ -10,6 +10,8 @@ export interface Pointer {
   readonly z: number;
   readonly slopeY: number;
   readonly slopeZ: number;
+  /** velocity along the word, cap heights per second, from the pointer's own event timestamps */
+  readonly vx: number;
 }
 
 interface PanelLike {
@@ -97,11 +99,10 @@ export const step = (
   const n = r.xs.length;
   const crossings: Crossing[] = [];
 
-  // pointer velocity along the word, lightly smoothed against uneven events
+  // velocity comes with the pointer, measured from event timestamps rather than frame gaps,
+  // so uneven or batched events (and long pauses) can't fake a fast swipe
   const prev = r.prev;
-  // real dt, not the capped one, so a long pause (backgrounded tab) can't fake a fast swipe
-  const raw = pointer && prev && dt > 0 ? (pointer.x - prev.x) / dt : 0;
-  r.speed = pointer && prev ? r.speed * 0.4 + raw * 0.6 : 0;
+  r.speed = pointer?.vx ?? 0;
   r.prev = pointer;
 
   if (pointer && prev) {

@@ -18,8 +18,10 @@ const run = (frameMs: number) => {
   const dt = frameMs / 1000;
   // a fast swipe across the whole word, then let go
   const swipe = Math.max(1, Math.round(0.4 / dt));
+  // the pointer's own velocity, as GSAP Observer reports it from event timestamps
+  const vx = 4 / (swipe * dt);
   for (let i = 0; i <= swipe; i++)
-    step(rustle, { ...ray, x: (i / swipe) * 4 }, dt, defaults);
+    step(rustle, { ...ray, x: (i / swipe) * 4, vx }, dt, defaults);
   const peak = Math.max(...rustle.angle.map(Math.abs));
   // six simulated seconds; steps are capped at 50 ms, so count frames, not wall time
   const settle = Math.ceil(6 / Math.min(dt, 0.05));
@@ -50,8 +52,8 @@ void test("Panels at rest stay at rest without a push", () => {
 
 void test("crossing a column reports it once", () => {
   const rustle = createRustle(panels);
-  step(rustle, { ...ray, x: 0.01 }, 0.016, defaults);
-  const crossed = step(rustle, { ...ray, x: 0.05 }, 0.016, defaults);
+  step(rustle, { ...ray, x: 0.01, vx: 2.5 }, 0.016, defaults);
+  const crossed = step(rustle, { ...ray, x: 0.05, vx: 2.5 }, 0.016, defaults);
   assert.deepEqual(
     crossed.map((c) => c.column),
     [1],

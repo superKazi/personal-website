@@ -46,9 +46,6 @@ export const createAudio = () => {
   const enable = async () => {
     ctx ??= new AudioContext();
     await ctx.resume();
-    // confirmation: two soft paper ticks, low then high
-    burst(1800, 1.2, 0.12, 0.09);
-    burst(3200, 1.4, 0.1, 0.08, 0.07);
   };
 
   const disable = () => void ctx?.suspend();

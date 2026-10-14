@@ -120,6 +120,8 @@
       }
 
       .sound svg {
+        /* clicks always land on the button, never on the animating bars */
+        pointer-events: none;
         display: block;
         inline-size: 100%;
         block-size: 100%;

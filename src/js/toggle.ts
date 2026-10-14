@@ -59,15 +59,11 @@ export const createSoundToggle = (
     const offX = (SIZE - (Math.max(...xs) - minX) * scale) / 2;
     const offY = (SIZE - (Math.max(...ys) - minY) * scale) / 2;
 
-    // draw the bar nearest the viewer last
-    const order =
-      x[2] >= 0 ? bars.map((_, i) => i) : bars.map((_, i) => BARS - 1 - i);
-    order.forEach((i) => {
+    bars.forEach((bar, i) => {
       const wave = 0.5 + 0.5 * Math.sin(state.phase + i * 0.9);
       const level =
         0.35 + 0.65 * (state.on * (0.25 + 0.6 * wave) + state.bump * wave);
       const h = 6 * Math.min(1, level);
-      const bar = bars[i];
       bar.setAttribute(
         "points",
         corners(i, h)
@@ -81,7 +77,6 @@ export const createSoundToggle = (
         "fill",
         gsap.utils.interpolate(OFF, palette[i % palette.length], state.on),
       );
-      svg.append(bar);
     });
   };
 
@@ -110,6 +105,10 @@ export const createSoundToggle = (
     /** Re-slant the bars to match the piece's current view. */
     layout: (next: readonly Axis[]) => {
       axes = next;
+      // draw the bar nearest the viewer last; only here, since moving nodes mid-click drops the click
+      (axes[0][2] >= 0 ? bars : [...bars].reverse()).forEach((bar) =>
+        svg.append(bar),
+      );
       draw();
     },
     /** Kick the bars, e.g. when a Flick plays. */

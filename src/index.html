@@ -103,6 +103,15 @@
         overscroll-behavior: none;
       }
 
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
       .sound {
         position: fixed;
         inset-block-end: max(1rem, env(safe-area-inset-bottom));
@@ -186,7 +195,8 @@
       role="img"
       aria-label="The word KAZI built from stacks of colored paper panels"
     ></canvas>
-    <button class="sound" type="button" aria-label="Sound" aria-pressed="false">
+    <button class="sound" type="button">
+      <span class="visually-hidden">Turn on audio experience</span>
       <svg viewBox="0 0 24 24" aria-hidden="true"></svg>
     </button>
     <script type="module" src="./js/main.ts"></script>

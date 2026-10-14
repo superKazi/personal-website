@@ -91,7 +91,9 @@ export const createSoundToggle = (
 
   button.addEventListener("click", () => {
     on = !on;
-    button.setAttribute("aria-pressed", String(on));
+    // the label states the action, so there's no aria-pressed to announce the state twice
+    const label = button.querySelector(".visually-hidden");
+    if (label) label.textContent = `Turn ${on ? "off" : "on"} audio experience`;
     gsap.to(state, {
       on: on ? 1 : 0,
       duration: 0.5,

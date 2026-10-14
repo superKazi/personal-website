@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mdn": {
+      "type": "http",
+      "url": "https://mcp.mdn.mozilla.net/"
+    },
+    "fallow": {
+      "command": "npx",
+      "args": ["--yes", "--package", "fallow", "fallow-mcp"]
+    }
+  }
+}

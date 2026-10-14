@@ -41,6 +41,8 @@ if (canvas && button) {
   let swayPhase = 0;
   // eslint-disable-next-line functional/no-let
   let swayAmp = 0;
+  // eslint-disable-next-line functional/no-let
+  let grainClock = 0;
 
   const rebuild = () => {
     intro?.progress(1).kill();
@@ -94,6 +96,9 @@ if (canvas && button) {
     swayAmp += (amp - swayAmp) * Math.min(1, dt * 2);
     swayPhase += dt * (reduced ? sway.reducedSpeed : sway.speed) * Math.PI * 2;
     scene.setSway(swayAmp, swayPhase);
+    // Grain re-rolls in steps, like a hand-made print, and holds still under reduced motion
+    if (!reduced) grainClock += dt;
+    scene.setGrain(Math.floor(grainClock * config.grain.fps));
 
     const wasMoving = rustle.moving;
     const crossed = step(rustle, pointerNow(), dt, config);

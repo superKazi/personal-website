@@ -7,6 +7,7 @@ import {
   Program,
   Renderer,
   Transform,
+  Triangle,
   Vec3,
 } from "ogl";
 import type { Config } from "./config.ts";
@@ -57,6 +58,25 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 }`;
 
+// Grain: screen-space ink speckle that re-rolls whenever uGrainSeed steps
+const grain = /* glsl */ `
+uniform float uGrainSize;
+uniform float uGrainSeed;
+float hash(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+float valueNoise(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x),
+    mix(hash(i + vec2(0, 1)), hash(i + 1.0), f.x), f.y);
+}
+vec2 grainCell() {
+  return floor(gl_FragCoord.xy / uGrainSize) + fract(uGrainSeed * 0.618034) * 997.0;
+}`;
+
 const fragment = /* glsl */ `#version 300 es
 precision highp float;
 in vec2 vUv;
@@ -66,7 +86,11 @@ uniform float uFade;
 uniform float uBackShade;
 uniform float uEdgeWidth;
 uniform vec3 uEdge;
+uniform vec3 uBackground;
+uniform float uGrainAmount;
+uniform float uGrainBlotch;
 out vec4 fragColor;
+${grain}
 void main() {
   // dithered fade keeps depth testing correct without sorting Panels
   float alpha = mix(1.0, clamp(vRise, 0.0, 1.0), uFade);
@@ -78,7 +102,30 @@ void main() {
   float edge = uEdgeWidth > 0.0
     ? 1.0 - smoothstep(uEdgeWidth - 0.5, uEdgeWidth + 0.5, min(px.x, px.y))
     : 0.0;
-  fragColor = vec4(mix(color, uEdge, edge), 1.0);
+  color = mix(color, uEdge, edge);
+  // ink that didn't take: fine dropouts plus broad patches of thinner ink, showing the ground through
+  vec2 cell = grainCell();
+  float drop = uGrainAmount * pow(hash(cell), 3.0)
+    + uGrainBlotch * smoothstep(0.4, 1.0, valueNoise(cell / 48.0));
+  fragColor = vec4(mix(color, uBackground, clamp(drop, 0.0, 1.0)), 1.0);
+}`;
+
+// full-screen triangle behind the Panels: the ground, with faint light flecks like dark stock
+const groundVertex = /* glsl */ `#version 300 es
+in vec2 position;
+void main() {
+  gl_Position = vec4(position, 0.0, 1.0);
+}`;
+
+const groundFragment = /* glsl */ `#version 300 es
+precision highp float;
+uniform vec3 uBackground;
+uniform float uGrainGround;
+out vec4 fragColor;
+${grain}
+void main() {
+  float fleck = uGrainGround * pow(hash(grainCell()), 12.0);
+  fragColor = vec4(mix(uBackground, vec3(1.0), fleck), 1.0);
 }`;
 
 const rad = (deg: number) => (deg * Math.PI) / 180;
@@ -114,6 +161,12 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     uBackShade: { value: 1 },
     uEdgeWidth: { value: 1 },
     uEdge: { value: new Color() },
+    uBackground: { value: new Color() },
+    uGrainSize: { value: 1 },
+    uGrainSeed: { value: 0 },
+    uGrainAmount: { value: 0 },
+    uGrainBlotch: { value: 0 },
+    uGrainGround: { value: 0 },
   };
   const program = new Program(gl, {
     vertex,
@@ -121,6 +174,19 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     cullFace: false,
     uniforms,
   });
+  const ground = new Mesh(gl, {
+    geometry: new Triangle(gl),
+    program: new Program(gl, {
+      vertex: groundVertex,
+      fragment: groundFragment,
+      uniforms,
+      depthTest: false,
+      depthWrite: false,
+    }),
+    frustumCulled: false,
+    renderOrder: -1,
+  });
+  ground.setParent(roll);
 
   // eslint-disable-next-line functional/no-let
   let mesh: Mesh | undefined;
@@ -212,8 +278,11 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     uniforms.uBackShade.value = cfg.color.backShade;
     uniforms.uEdgeWidth.value = cfg.color.edgeWidth * renderer.dpr;
     uniforms.uEdge.value.set(cfg.color.edge);
-    const bg = new Color(cfg.color.background);
-    gl.clearColor(bg.r, bg.g, bg.b, 1);
+    uniforms.uBackground.value.set(cfg.color.background);
+    uniforms.uGrainSize.value = cfg.grain.size * renderer.dpr;
+    uniforms.uGrainAmount.value = cfg.grain.amount;
+    uniforms.uGrainBlotch.value = cfg.grain.blotch;
+    uniforms.uGrainGround.value = cfg.grain.ground;
     fit(cfg);
   };
 
@@ -236,6 +305,10 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   const setSway = (amplitude: number, phase: number) => {
     uniforms.uSwayAmp.value = amplitude;
     uniforms.uSwayPhase.value = phase;
+  };
+  /** Grain re-roll step; a new value re-rolls every speckle. */
+  const setGrain = (seed: number) => {
+    uniforms.uGrainSeed.value = seed;
   };
   /** Per-Panel Rustle as [tilt, bend position]; write into it, then call `commitBend`. */
   const getBend = () => bend;
@@ -284,6 +357,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     getBend,
     commitBend,
     setSway,
+    setGrain,
     toWord,
     axes,
   };

@@ -31,3 +31,7 @@ _Avoid_: Flick, click, tick, note
 **Sound toggle**:
 The corner button, drawn as a tiny Stack, that turns Chimes on or off.
 _Avoid_: Mute button, speaker icon
+
+**Grain**:
+The subtle ink speckle over the whole piece that makes it read as a risograph print; it re-rolls in small steps, like a hand-made print, and holds still for visitors who prefer reduced motion.
+_Avoid_: Noise, texture, riso filter

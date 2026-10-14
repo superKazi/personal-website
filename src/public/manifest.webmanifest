@@ -19,6 +19,6 @@
   "display": "standalone",
   "start_url": "/",
   "description": "Design engineer, Brooklyn guy.",
-  "theme_color": "#0d0d0d",
-  "background_color": "#ffffff"
+  "theme_color": "#100F0F",
+  "background_color": "#100F0F"
 }

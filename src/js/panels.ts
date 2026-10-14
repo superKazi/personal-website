@@ -9,7 +9,6 @@ export interface Panel {
   readonly x: number;
   readonly y0: number;
   readonly y1: number;
-  readonly stack: number;
   readonly color: string;
 }
 
@@ -76,13 +75,13 @@ export const buildPanels = ({ panels, color }: Readonly<Config>): Panel[] => {
   ctx.textBaseline = "alphabetic";
 
   const step = cap / panels.density;
-  const columns: { x: number; stack: number }[] = [];
-  letters.reduce((left, { ch, m }, stack) => {
-    const ink = inkWidths[stack];
+  const columns: number[] = [];
+  letters.reduce((left, { ch, m }, i) => {
+    const ink = inkWidths[i];
     ctx.fillText(ch, left + m.actualBoundingBoxLeft, pad + cap);
     const n = Math.max(1, Math.round(ink / step));
     const first = left + (ink - (n - 1) * step) / 2;
-    for (let i = 0; i < n; i++) columns.push({ x: first + i * step, stack });
+    for (let j = 0; j < n; j++) columns.push(first + j * step);
     return left + ink + gap;
   }, pad);
 
@@ -99,7 +98,7 @@ export const buildPanels = ({ panels, color }: Readonly<Config>): Panel[] => {
   // eslint-disable-next-line functional/no-let
   let current = "",
     left = 0;
-  return columns.flatMap(({ x, stack }) => {
+  return columns.flatMap((x) => {
     if (left-- <= 0) {
       current = pick(current);
       left = color.runMin + Math.floor(random() * span) - 1;
@@ -109,7 +108,6 @@ export const buildPanels = ({ panels, color }: Readonly<Config>): Panel[] => {
       x: (x - pad) / cap,
       y0: (pad + cap - bottom) / cap,
       y1: (pad + cap - top) / cap,
-      stack,
       color: current,
     }));
   });

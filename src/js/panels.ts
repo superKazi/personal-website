@@ -1,6 +1,6 @@
 import type { Config } from "./config.ts";
 
-export const WORD = "KAZI";
+const WORD = "KAZI";
 const FONT_PX = 256;
 const FONT = `800 ${FONT_PX}px Degular`;
 

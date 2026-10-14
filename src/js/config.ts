@@ -82,8 +82,8 @@ export const defaults = {
     ring: 0.7,
     /** level of the overtones, 0 = pure tone */
     brightness: 0.8,
-    /** level of the strike's wooden knock, 0 = none */
-    knock: 0.5,
+    /** level of the strike's wooden knock, 0 = none; played densely it reads as crackle */
+    knock: 0,
     /** random detune per partial, cents */
     detune: 6,
     /** reverb send level */

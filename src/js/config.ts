@@ -60,6 +60,26 @@ export const defaults = {
     reducedAmplitude: 0.03,
     reducedSpeed: 0.07,
   },
+  flick: {
+    volume: 0.22,
+    /** pointer speeds (cap heights per second) mapped to quiet/dark through loud/bright */
+    minSpeed: 0.3,
+    maxSpeed: 12,
+    /** swish band, Hz: dark at slow speeds, bright at fast */
+    lowFrequency: 1400,
+    highFrequency: 4200,
+    /** swish band narrowness */
+    q: 1.2,
+    /** loudness of the crisp tick, relative to the swish */
+    tick: 0.5,
+    /** seconds */
+    attack: 0.003,
+    decay: 0.07,
+    /** random spread of pitch and length, 0..1 */
+    variation: 0.3,
+    /** most Flicks sounding at once */
+    voices: 8,
+  },
   color: {
     seed: 475,
     runMin: 2,

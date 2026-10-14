@@ -52,6 +52,19 @@ export const createGui = (
   sway.add(config.sway, "reducedAmplitude", 0, 0.2, 0.001);
   sway.add(config.sway, "reducedSpeed", 0, 1, 0.01);
 
+  const flick = gui.addFolder("Flick");
+  flick.add(config.flick, "volume", 0, 1, 0.01);
+  flick.add(config.flick, "minSpeed", 0, 5, 0.05);
+  flick.add(config.flick, "maxSpeed", 1, 40, 0.5);
+  flick.add(config.flick, "lowFrequency", 200, 8000, 10);
+  flick.add(config.flick, "highFrequency", 200, 12000, 10);
+  flick.add(config.flick, "q", 0.1, 10, 0.1);
+  flick.add(config.flick, "tick", 0, 2, 0.01);
+  flick.add(config.flick, "attack", 0.001, 0.05, 0.001);
+  flick.add(config.flick, "decay", 0.01, 0.5, 0.005);
+  flick.add(config.flick, "variation", 0, 1, 0.01);
+  flick.add(config.flick, "voices", 1, 32, 1);
+
   const color = gui.addFolder("Color");
   color.add(config.color, "seed", 0, 1000, 1).onChange(rebuild);
   color.add(config.color, "runMin", 1, 10, 1).onChange(rebuild);

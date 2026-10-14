@@ -74,7 +74,19 @@ if (canvas && button) {
     scene.setSway(swayAmp, swayPhase);
 
     const wasMoving = rustle.moving;
-    step(rustle, pointer, dt, config);
+    const crossed = step(rustle, pointer, dt, config);
+    if (toggle.isOn() && crossed.length) {
+      // spread a frame's Flicks across the frame so fast swipes don't stack into one click
+      const peak = crossed.reduce(
+        (max, c, i) =>
+          Math.max(
+            max,
+            audio.flick(c.speed, config, (i / crossed.length) * dt),
+          ),
+        0,
+      );
+      if (peak > 0) toggle.bump(peak);
+    }
     if (rustle.moving || wasMoving) {
       const bend = scene.getBend();
       rustle.column.forEach((c, i) => {

@@ -64,13 +64,13 @@ export const defaults = {
   },
   chime: {
     material: "bamboo" as Material,
-    scale: "yo" as Scale,
+    scale: "hirajoshi" as Scale,
     /** frequency of the lowest note, Hz (D4) */
     root: 293.66,
-    /** how many stretches the word is divided into, left to right */
-    notes: 12,
-    /** overall level; each voice gets volume / voices, and a limiter catches rare pile-ups */
-    volume: 1.6,
+    /** how many scale steps Panel lengths span: longest Panel rings the root */
+    notes: 10,
+    /** overall level; each voice gets volume / voices, and a soft clipper rounds off rare pile-ups */
+    volume: 1.2,
     /** pointer speeds (cap heights per second) mapped to soft/mellow through loud/bright */
     minSpeed: 0.2,
     maxSpeed: 10,
@@ -86,8 +86,8 @@ export const defaults = {
     detune: 6,
     /** reverb send level */
     reverb: 0.25,
-    /** most notes ringing at once; each gets an equal share of the volume */
-    voices: 8,
+    /** most notes ringing at once; past this the oldest gives way */
+    voices: 10,
   },
   color: {
     seed: 475,

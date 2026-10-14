@@ -2,7 +2,7 @@ import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import { config } from "./config.ts";
 import { createAudio } from "./audio.ts";
-import { frequency, noteAt } from "./chime.ts";
+import { frequency, noteForLength } from "./chime.ts";
 import { playIntro } from "./intro.ts";
 import { buildPanels, loadFont, type Panel } from "./panels.ts";
 import { createRustle, step, type Pointer } from "./rustle.ts";
@@ -31,7 +31,7 @@ if (canvas && button) {
   // eslint-disable-next-line functional/no-let
   let pointer: Pointer | null = null;
   // eslint-disable-next-line functional/no-let
-  let lastNote = -1;
+  let lengths = { min: 0, max: 0 };
   // eslint-disable-next-line functional/no-let
   let reduced = false;
   // eslint-disable-next-line functional/no-let
@@ -44,6 +44,10 @@ if (canvas && button) {
     panels = buildPanels(config);
     scene.build(panels, config);
     rustle = createRustle(panels);
+    lengths = {
+      min: Math.min(...rustle.length),
+      max: Math.max(...rustle.length),
+    };
   };
   const update = () => {
     scene.update(config);
@@ -78,16 +82,16 @@ if (canvas && button) {
 
     const wasMoving = rustle.moving;
     const crossed = step(rustle, pointer, dt, config);
-    if (!pointer) lastNote = -1;
     if (toggle.isOn() && crossed.length) {
       const { chime } = config;
-      const min = rustle.xs[0] ?? 0;
-      const span = (rustle.xs.at(-1) ?? 0) - min || 1;
+      // every Panel is a chime: each one crossed plays its own note, set by its length
       crossed.forEach((c, i) => {
-        const note = noteAt(rustle.xs[c.column], min, span, chime.notes);
-        // one Chime per stretch: crossing more columns of the same stretch adds nothing
-        if (note === lastNote) return;
-        lastNote = note;
+        const note = noteForLength(
+          rustle.length[c.column],
+          lengths.min,
+          lengths.max,
+          chime.notes,
+        );
         const s = Math.min(
           1,
           Math.max(

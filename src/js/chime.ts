@@ -37,6 +37,13 @@ export const frequency = (n: number, root: number, scale: Scale) => {
   return root * 2 ** (semitone / 12);
 };
 
-/** Which of `notes` stretches of the word position `x` falls in, left to right. */
-export const noteAt = (x: number, min: number, span: number, notes: number) =>
-  Math.min(notes - 1, Math.max(0, Math.floor(((x - min) / span) * notes)));
+/**
+ * A Panel's note from its length, like a real chime: the longest rings the root,
+ * the shortest `notes - 1` steps up the scale.
+ */
+export const noteForLength = (
+  length: number,
+  min: number,
+  max: number,
+  notes: number,
+) => (max > min ? Math.round(((max - length) / (max - min)) * (notes - 1)) : 0);

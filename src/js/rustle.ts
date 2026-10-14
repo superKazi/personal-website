@@ -31,15 +31,19 @@ export const createRustle = (panels: readonly PanelLike[]) => {
   const index = new Map(xs.map((x, i) => [x, i]));
   const top = new Float32Array(xs.length);
   const bottom = new Float32Array(xs.length).fill(Infinity);
+  // how much paper a column holds, summed across its pieces; sets its Chime's pitch
+  const length = new Float32Array(xs.length);
   panels.forEach((p) => {
     const i = index.get(p.x) ?? 0;
     top[i] = Math.max(top[i], p.y1);
     bottom[i] = Math.min(bottom[i], p.y0);
+    length[i] += p.y1 - p.y0;
   });
   return {
     xs,
     top,
     bottom,
+    length,
     /** column of each Panel */
     column: panels.map((p) => index.get(p.x) ?? 0),
     /** tilt toward +x, radians */

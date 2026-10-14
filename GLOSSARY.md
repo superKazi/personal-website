@@ -25,7 +25,7 @@ The gentle ambient motion of Panels when no pointer drives them.
 _Avoid_: Wind, idle animation
 
 **Chime**:
-The note a stretch of the word plays when Rustled past; stretches rise through a scale from left to right.
+The note a Panel plays when Rustled past; its pitch comes from the Panel's length, like a real chime.
 _Avoid_: Flick, click, tick, note
 
 **Sound toggle**:

@@ -1,0 +1,61 @@
+import GUI from "lil-gui";
+import type { Config } from "./config.ts";
+
+/** Dev-only tuning panel. `rebuild` re-slices Panels, `update` only re-renders. */
+export const createGui = (
+  // lil-gui edits config in place
+  // eslint-disable-next-line functional/prefer-immutable-types
+  config: Config,
+  rebuild: () => void,
+  update: () => void,
+) => {
+  const gui = new GUI({ title: "KAZI" });
+
+  const view = gui.addFolder("View");
+  view.add(config.view, "yaw", -90, 90, 1);
+  view.add(config.view, "pitch", -90, 90, 1);
+  view.add(config.view, "roll", -90, 90, 1);
+  view.add(config.view, "padding", 0, 0.4, 0.01);
+  view.onChange(update);
+
+  const panels = gui.addFolder("Panels");
+  panels.add(config.panels, "density", 2, 40, 1).onFinishChange(rebuild);
+  panels.add(config.panels, "tracking", 0, 0.6, 0.01).onFinishChange(rebuild);
+  panels.add(config.panels, "depth", 0.05, 3, 0.01).onChange(rebuild);
+
+  const color = gui.addFolder("Color");
+  color.add(config.color, "seed", 0, 1000, 1).onChange(rebuild);
+  color.add(config.color, "runMin", 1, 10, 1).onChange(rebuild);
+  color.add(config.color, "runMax", 1, 10, 1).onChange(rebuild);
+  color.add(config.color, "accentChance", 0, 1, 0.01).onChange(rebuild);
+  color.add(config.color, "backShade", 0, 1, 0.01).onChange(update);
+  color.add(config.color, "edgeWidth", 0, 4, 0.25).onChange(update);
+  color.addColor(config.color, "edge").onChange(update);
+  color.addColor(config.color, "background").onChange(update);
+  color.addColor(config.color, "accent").onChange(rebuild);
+  const palette = color.addFolder("Palette").close();
+  config.color.palette.forEach((_, i) =>
+    palette.addColor(config.color.palette, i).onChange(rebuild),
+  );
+
+  gui.add({ export: () => void exportJson(config) }, "export");
+};
+
+const exportJson = async (config: Readonly<Config>) => {
+  const json = JSON.stringify(config, null, 2);
+  try {
+    await navigator.clipboard.writeText(json);
+    console.log("config copied to clipboard");
+  } catch {
+    // clipboard needs a secure context, which the phone-over-LAN dev URL isn't
+    const box = document.createElement("textarea");
+    box.value = json;
+    box.readOnly = true;
+    box.style.cssText =
+      "position:fixed;inset:1rem;z-index:10;font:12px monospace;background:#fff;color:#000";
+    box.addEventListener("blur", () => box.remove());
+    document.body.append(box);
+    box.focus();
+    box.select();
+  }
+};

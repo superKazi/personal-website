@@ -10,4 +10,6 @@ Netlify builds this code to make my website.
 - [Goatcounter](https://www.goatcounter.com) by Martin Tournoij to track you if/when you visit
 - [Vite.js](https://vitejs.dev) for my build tooling
 - [GSAP](https://gsap.com) for animations
-- [Radix](https://www.radix-ui.com/colors) ui colors
+- [Flexoki](https://stephango.com/flexoki) colors by Steph Ango
+- [OGL](https://github.com/oframe/ogl) for WebGL
+- Inspiration: Takenobu Igarashi’s cover for _Design News_ No. 113 (1980)

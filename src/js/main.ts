@@ -20,6 +20,12 @@ if (canvas) {
   let intro: gsap.core.Tween | undefined;
   // eslint-disable-next-line functional/no-let
   let pointer: Pointer | null = null;
+  // eslint-disable-next-line functional/no-let
+  let reduced = false;
+  // eslint-disable-next-line functional/no-let
+  let swayPhase = 0;
+  // eslint-disable-next-line functional/no-let
+  let swayAmp = 0;
 
   const rebuild = () => {
     intro?.progress(1).kill();
@@ -30,19 +36,28 @@ if (canvas) {
   const update = () => scene.update(config);
   const replay = () => {
     intro?.kill();
+    if (reduced) return;
     intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
   };
 
   const track = (self: Observer) => {
-    pointer = scene.toWord(self.x ?? 0, self.y ?? 0);
+    pointer = reduced ? null : scene.toWord(self.x ?? 0, self.y ?? 0);
   };
   const leave = () => {
     pointer = null;
   };
 
   const tick = (_time: number, deltaMs: number) => {
+    const dt = deltaMs / 1000;
+    const { sway } = config;
+    // ease between normal and reduced Sway so switching modes never jumps
+    const amp = reduced ? sway.reducedAmplitude : sway.amplitude;
+    swayAmp += (amp - swayAmp) * Math.min(1, dt * 2);
+    swayPhase += dt * (reduced ? sway.reducedSpeed : sway.speed) * Math.PI * 2;
+    scene.setSway(swayAmp, swayPhase);
+
     const wasMoving = rustle.moving;
-    step(rustle, pointer, deltaMs / 1000, config);
+    step(rustle, pointer, dt, config);
     if (rustle.moving || wasMoving) {
       const bend = scene.getBend();
       rustle.column.forEach((c, i) => {
@@ -59,6 +74,14 @@ if (canvas) {
     scene.resize(config);
     addEventListener("resize", () => scene.resize(config));
     gsap.ticker.add(tick);
+    gsap.matchMedia().add("(prefers-reduced-motion: reduce)", () => {
+      reduced = true;
+      pointer = null;
+      intro?.progress(1).kill();
+      return () => {
+        reduced = false;
+      };
+    });
     replay();
 
     Observer.create({

@@ -44,6 +44,13 @@ export const createGui = (
   rustle.add(config.rustle, "bendSharpness", 0, 1, 0.01).onChange(update);
   rustle.add(config.rustle, "bendWidth", 0.02, 1, 0.01).onChange(update);
 
+  const sway = gui.addFolder("Sway");
+  sway.add(config.sway, "amplitude", 0, 0.2, 0.001);
+  sway.add(config.sway, "speed", 0, 1, 0.01);
+  sway.add(config.sway, "wave", 0, 6, 0.05).onChange(update);
+  sway.add(config.sway, "reducedAmplitude", 0, 0.2, 0.001);
+  sway.add(config.sway, "reducedSpeed", 0, 1, 0.01);
+
   const color = gui.addFolder("Color");
   color.add(config.color, "seed", 0, 1000, 1).onChange(rebuild);
   color.add(config.color, "runMin", 1, 10, 1).onChange(rebuild);

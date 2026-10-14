@@ -17,7 +17,7 @@ in vec2 uv;
 in vec4 aPanel; // x, y0, y1, stack
 in vec3 aColor;
 in float aRise; // intro progress, 0 = hidden below, 1 = at rest
-in vec3 aBend; // Rustle: column tilt (radians), bend height (0..1), column top
+in vec2 aBend; // Rustle: tilt (radians), bend position along the depth (0 = Spine, 1 = free edge)
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform float uDepth;
@@ -27,7 +27,7 @@ uniform float uBendWidth;
 out vec2 vUv;
 out vec3 vColor;
 out float vRise;
-// share of the full tilt reached at height u: even curve, or concentrated at the bend height
+// share of the full tilt reached at depth u: even curve, or concentrated at the bend height
 float profile(float u, float h) {
   return mix(u, smoothstep(h - uBendWidth, h + uBendWidth, u), uBendSharpness);
 }
@@ -37,16 +37,15 @@ void main() {
   vRise = aRise;
   // Panels stand in the y-z plane; uv.x runs along depth, uv.y up the height
   float y = mix(aPanel.y, aPanel.z, uv.y);
-  // walk up the column from its fixed base so the sheet keeps its length as it bends
-  float top = max(aBend.z, 1e-4);
-  float s = clamp(y / top, 0.0, 1.0);
+  // walk out from the Spine (z = 0) so the sheet keeps its length as it bends
+  float s = uv.x;
   vec2 q = vec2(0.0);
   for (int i = 0; i < 12; i++) {
     float phi = aBend.x * profile((float(i) + 0.5) / 12.0 * s, aBend.y);
     q += vec2(sin(phi), cos(phi));
   }
-  q *= top * s / 12.0;
-  vec3 p = vec3(aPanel.x + q.x, q.y, uv.x * uDepth);
+  q *= uDepth * s / 12.0;
+  vec3 p = vec3(aPanel.x + q.x, y, q.y);
   p.y -= (1.0 - aRise) * uRiseDistance;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 }`;
@@ -162,14 +161,14 @@ export const createScene = (canvas: HTMLCanvasElement) => {
       panels.flatMap((p) => [...new Color(p.color)]),
     );
     rise = new Float32Array(panels.length).fill(1);
-    bend = new Float32Array(panels.flatMap((p) => [0, 0.5, p.y1]));
+    bend = new Float32Array(panels.length * 2);
     const geometry = new Plane(gl, {
       heightSegments: 24,
       attributes: {
         aPanel: { instanced: 1, size: 4, data: panel },
         aColor: { instanced: 1, size: 3, data: color },
         aRise: { instanced: 1, size: 1, data: rise },
-        aBend: { instanced: 1, size: 3, data: bend },
+        aBend: { instanced: 1, size: 2, data: bend },
       },
     });
     mesh = new Mesh(gl, { geometry, program });
@@ -220,14 +219,14 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     if (mesh) mesh.geometry.attributes.aRise.needsUpdate = true;
   };
 
-  /** Per-Panel Rustle as [tilt, bend height, column top]; write into it, then call `commitBend`. */
+  /** Per-Panel Rustle as [tilt, bend position]; write into it, then call `commitBend`. */
   const getBend = () => bend;
   const commitBend = () => {
     if (mesh) mesh.geometry.attributes.aBend.needsUpdate = true;
   };
 
   const inverse = new Mat4();
-  /** Map a client-space point onto the word's mid-depth plane, in cap heights. */
+  /** The pointer ray in word space (cap heights), anchored on the mid-depth plane. */
   const toWord = (clientX: number, clientY: number) => {
     const { left, right, top, bottom } = camera;
     const wx = left + (clientX / innerWidth) * (right - left);
@@ -238,9 +237,15 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     const dz = far.z - near.z;
     if (Math.abs(dz) < 1e-6) return null;
     const t = (bounds.max.z / 2 - near.z) / dz;
+    const dx = far.x - near.x;
+    // a ray parallel to the sheets can't say where it meets them; treat it as a point
+    const flat = Math.abs(dx) < 1e-6;
     return {
-      x: near.x + (far.x - near.x) * t,
+      x: near.x + dx * t,
       y: near.y + (far.y - near.y) * t,
+      z: bounds.max.z / 2,
+      slopeY: flat ? 0 : (far.y - near.y) / dx,
+      slopeZ: flat ? 0 : dz / dx,
     };
   };
 

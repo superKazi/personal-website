@@ -1,9 +1,15 @@
 import type { Config } from "./config.ts";
 
-/** Pointer position in word space: x along the word, y up, in cap heights. */
+/**
+ * The pointer as a ray through word space (cap heights): a point on the word's
+ * mid-depth plane, plus how y and z change per unit of x along the ray.
+ */
 export interface Pointer {
   readonly x: number;
   readonly y: number;
+  readonly z: number;
+  readonly slopeY: number;
+  readonly slopeZ: number;
 }
 
 interface PanelLike {
@@ -24,20 +30,23 @@ export const createRustle = (panels: readonly PanelLike[]) => {
   const xs = [...new Set(panels.map((p) => p.x))].sort((a, b) => a - b);
   const index = new Map(xs.map((x, i) => [x, i]));
   const top = new Float32Array(xs.length);
+  const bottom = new Float32Array(xs.length).fill(Infinity);
   panels.forEach((p) => {
     const i = index.get(p.x) ?? 0;
     top[i] = Math.max(top[i], p.y1);
+    bottom[i] = Math.min(bottom[i], p.y0);
   });
   return {
     xs,
     top,
+    bottom,
     /** column of each Panel */
     column: panels.map((p) => index.get(p.x) ?? 0),
     /** tilt toward +x, radians */
     angle: new Float32Array(xs.length),
     velocity: new Float32Array(xs.length),
-    /** where the bend sits, 0 = base, 1 = top of the column */
-    height: new Float32Array(xs.length).fill(0.5),
+    /** where the bend sits, 0 = Spine, 1 = free edge */
+    bend: new Float32Array(xs.length).fill(0.5),
     prev: null as Pointer | null,
     speed: 0,
     moving: false,
@@ -45,6 +54,25 @@ export const createRustle = (panels: readonly PanelLike[]) => {
 };
 
 export type Rustle = ReturnType<typeof createRustle>;
+
+/** Where the pointer ray meets a column's sheet, as a fraction of depth from the Spine, or null if it misses. */
+const hit = (
+  r: Readonly<Rustle>,
+  p: Pointer,
+  i: number,
+  margin: number,
+  depth: number,
+) => {
+  const dx = r.xs[i] - p.x;
+  const y = p.y + p.slopeY * dx;
+  const z = p.z + p.slopeZ * dx;
+  const inside =
+    y > r.bottom[i] - margin &&
+    y < r.top[i] + margin &&
+    z > -margin &&
+    z < depth + margin;
+  return inside ? z / depth : null;
+};
 
 /** Columns the pointer passed this step, with the pointer's speed along the word. */
 export interface Crossing {
@@ -59,7 +87,7 @@ export const step = (
   r: Rustle,
   pointer: Pointer | null,
   dt: number,
-  { rustle: cfg }: Readonly<Config>,
+  { rustle: cfg, panels: { depth } }: Readonly<Config>,
 ): Crossing[] => {
   const frame = Math.min(Math.max(dt, 0), MAX_DT);
   const n = r.xs.length;
@@ -77,8 +105,7 @@ export const step = (
     const hi = Math.max(prev.x, pointer.x);
     for (let i = 0; i < n; i++) {
       const x = r.xs[i];
-      const reach =
-        pointer.y > -cfg.margin && pointer.y < r.top[i] + cfg.margin;
+      const reach = hit(r, pointer, i, cfg.margin, depth) !== null;
       if (reach && x > lo && x <= hi)
         crossings.push({ column: i, speed: Math.abs(r.speed) });
     }
@@ -100,14 +127,13 @@ export const step = (
         cfg.coupling * (left + right - 2 * a);
 
       if (pointer && cfg.radius > 0) {
-        const top = r.top[i];
-        const reach = pointer.y > -cfg.margin && pointer.y < top + cfg.margin;
+        const at = hit(r, pointer, i, cfg.margin, depth);
         const d = (pointer.x - r.xs[i]) / cfg.radius;
-        const w = reach ? Math.exp(-d * d) : 0;
-        if (w > 1e-3) {
+        const w = at === null ? 0 : Math.exp(-d * d);
+        if (at !== null && w > 1e-3) {
           accel += (cfg.strength * r.speed * w) / h / steps;
-          const target = Math.min(0.95, Math.max(0.1, pointer.y / top));
-          r.height[i] += (target - r.height[i]) * Math.min(1, w);
+          const target = Math.min(0.95, Math.max(0.1, at));
+          r.bend[i] += (target - r.bend[i]) * Math.min(1, w);
         }
       }
       r.velocity[i] += accel * h;

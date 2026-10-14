@@ -46,9 +46,8 @@ if (canvas) {
     if (rustle.moving || wasMoving) {
       const bend = scene.getBend();
       rustle.column.forEach((c, i) => {
-        bend[i * 3] = rustle.angle[c];
-        bend[i * 3 + 1] = rustle.height[c];
-        bend[i * 3 + 2] = rustle.top[c];
+        bend[i * 2] = rustle.angle[c];
+        bend[i * 2 + 1] = rustle.bend[c];
       });
       scene.commitBend();
     }

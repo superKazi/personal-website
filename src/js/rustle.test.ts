@@ -10,13 +10,16 @@ const panels = Array.from({ length: 100 }, (_, i) => ({
   y1: 1,
 }));
 
+// a pointer straight through the middle of every sheet
+const ray = { y: 0.5, z: defaults.panels.depth / 2, slopeY: 0, slopeZ: 0 };
+
 const run = (frameMs: number) => {
   const rustle = createRustle(panels);
   const dt = frameMs / 1000;
   // a fast swipe across the whole word, then let go
   const swipe = Math.max(1, Math.round(0.4 / dt));
   for (let i = 0; i <= swipe; i++)
-    step(rustle, { x: (i / swipe) * 4, y: 0.5 }, dt, defaults);
+    step(rustle, { ...ray, x: (i / swipe) * 4 }, dt, defaults);
   const peak = Math.max(...rustle.angle.map(Math.abs));
   // six simulated seconds; steps are capped at 50 ms, so count frames, not wall time
   const settle = Math.ceil(6 / Math.min(dt, 0.05));
@@ -47,8 +50,8 @@ void test("Panels at rest stay at rest without a push", () => {
 
 void test("crossing a column reports it once", () => {
   const rustle = createRustle(panels);
-  step(rustle, { x: 0.01, y: 0.5 }, 0.016, defaults);
-  const crossed = step(rustle, { x: 0.05, y: 0.5 }, 0.016, defaults);
+  step(rustle, { ...ray, x: 0.01 }, 0.016, defaults);
+  const crossed = step(rustle, { ...ray, x: 0.05 }, 0.016, defaults);
   assert.deepEqual(
     crossed.map((c) => c.column),
     [1],

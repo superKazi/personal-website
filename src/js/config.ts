@@ -40,13 +40,13 @@ export const defaults = {
     strength: 1.6,
     /** pointer reach along the word, in cap heights */
     radius: 0.2,
-    /** pointer reach above and below the word, in cap heights */
+    /** how far past a sheet's edges the pointer still reaches, in cap heights */
     margin: 0.15,
     /** radians */
     maxAngle: 1,
-    /** 0 = even curve, 1 = all bend at the pointer's height */
+    /** 0 = even curve, 1 = all bend at the pointer's depth */
     bendSharpness: 0.7,
-    /** height of the bend zone, as a fraction of the column */
+    /** width of the bend zone, as a fraction of the depth */
     bendWidth: 0.3,
   },
   color: {

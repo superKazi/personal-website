@@ -241,6 +241,13 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     if (mesh) mesh.geometry.attributes.aBend.needsUpdate = true;
   };
 
+  /** The word's x (along), y (up) and z (depth) axes as they appear on screen: [right, down, toward viewer]. */
+  const axes = () =>
+    [new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 1)].map((v) => {
+      v.transformDirection(center.worldMatrix);
+      return [v.x, -v.y, v.z] as const;
+    });
+
   const inverse = new Mat4();
   /** The pointer ray in word space (cap heights), anchored on the mid-depth plane. */
   const toWord = (clientX: number, clientY: number) => {
@@ -276,5 +283,6 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     commitBend,
     setSway,
     toWord,
+    axes,
   };
 };

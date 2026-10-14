@@ -103,6 +103,40 @@
         overscroll-behavior: none;
       }
 
+      .sound {
+        position: fixed;
+        inset-block-end: max(1rem, env(safe-area-inset-bottom));
+        inset-inline-end: max(1rem, env(safe-area-inset-right));
+        inline-size: 2.75rem;
+        block-size: 2.75rem;
+        padding: 0.625rem;
+        border: 0;
+        border-radius: 0.5rem;
+        background: none;
+        cursor: pointer;
+        /* revealed by script once the intro ends */
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .sound svg {
+        display: block;
+        inline-size: 100%;
+        block-size: 100%;
+        overflow: visible;
+      }
+
+      .sound polygon {
+        stroke: #100f0f;
+        stroke-width: 0.5;
+        stroke-linejoin: round;
+      }
+
+      .sound:focus-visible {
+        outline: 1px solid #878580;
+        outline-offset: 2px;
+      }
+
       canvas {
         /* every touch on the piece is a Rustle, never a scroll or zoom */
         touch-action: none;
@@ -150,6 +184,9 @@
       role="img"
       aria-label="The word KAZI built from stacks of colored paper panels"
     ></canvas>
+    <button class="sound" type="button" aria-label="Sound" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"></svg>
+    </button>
     <script type="module" src="./js/main.ts"></script>
     <script
       data-goatcounter="https://superkazi.goatcounter.com/count"

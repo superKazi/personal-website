@@ -3,6 +3,12 @@
 - When running fallow only run it via npx. Never install globally.
 - Baseline newly available features are okay for progressive enhancements.
 
+## Branch workflow
+
+- All dev work happens on `new-experience`.
+- When a slice is complete, open a PR from `new-experience` into `develop` for user review.
+- When everything is done, the user will merge `develop` into `main` to ship it to production, then delete `new-experience`.
+
 ## Agent skills
 
 ### Issue tracker

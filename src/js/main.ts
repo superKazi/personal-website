@@ -13,15 +13,16 @@ gsap.registerPlugin(Observer);
 
 const canvas = document.querySelector("canvas");
 const button = document.querySelector<HTMLButtonElement>("button.sound");
+const byline = document.querySelector(".byline");
 
-if (canvas && button) {
+if (canvas && button && byline) {
   const scene = createScene(canvas);
   const audio = createAudio();
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
     on ? void audio.enable(config) : audio.disable(),
   );
   const showToggle = () =>
-    void gsap.to(button, { autoAlpha: 1, duration: 0.6, ease: "power2.out" });
+    void gsap.to([button, byline], { autoAlpha: 1, duration: 0.6, ease: "power2.out" });
   // eslint-disable-next-line functional/no-let
   let panels: readonly Panel[] = [];
   // eslint-disable-next-line functional/no-let
@@ -150,6 +151,8 @@ if (canvas && button) {
       ctx.ignore(() => toggle.turnOff());
       // overwrite stops the intro's just-fired fade-in from revealing the button again
       gsap.set(button, { autoAlpha: 0, overwrite: true });
+      // the Byline still shows without the intro; ignored so leaving reduced motion keeps it
+      ctx.ignore(() => gsap.set(byline, { autoAlpha: 1, overwrite: true }));
       return () => {
         reduced = false;
         showToggle();

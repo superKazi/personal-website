@@ -54,6 +54,14 @@ export const createGui = (
   sway.add(config.sway, "reducedAmplitude", 0, 0.2, 0.001);
   sway.add(config.sway, "reducedSpeed", 0, 1, 0.01);
 
+  const grain = gui.addFolder("Grain");
+  grain.add(config.grain, "amount", 0, 1, 0.01);
+  grain.add(config.grain, "blotch", 0, 1, 0.01);
+  grain.add(config.grain, "ground", 0, 1, 0.01);
+  grain.add(config.grain, "size", 0.5, 4, 0.25);
+  grain.add(config.grain, "fps", 0, 30, 1);
+  grain.onChange(update);
+
   const chime = gui.addFolder("Chime");
   chime.add(config.chime, "material", Object.keys(MATERIALS));
   chime.add(config.chime, "scale", Object.keys(SCALES));
@@ -77,7 +85,7 @@ export const createGui = (
   color.add(config.color, "runMax", 1, 10, 1).onChange(rebuild);
   color.add(config.color, "accentChance", 0, 1, 0.01).onChange(rebuild);
   color.add(config.color, "backShade", 0, 1, 0.01).onChange(update);
-  color.add(config.color, "edgeWidth", 0, 4, 0.25).onChange(update);
+  color.add(config.color, "edgeWidth", 0, 4, 0.05).onChange(update);
   color.addColor(config.color, "edge").onChange(update);
   color.addColor(config.color, "background").onChange(update);
   color.addColor(config.color, "accent").onChange(rebuild);

@@ -62,6 +62,18 @@ export const defaults = {
     reducedAmplitude: 0.03,
     reducedSpeed: 0.07,
   },
+  grain: {
+    /** fine ink dropouts, 0..1 */
+    amount: 0.1,
+    /** broad patches of thinner ink, 0..1 */
+    blotch: 0.01,
+    /** light flecks in the ground, 0..1 */
+    ground: 0.05,
+    /** speckle size, CSS px */
+    size: 1,
+    /** re-rolls per second, 0 = still; always still under reduced motion */
+    fps: 4,
+  },
   chime: {
     material: "bamboo" as Material,
     scale: "hirajoshi" as Scale,
@@ -100,7 +112,7 @@ export const defaults = {
     /** back face brightness multiplier */
     backShade: 0.8,
     /** edge line width in px, 0 = off */
-    edgeWidth: 1,
+    edgeWidth: 0.5,
     edge: "#100F0F",
     background: "#100F0F",
     accent: "#9D4310",

@@ -8,14 +8,6 @@
     />
     <title>Kazi&#8216;s website</title>
     <link rel="preconnect" href="https://superkazi.goatcounter.com" />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-      href="./DegularVariable.woff2"
-      fetchpriority="high"
-    />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -88,52 +80,14 @@
       @font-face {
         font-family: "Degular";
         src: url("/DegularVariable.woff2") format("woff2-variations");
-        font-optical-sizing: none;
         font-weight: 200 800;
-        font-stretch: normal;
         font-style: normal;
-        font-display: auto;
-        font-synthesis: none;
+        font-display: block;
       }
 
       :root {
-        --step-0: clamp(1.125rem, 1.0714rem + 0.2679vw, 1.5rem);
-
-        --sand-2: #f9f9f8;
-        --sand-11: #63635e;
-        --sand-12: #21201c;
-      }
-
-      @supports (color: color(display-p3 1 1 1)) {
-        @media (color-gamut: p3) {
-          :root {
-            --sand-2: color(display-p3 0.977 0.977 0.973);
-            --sand-11: color(display-p3 0.388 0.388 0.37);
-            --sand-12: color(display-p3 0.129 0.126 0.111);
-          }
-        }
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --sand-2: #191918;
-          --sand-11: #b5b3ad;
-          --sand-12: #eeeeec;
-        }
-      }
-
-      @supports (color: color(display-p3 1 1 1)) {
-        @media (color-gamut: p3) and (prefers-color-scheme: dark) {
-          :root {
-            --sand-2: color(display-p3 0.098 0.098 0.094);
-            --sand-11: color(display-p3 0.707 0.703 0.68);
-            --sand-12: color(display-p3 0.933 0.933 0.926);
-          }
-        }
-      }
-
-      @view-transition {
-        navigation: auto;
+        color-scheme: dark;
+        background-color: #100f0f;
       }
 
       *,
@@ -141,167 +95,20 @@
       *::after {
         box-sizing: border-box;
         margin: 0;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
       }
 
       html,
       body {
-        background-color: var(--sand-2);
-      }
-
-      html {
-        -moz-text-size-adjust: none;
-        -webkit-text-size-adjust: none;
-        text-size-adjust: none;
+        overflow: hidden;
         overscroll-behavior: none;
-        scroll-behavior: smooth;
       }
 
-      body {
-        -webkit-font-smoothing: antialiased;
-        font-family:
-          "Degular", Inter, Roboto, "Helvetica Neue", "Arial Nova",
-          "Nimbus Sans", Arial, sans-serif;
-        font-kerning: none;
-        text-rendering: optimizeSpeed;
-        color: var(--sand-12);
-        padding-left: env(safe-area-inset-left);
-        padding-right: env(safe-area-inset-right);
-        min-block-size: 100svh;
-      }
-
-      main {
-        text-transform: uppercase;
-        line-height: 1;
-        padding: 1rem;
-      }
-
-      header,
-      ul[role="list"] {
-        opacity: 0;
-      }
-
-      h1,
-      h2 {
-        line-height: 1;
-        font-variation-settings:
-          "opsz" 6,
-          "wght" 700;
-      }
-
-      h1,
-      h2,
-      ul[role="list"] {
-        font-size: var(--step-0);
-      }
-
-      h1 {
-        margin-block-start: 1rem;
-      }
-
-      h2 {
-        color: var(--sand-11);
-        margin-block-start: 0.05rem;
-        margin-block-start: 0.05lh;
-      }
-
-      ul[role="list"] {
-        list-style: none;
-        padding: 0;
-        margin-block-start: 3rem;
-        font-variation-settings:
-          "opsz" 6,
-          "wght" 500;
-      }
-
-      a {
-        color: var(--sand-12);
-        text-decoration: none;
-      }
-
-      a:focus-visible {
-        border-radius: 4px;
-        outline-width: 1px;
-        outline-offset: 1px;
-        outline-style: solid;
-        outline-color: var(--sand-11);
-      }
-
-      a:visited {
-        color: var(--sand-12);
-      }
-
-      a:focus:not(:focus-visible) {
-        outline: none;
-      }
-
-      span {
-        color: var(--sand-11);
-      }
-
-      b {
-        display: block;
-        border: 1px solid var(--sand-11);
-        block-size: 1px;
+      canvas {
+        position: fixed;
+        inset: 0;
         inline-size: 100%;
-        transform: scaleX(0);
-        transform-origin: center;
-      }
-
-      @media (min-width: 80rem) {
-        main {
-          display: grid;
-          min-block-size: 100svh;
-          grid-template-columns: 4fr max-content 4fr max-content 4fr;
-          grid-template-rows: 2fr max-content 4fr;
-          grid-auto-flow: column;
-          gap: 1rem;
-        }
-
-        h1,
-        ul[role="list"] {
-          margin-block-start: 0;
-        }
-
-        header,
-        ul[role="list"] {
-          grid-row: 2/3;
-        }
-
-        header {
-          grid-column: 2/3;
-        }
-
-        ul[role="list"] {
-          grid-column: 4/5;
-        }
-
-        b {
-          grid-column: 1/-1;
-          grid-row: 1 / 2;
-          align-self: end;
-        }
-      }
-
-      ::selection {
-        background-color: var(--sand-12);
-        color: var(--sand-2);
-      }
-
-      @media (prefers-reduced-motion: reduce) or (scripting: none) {
-        header,
-        ul[role="list"] {
-          opacity: 1;
-        }
-
-        a:hover {
-          text-decoration: underline;
-        }
-
-        b {
-          transform: revert;
-          transform-origin: revert;
-        }
+        block-size: 100%;
+        display: block;
       }
     </style>
     <meta
@@ -315,7 +122,7 @@
     <meta name="robots" content="index,follow" />
     <meta name="googlebot" content="index,follow" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="theme-color" content="#0d0d0d" />
+    <meta name="theme-color" content="#100F0F" />
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Kazi’s website" />
     <meta property="og:url" content="https://kazielmanawal.me" />
@@ -335,164 +142,12 @@
     <link rel="apple-touch-icon" href="./apple.png" />
     <link rel="canonical" href="https://kazielmanawal.me" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <script type="speculationrules">
-      {
-        "prefetch": [
-          {
-            "where": { "selector_matches": "ul[role='list'] a[href]" },
-            "eagerness": "moderate"
-          }
-        ]
-      }
-    </script>
   </head>
   <body>
-    <main>
-      <b aria-hidden="true"></b>
-      <header>
-        <h1>Kazi Elman Awal</h1>
-        <h2>Dev, Design, Data Viz</h2>
-      </header>
-      <ul role="list">
-        <li>
-          <a
-            data-goatcounter-click="df-mckinsey-primary-care"
-            rel="noreferrer"
-            href="https://www.mckinsey.com/mhi/our-insights/primary-care-reimagined-workforce-and-care-model-innovation-in-a-modern-age"
-            ><span>Dataface:</span> Workforce and Care Model Innovation
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="df-eggs"
-            rel="noreferrer"
-            href="https://eggs.thedataface.com"
-            ><span>Dataface:</span> Data&Eggs
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="cdc-activity-levels"
-            rel="noreferrer"
-            href="https://www.cdc.gov/respiratory-viruses/data/activity-levels.html"
-            ><span>CDC:</span> Respiratory Virus Activity Levels
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="cdc-data-channel"
-            rel="noreferrer"
-            href="https://www.cdc.gov/respiratory-viruses/data/index.html"
-            ><span>CDC:</span> Respiratory Illness Data Channel
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="espn-quiz"
-            rel="noreferrer"
-            href="https://www.espn.com/espn/feature/story/_/id/43781608/30th-anniversary-quiz"
-            ><span>ESPN:</span> 30th Anniversary Quiz
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="espn-invisible"
-            rel="noreferrer"
-            href="https://www.espn.com/espn/feature/story/_/id/40276381/how-stadiums-help-fans-invisible-disabilities"
-            ><span>ESPN:</span> Invisible
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="bi-ai-lover"
-            rel="noreferrer"
-            href="https://www.businessinsider.com/when-your-ai-says-she-loves-you-2023-10"
-            ><span>Business Insider:</span> App, Lover, Muse
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="bi-king-charles"
-            rel="noreferrer"
-            href="https://www.businessinsider.com/king-charles-coronation-schedule-guide-timeline-2023-5"
-            ><span>Business Insider:</span> King Charles&#8217; Coronation
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="bi-albertina"
-            rel="noreferrer"
-            href="https://www.businessinsider.com/artificial-intelligence-albertina-geller-deepfake-gan-images-online-scams-2022-10"
-            ><span>Business Insider:</span> Who in the world is Albertina
-            Geller?
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="row-collection"
-            rel="noreferrer"
-            href="https://restofworld.org/collection/english-as-a-second-language/"
-            ><span>Rest of World:</span> Collection Page
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="row-home"
-            rel="noreferrer"
-            href="https://restofworld.org"
-            ><span>Rest of World:</span> Homepage
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="row-social"
-            rel="noreferrer"
-            href="https://restofworld.org/wp-content/projects/card-builder/"
-            ><span>Rest of World:</span> Social Card Tool
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="sfc-covid"
-            rel="noreferrer"
-            href="https://www.sfchronicle.com/projects/coronavirus-map/"
-            ><span>San Francisco Chronicle:</span> Coronavirus Tracker
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="sfc-fire"
-            rel="noreferrer"
-            href="https://projects.sfchronicle.com/2019/kincade-fire-origin/"
-            ><span>San Francisco Chronicle:</span> A Spark on Burned Mountain
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="sfc-restaurant"
-            rel="noreferrer"
-            href="https://projects.sfchronicle.com/2020/sushi-yoshizumi-review/"
-            ><span>San Francisco Chronicle:</span> Sushi Yoshizumi Review
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="wapo-flip-house"
-            rel="noreferrer"
-            href="https://www.washingtonpost.com/graphics/2018/politics/how-to-flip-the-house-2018/"
-            ><span>Washington Post:</span> How to Flip the House
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="wapo-india-hate"
-            rel="noreferrer"
-            href="https://www.washingtonpost.com/graphics/2018/world/reports-of-hate-crime-cases-have-spiked-in-india/"
-            ><span>Washington Post:</span> Rising Hate in India
-          </a>
-        </li>
-      </ul>
-    </main>
+    <canvas
+      role="img"
+      aria-label="The word KAZI built from stacks of colored paper panels"
+    ></canvas>
     <script type="module" src="./js/main.ts"></script>
     <script
       data-goatcounter="https://superkazi.goatcounter.com/count"

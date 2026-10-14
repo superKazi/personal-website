@@ -34,6 +34,11 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // OGL, lil-gui and the per-frame loop are mutation-based; allocating per frame would jank
+      "functional/immutable-data": "off",
+      "functional/no-loop-statements": "off",
+    },
   },
   {
     files: ["src/**/*.css"],

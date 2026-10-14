@@ -23,7 +23,6 @@ export const createAudio = () => {
   // eslint-disable-next-line functional/no-let
   let knockNoise: AudioBuffer | undefined;
   /** ringing voices, oldest first */
-  // eslint-disable-next-line functional/prefer-readonly-type
   const voices: Voice[] = [];
   // eslint-disable-next-line functional/no-let
   let lastStart = -Infinity;

@@ -33,6 +33,17 @@ export const createGui = (
   intro.add(config.intro, "fade", 0, 1, 0.01).onChange(update);
   intro.add({ replay }, "replay").name("replay intro");
 
+  const rustle = gui.addFolder("Rustle");
+  rustle.add(config.rustle, "stiffness", 1, 300, 1);
+  rustle.add(config.rustle, "damping", 0, 40, 0.1);
+  rustle.add(config.rustle, "coupling", 0, 200, 1);
+  rustle.add(config.rustle, "strength", 0, 10, 0.05);
+  rustle.add(config.rustle, "radius", 0.01, 2, 0.01);
+  rustle.add(config.rustle, "margin", 0, 1, 0.01);
+  rustle.add(config.rustle, "maxAngle", 0.1, 1.5, 0.01);
+  rustle.add(config.rustle, "bendSharpness", 0, 1, 0.01).onChange(update);
+  rustle.add(config.rustle, "bendWidth", 0.02, 1, 0.01).onChange(update);
+
   const color = gui.addFolder("Color");
   color.add(config.color, "seed", 0, 1000, 1).onChange(rebuild);
   color.add(config.color, "runMin", 1, 10, 1).onChange(rebuild);

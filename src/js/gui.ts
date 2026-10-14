@@ -11,7 +11,8 @@ export const createGui = (
   update: () => void,
   replay: () => void,
 ) => {
-  const gui = new GUI({ title: "KAZI" });
+  // starts collapsed so it never covers the Sound toggle
+  const gui = new GUI({ title: "KAZI", closeFolders: true }).close();
 
   const view = gui.addFolder("View");
   view.add(config.view, "yaw", -90, 90, 1);

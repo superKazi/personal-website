@@ -66,7 +66,7 @@ export const defaults = {
     /** fine ink dropouts, 0..1 */
     amount: 0.1,
     /** broad patches of thinner ink, 0..1 */
-    blotch: 0.05,
+    blotch: 0.01,
     /** light flecks in the ground, 0..1 */
     ground: 0.05,
     /** speckle size, CSS px */

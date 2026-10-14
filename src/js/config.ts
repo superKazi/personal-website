@@ -2,6 +2,8 @@
  * Every tunable in one place. In dev, lil-gui edits a copy and its export
  * button produces JSON to paste over these defaults.
  */
+import type { Material, Scale } from "./chime.ts";
+
 export const defaults = {
   view: {
     /** degrees */
@@ -59,6 +61,35 @@ export const defaults = {
     /** used when the visitor prefers reduced motion */
     reducedAmplitude: 0.03,
     reducedSpeed: 0.07,
+  },
+  chime: {
+    material: "bamboo" as Material,
+    scale: "hirajoshi" as Scale,
+    /** frequency of the lowest note, Hz (D4) */
+    root: 293.66,
+    /** how many scale steps Panel lengths span: longest Panel rings the root */
+    notes: 12,
+    /** overall level, 0..1; each voice gets volume / voices, so even every voice at full strike sums to at most full scale */
+    volume: 0.8,
+    /** pointer speeds (cap heights per second) mapped to soft/mellow through loud/bright */
+    minSpeed: 0.2,
+    maxSpeed: 10,
+    /** how much Rustle speed changes loudness: 0 = every Chime equal, 1 = soft to loud */
+    dynamics: 0.25,
+    /** seconds the strike takes to reach full volume; longer is softer */
+    strike: 0.005,
+    /** how long notes ring, as a multiple of the material's natural ring */
+    ring: 2.5,
+    /** level of the overtones, 0 = pure tone */
+    brightness: 0.8,
+    /** level of the strike's wooden knock, 0 = none; played densely it reads as crackle */
+    knock: 0,
+    /** random detune per partial, cents */
+    detune: 6,
+    /** reverb send level */
+    reverb: 0.2,
+    /** most notes ringing at once; past this the oldest gives way */
+    voices: 12,
   },
   color: {
     seed: 475,

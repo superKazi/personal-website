@@ -10,6 +10,8 @@ export interface Pointer {
   readonly z: number;
   readonly slopeY: number;
   readonly slopeZ: number;
+  /** velocity along the word, cap heights per second, from GSAP Observer */
+  readonly vx: number;
 }
 
 interface PanelLike {
@@ -31,15 +33,19 @@ export const createRustle = (panels: readonly PanelLike[]) => {
   const index = new Map(xs.map((x, i) => [x, i]));
   const top = new Float32Array(xs.length);
   const bottom = new Float32Array(xs.length).fill(Infinity);
+  // how much paper a column holds, summed across its pieces; sets its Chime's pitch
+  const length = new Float32Array(xs.length);
   panels.forEach((p) => {
     const i = index.get(p.x) ?? 0;
     top[i] = Math.max(top[i], p.y1);
     bottom[i] = Math.min(bottom[i], p.y0);
+    length[i] += p.y1 - p.y0;
   });
   return {
     xs,
     top,
     bottom,
+    length,
     /** column of each Panel */
     column: panels.map((p) => index.get(p.x) ?? 0),
     /** tilt toward +x, radians */
@@ -93,11 +99,10 @@ export const step = (
   const n = r.xs.length;
   const crossings: Crossing[] = [];
 
-  // pointer velocity along the word, lightly smoothed against uneven events
+  // velocity comes with the pointer (GSAP Observer's), not from frame gaps, so uneven
+  // events and long pauses can't fake a fast swipe
   const prev = r.prev;
-  // real dt, not the capped one, so a long pause (backgrounded tab) can't fake a fast swipe
-  const raw = pointer && prev && dt > 0 ? (pointer.x - prev.x) / dt : 0;
-  r.speed = pointer && prev ? r.speed * 0.4 + raw * 0.6 : 0;
+  r.speed = pointer?.vx ?? 0;
   r.prev = pointer;
 
   if (pointer && prev) {

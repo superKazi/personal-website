@@ -2,6 +2,7 @@ import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import { config } from "./config.ts";
 import { createAudio } from "./audio.ts";
+import { frequency, noteForLength } from "./chime.ts";
 import { playIntro } from "./intro.ts";
 import { buildPanels, loadFont, type Panel } from "./panels.ts";
 import { createRustle, step, type Pointer } from "./rustle.ts";
@@ -17,7 +18,7 @@ if (canvas && button) {
   const scene = createScene(canvas);
   const audio = createAudio();
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
-    on ? void audio.enable() : audio.disable(),
+    on ? void audio.enable(config) : audio.disable(),
   );
   const showToggle = () =>
     void gsap.to(button, { autoAlpha: 1, duration: 0.6, ease: "power2.out" });
@@ -27,8 +28,13 @@ if (canvas && button) {
   let rustle = createRustle([]);
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
+  // where the pointer is on screen, null when it's away, and the Observer tracking its velocity
   // eslint-disable-next-line functional/no-let
-  let pointer: Pointer | null = null;
+  let client: Readonly<{ x: number; y: number }> | null = null;
+  // eslint-disable-next-line functional/no-let
+  let observer: Observer | undefined;
+  // eslint-disable-next-line functional/no-let
+  let lengths = { min: 0, max: 0 };
   // eslint-disable-next-line functional/no-let
   let reduced = false;
   // eslint-disable-next-line functional/no-let
@@ -41,6 +47,10 @@ if (canvas && button) {
     panels = buildPanels(config);
     scene.build(panels, config);
     rustle = createRustle(panels);
+    lengths = {
+      min: Math.min(...rustle.length),
+      max: Math.max(...rustle.length),
+    };
   };
   const update = () => {
     scene.update(config);
@@ -58,10 +68,22 @@ if (canvas && button) {
   };
 
   const track = (self: Observer) => {
-    pointer = reduced ? null : scene.toWord(self.x ?? 0, self.y ?? 0);
+    client = reduced ? null : { x: self.x ?? 0, y: self.y ?? 0 };
   };
   const leave = () => {
-    pointer = null;
+    client = null;
+  };
+  /** The pointer ray in word space, with Observer's velocity projected onto the word. */
+  const pointerNow = (): Pointer | null => {
+    if (!client || !observer) return null;
+    const ray = scene.toWord(client.x, client.y);
+    if (!ray) return null;
+    const h = 0.01;
+    const ahead = scene.toWord(
+      client.x + observer.velocityX * h,
+      client.y + observer.velocityY * h,
+    );
+    return { ...ray, vx: ahead ? (ahead.x - ray.x) / h : 0 };
   };
 
   const tick = (_time: number, deltaMs: number) => {
@@ -74,7 +96,30 @@ if (canvas && button) {
     scene.setSway(swayAmp, swayPhase);
 
     const wasMoving = rustle.moving;
-    step(rustle, pointer, dt, config);
+    const crossed = step(rustle, pointerNow(), dt, config);
+    if (toggle.isOn() && crossed.length) {
+      const { chime } = config;
+      // every Panel is a chime: each one crossed plays its own note, set by its length
+      crossed.forEach((c, i) => {
+        const note = noteForLength(
+          rustle.length[c.column],
+          lengths.min,
+          lengths.max,
+          chime.notes,
+        );
+        const s = Math.min(
+          1,
+          Math.max(
+            0,
+            (c.speed - chime.minSpeed) / (chime.maxSpeed - chime.minSpeed),
+          ),
+        );
+        const freq = frequency(note, chime.root, chime.scale);
+        // spread a frame's Chimes across the frame so a fast swipe plays a run, not a chord
+        if (audio.chime(note, freq, s, config, (i / crossed.length) * dt))
+          toggle.bump(0.4 + 0.6 * s, note / Math.max(1, chime.notes - 1));
+      });
+    }
     if (rustle.moving || wasMoving) {
       const bend = scene.getBend();
       rustle.column.forEach((c, i) => {
@@ -93,9 +138,9 @@ if (canvas && button) {
     gsap.ticker.add(tick);
     gsap.matchMedia().add("(prefers-reduced-motion: reduce)", () => {
       reduced = true;
-      pointer = null;
+      client = null;
       intro?.progress(1).kill();
-      // no Rustle means no Flicks, so the Sound toggle has nothing to switch
+      // no Rustle means no Chimes, so the Sound toggle has nothing to switch
       toggle.turnOff();
       gsap.set(button, { autoAlpha: 0 });
       return () => {
@@ -105,7 +150,7 @@ if (canvas && button) {
     });
     replay();
 
-    Observer.create({
+    observer = Observer.create({
       target: canvas,
       type: "pointer,touch",
       onMove: track,
@@ -118,7 +163,13 @@ if (canvas && button) {
     if (import.meta.env.DEV) {
       void import("./gui.ts").then(({ createGui }) =>
         // lil-gui's stylesheet resets CSS font faces, so reload Degular before re-slicing
-        createGui(config, () => void loadFont().then(rebuild), update, replay),
+        createGui(
+          config,
+          () => void loadFont().then(rebuild),
+          update,
+          replay,
+          () => audio.mix(config),
+        ),
       );
     }
   });

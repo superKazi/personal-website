@@ -104,6 +104,8 @@
       }
 
       canvas {
+        /* every touch on the piece is a Rustle, never a scroll or zoom */
+        touch-action: none;
         position: fixed;
         inset: 0;
         inline-size: 100%;

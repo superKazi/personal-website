@@ -8,6 +8,10 @@ A single-screen interactive piece after Takenobu Igarashi's _Design News_ 113 co
 One thin upright sheet; a vertical slice of a letter.
 _Avoid_: Page, card, slice, sheet
 
+**Spine**:
+The fixed vertical edge of a Panel, on the face where the word's depth starts; Panels bend away from it like pages from a book's spine.
+_Avoid_: Hinge, base, bottom
+
 **Stack**:
 The row of Panels that together form one letter.
 _Avoid_: Letter mesh, glyph, block

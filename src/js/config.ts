@@ -30,6 +30,25 @@ export const defaults = {
     /** 0 = movement only, 1 = full fade from transparent */
     fade: 1,
   },
+  rustle: {
+    /** spring pulling each column upright */
+    stiffness: 120,
+    damping: 5,
+    /** pull toward neighbouring columns, 0 = independent */
+    coupling: 15,
+    /** tilt velocity per unit of pointer speed */
+    strength: 1,
+    /** pointer reach along the word, in cap heights */
+    radius: 0.2,
+    /** how far past a sheet's edges the pointer still reaches, in cap heights */
+    margin: 0,
+    /** radians */
+    maxAngle: 0.25,
+    /** 0 = even curve, 1 = all bend at the pointer's depth */
+    bendSharpness: 0.5,
+    /** width of the bend zone, as a fraction of the depth */
+    bendWidth: 0.5,
+  },
   color: {
     seed: 475,
     runMin: 2,

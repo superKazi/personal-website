@@ -1,6 +1,7 @@
 import {
   Camera,
   Color,
+  Mat4,
   Mesh,
   Plane,
   Program,
@@ -16,19 +17,35 @@ in vec2 uv;
 in vec4 aPanel; // x, y0, y1, stack
 in vec3 aColor;
 in float aRise; // intro progress, 0 = hidden below, 1 = at rest
+in vec2 aBend; // Rustle: tilt (radians), bend position along the depth (0 = Spine, 1 = free edge)
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform float uDepth;
 uniform float uRiseDistance;
+uniform float uBendSharpness;
+uniform float uBendWidth;
 out vec2 vUv;
 out vec3 vColor;
 out float vRise;
+// share of the full tilt reached at depth u: even curve, or concentrated at the bend height
+float profile(float u, float h) {
+  return mix(u, smoothstep(h - uBendWidth, h + uBendWidth, u), uBendSharpness);
+}
 void main() {
   vUv = uv;
   vColor = aColor;
   vRise = aRise;
   // Panels stand in the y-z plane; uv.x runs along depth, uv.y up the height
-  vec3 p = vec3(aPanel.x, mix(aPanel.y, aPanel.z, uv.y), uv.x * uDepth);
+  float y = mix(aPanel.y, aPanel.z, uv.y);
+  // walk out from the Spine (z = 0) so the sheet keeps its length as it bends
+  float s = uv.x;
+  vec2 q = vec2(0.0);
+  for (int i = 0; i < 12; i++) {
+    float phi = aBend.x * profile((float(i) + 0.5) / 12.0 * s, aBend.y);
+    q += vec2(sin(phi), cos(phi));
+  }
+  q *= uDepth * s / 12.0;
+  vec3 p = vec3(aPanel.x + q.x, y, q.y);
   p.y -= (1.0 - aRise) * uRiseDistance;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 }`;
@@ -81,6 +98,8 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   const uniforms = {
     uDepth: { value: 1 },
     uRiseDistance: { value: 1 },
+    uBendSharpness: { value: 0 },
+    uBendWidth: { value: 0.3 },
     uFade: { value: 0 },
     uBackShade: { value: 1 },
     uEdgeWidth: { value: 1 },
@@ -97,6 +116,8 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   let mesh: Mesh | undefined;
   // eslint-disable-next-line functional/no-let
   let rise = new Float32Array();
+  // eslint-disable-next-line functional/no-let
+  let bend = new Float32Array();
   // eslint-disable-next-line functional/no-let
   let bounds = { min: new Vec3(), max: new Vec3() };
 
@@ -140,12 +161,14 @@ export const createScene = (canvas: HTMLCanvasElement) => {
       panels.flatMap((p) => [...new Color(p.color)]),
     );
     rise = new Float32Array(panels.length).fill(1);
+    bend = new Float32Array(panels.length * 2);
     const geometry = new Plane(gl, {
       heightSegments: 24,
       attributes: {
         aPanel: { instanced: 1, size: 4, data: panel },
         aColor: { instanced: 1, size: 3, data: color },
         aRise: { instanced: 1, size: 1, data: rise },
+        aBend: { instanced: 1, size: 2, data: bend },
       },
     });
     mesh = new Mesh(gl, { geometry, program });
@@ -173,6 +196,8 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     uniforms.uDepth.value = cfg.panels.depth;
     uniforms.uRiseDistance.value = cfg.intro.distance;
     uniforms.uFade.value = cfg.intro.fade;
+    uniforms.uBendSharpness.value = cfg.rustle.bendSharpness;
+    uniforms.uBendWidth.value = cfg.rustle.bendWidth;
     uniforms.uBackShade.value = cfg.color.backShade;
     uniforms.uEdgeWidth.value = cfg.color.edgeWidth * renderer.dpr;
     uniforms.uEdge.value.set(cfg.color.edge);
@@ -194,5 +219,45 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     if (mesh) mesh.geometry.attributes.aRise.needsUpdate = true;
   };
 
-  return { build, update, resize, render, getRise, commitRise };
+  /** Per-Panel Rustle as [tilt, bend position]; write into it, then call `commitBend`. */
+  const getBend = () => bend;
+  const commitBend = () => {
+    if (mesh) mesh.geometry.attributes.aBend.needsUpdate = true;
+  };
+
+  const inverse = new Mat4();
+  /** The pointer ray in word space (cap heights), anchored on the mid-depth plane. */
+  const toWord = (clientX: number, clientY: number) => {
+    const { left, right, top, bottom } = camera;
+    const wx = left + (clientX / innerWidth) * (right - left);
+    const wy = top - (clientY / innerHeight) * (top - bottom);
+    inverse.inverse(center.worldMatrix);
+    const near = new Vec3(wx, wy, 0).applyMatrix4(inverse);
+    const far = new Vec3(wx, wy, -1).applyMatrix4(inverse);
+    const dz = far.z - near.z;
+    if (Math.abs(dz) < 1e-6) return null;
+    const t = (bounds.max.z / 2 - near.z) / dz;
+    const dx = far.x - near.x;
+    // a ray parallel to the sheets can't say where it meets them; treat it as a point
+    const flat = Math.abs(dx) < 1e-6;
+    return {
+      x: near.x + dx * t,
+      y: near.y + (far.y - near.y) * t,
+      z: bounds.max.z / 2,
+      slopeY: flat ? 0 : (far.y - near.y) / dx,
+      slopeZ: flat ? 0 : dz / dx,
+    };
+  };
+
+  return {
+    build,
+    update,
+    resize,
+    render,
+    getRise,
+    commitRise,
+    getBend,
+    commitBend,
+    toWord,
+  };
 };

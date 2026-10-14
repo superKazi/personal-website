@@ -18,7 +18,7 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         navigateFallback: null,
         // A separate URL keeps the offline seed from intercepting live navigations.
-        manifestTransforms: [async (entries) => ({
+        manifestTransforms: [(entries) => ({
           manifest: entries.map((entry) =>
             entry.url === "index.html"
               ? { ...entry, url: "index.html?offline" }

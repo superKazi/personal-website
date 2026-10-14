@@ -136,13 +136,15 @@ if (canvas && button) {
     resize();
     addEventListener("resize", resize);
     gsap.ticker.add(tick);
-    gsap.matchMedia().add("(prefers-reduced-motion: reduce)", () => {
+    gsap.matchMedia().add("(prefers-reduced-motion: reduce)", (ctx) => {
       reduced = true;
       client = null;
       intro?.progress(1).kill();
-      // no Rustle means no Chimes, so the Sound toggle has nothing to switch
-      toggle.turnOff();
-      gsap.set(button, { autoAlpha: 0 });
+      // no Rustle means no Chimes, so the Sound toggle has nothing to switch;
+      // ignored so leaving reduced motion doesn't revert the toggle's look back to on
+      ctx.ignore(() => toggle.turnOff());
+      // overwrite stops the intro's just-fired fade-in from revealing the button again
+      gsap.set(button, { autoAlpha: 0, overwrite: true });
       return () => {
         reduced = false;
         showToggle();

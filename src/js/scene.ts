@@ -14,7 +14,7 @@ import type { Panel } from "./panels.ts";
 
 const vertex = /* glsl */ `#version 300 es
 in vec2 uv;
-in vec4 aPanel; // x, y0, y1, stack
+in vec3 aPanel; // x, y0, y1
 in vec3 aColor;
 in float aRise; // intro progress, 0 = hidden below, 1 = at rest
 in vec2 aBend; // Rustle: tilt (radians), bend position along the depth (0 = Spine, 1 = free edge)
@@ -165,7 +165,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     mesh?.setParent(null);
     mesh?.geometry.remove();
     const panel = new Float32Array(
-      panels.flatMap((p) => [p.x, p.y0, p.y1, p.stack]),
+      panels.flatMap((p) => [p.x, p.y0, p.y1]),
     );
     const color = new Float32Array(
       panels.flatMap((p) => [...new Color(p.color)]),
@@ -175,7 +175,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     const geometry = new Plane(gl, {
       heightSegments: 24,
       attributes: {
-        aPanel: { instanced: 1, size: 4, data: panel },
+        aPanel: { instanced: 1, size: 3, data: panel },
         aColor: { instanced: 1, size: 3, data: color },
         aRise: { instanced: 1, size: 1, data: rise },
         aBend: { instanced: 1, size: 2, data: bend },
@@ -218,6 +218,8 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   };
 
   const resize = (cfg: Readonly<Config>) => {
+    // re-read so moving to another screen or zooming stays sharp
+    renderer.dpr = Math.min(devicePixelRatio, 2);
     renderer.setSize(innerWidth, innerHeight);
     update(cfg);
   };

@@ -6,3 +6,5 @@ dist-ssr
 .netlify
 .vscode
 preflight.yml
+# design source files, kept locally
+og.psd

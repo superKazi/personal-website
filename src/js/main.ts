@@ -3,7 +3,7 @@ import { Observer } from "gsap/Observer";
 import { config } from "./config.ts";
 import { createAudio } from "./audio.ts";
 import { playIntro } from "./intro.ts";
-import { buildPanels, loadFont, type Panel } from "./panels.ts";
+import { buildPanels, loadFont } from "./panels.ts";
 import { createRustle, step, type Pointer } from "./rustle.ts";
 import { createScene } from "./scene.ts";
 import { createSoundToggle } from "./toggle.ts";
@@ -31,10 +31,10 @@ const start = async () => {
       duration: 0.6,
       ease: "power2.out",
     });
-  // eslint-disable-next-line functional/no-let
-  let panels: readonly Panel[] = [];
-  // eslint-disable-next-line functional/no-let
-  let rustle = createRustle([]);
+  const panels = buildPanels(config);
+  scene.build(panels, config);
+  const rustle = createRustle(panels);
+  audio.setLengths(rustle.length);
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
   // where the pointer is on screen, null when it's away, and the Observer tracking its velocity
@@ -53,13 +53,6 @@ const start = async () => {
   // eslint-disable-next-line functional/no-let
   let keyboard: Pointer | null = null;
 
-  const rebuild = () => {
-    intro?.progress(1).kill();
-    panels = buildPanels(config);
-    scene.build(panels, config);
-    rustle = createRustle(panels);
-    audio.setLengths(rustle.length);
-  };
   const resize = () => {
     scene.resize(config);
     toggle.layout(scene.axes());
@@ -126,7 +119,6 @@ const start = async () => {
     scene.render();
   };
 
-  rebuild();
   resize();
   document.body.classList.add("ready");
   gsap.set(byline, { autoAlpha: 0 });

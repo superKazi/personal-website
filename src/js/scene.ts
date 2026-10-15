@@ -238,8 +238,6 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   };
 
   const build = (panels: readonly Panel[], cfg: Readonly<Config>) => {
-    mesh?.setParent(null);
-    mesh?.geometry.remove();
     const panel = new Float32Array(panels.flatMap((p) => [p.x, p.y0, p.y1]));
     const color = new Float32Array(
       panels.flatMap((p) => [...new Color(p.color)]),
@@ -272,11 +270,13 @@ export const createScene = (canvas: HTMLCanvasElement) => {
       -bounds.max.y / 2,
       -depth / 2,
     );
-    update(cfg);
+    resize(cfg);
   };
 
-  /** Apply everything that doesn't need new Panels. */
-  const update = (cfg: Readonly<Config>) => {
+  const resize = (cfg: Readonly<Config>) => {
+    // re-read so moving to another screen or zooming stays sharp
+    renderer.dpr = Math.min(devicePixelRatio, 3);
+    renderer.setSize(innerWidth, innerHeight);
     uniforms.uDepth.value = cfg.panels.depth;
     uniforms.uRiseDistance.value = cfg.intro.distance;
     uniforms.uFade.value = cfg.intro.fade;
@@ -292,13 +292,6 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     uniforms.uGrainBlotch.value = cfg.grain.blotch;
     uniforms.uGrainGround.value = cfg.grain.ground;
     fit(cfg);
-  };
-
-  const resize = (cfg: Readonly<Config>) => {
-    // re-read so moving to another screen or zooming stays sharp
-    renderer.dpr = Math.min(devicePixelRatio, 3);
-    renderer.setSize(innerWidth, innerHeight);
-    update(cfg);
   };
 
   const render = () => renderer.render({ scene: roll, camera });

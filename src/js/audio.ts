@@ -23,8 +23,6 @@ export const createAudio = () => {
   let dry: GainNode | undefined;
   // eslint-disable-next-line functional/no-let
   let wet: GainNode | undefined;
-  // eslint-disable-next-line functional/no-let
-  let knockNoise: AudioBuffer | undefined;
   /** ringing voices, oldest first */
   const voices: Voice[] = [];
   // eslint-disable-next-line functional/no-let
@@ -109,14 +107,7 @@ export const createAudio = () => {
     { chime: c }: Readonly<Config>,
     delay = 0,
   ) => {
-    if (
-      !enabled ||
-      !ctx ||
-      !dry ||
-      !wet ||
-      !knockNoise ||
-      ctx.state !== "running"
-    )
+    if (!enabled || !ctx || !dry || !wet || ctx.state !== "running")
       return false;
     const t = ctx.currentTime + LOOKAHEAD + delay;
 
@@ -141,43 +132,24 @@ export const createAudio = () => {
     gain.connect(dry);
     gain.connect(wet);
 
-    const knock = (c.knock * material.knock) / 2;
-    const total = material.levels.reduce((a, b) => a + b, 0) + knock;
-    const sources: AudioScheduledSourceNode[] = material.ratios.map(
-      (ratio, i) => {
-        const osc = new OscillatorNode(ctx as AudioContext, {
-          // a few cents of random detune keeps repeated notes alive
-          frequency:
-            freq * ratio * 2 ** (((Math.random() - 0.5) * c.detune) / 1200),
-        });
-        // higher partials fade faster and come in with brightness and a harder strike
-        const bright = i === 0 ? 1 : c.brightness * (0.3 + 0.7 * s);
-        const level = (material.levels[i] * bright) / total;
-        const partial = new GainNode(ctx as AudioContext, { gain: level });
-        partial.gain.setValueAtTime(level, t);
-        partial.gain.setTargetAtTime(0, t, ring / (4 * (1 + i * 1.5)));
-        osc.connect(partial).connect(gain);
-        osc.start(t);
-        osc.stop(end);
-        return osc;
-      },
-    );
-
-    if (knock > 0) {
-      // the wooden "tok" of the strike: a few milliseconds of filtered noise
-      const source = new AudioBufferSourceNode(ctx, { buffer: knockNoise });
-      const filter = new BiquadFilterNode(ctx, {
-        type: "bandpass",
-        frequency: Math.min(freq * 3, 8000),
-        Q: 0.6,
+    const total = material.levels.reduce((a, b) => a + b, 0);
+    const sources = material.ratios.map((ratio, i) => {
+      const osc = new OscillatorNode(ctx as AudioContext, {
+        // a few cents of random detune keeps repeated notes alive
+        frequency:
+          freq * ratio * 2 ** (((Math.random() - 0.5) * c.detune) / 1200),
       });
-      const env = new GainNode(ctx, { gain: knock / total });
-      env.gain.setValueAtTime(knock / total, t);
-      env.gain.setTargetAtTime(0, t, 0.004);
-      source.connect(filter).connect(env).connect(gain);
-      source.start(t);
-      sources.push(source);
-    }
+      // higher partials fade faster and come in with brightness and a harder strike
+      const bright = i === 0 ? 1 : c.brightness * (0.3 + 0.7 * s);
+      const level = (material.levels[i] * bright) / total;
+      const partial = new GainNode(ctx as AudioContext, { gain: level });
+      partial.gain.setValueAtTime(level, t);
+      partial.gain.setTargetAtTime(0, t, ring / (4 * (1 + i * 1.5)));
+      osc.connect(partial).connect(gain);
+      osc.start(t);
+      osc.stop(end);
+      return osc;
+    });
 
     voices.push({ note, gain, sources, end });
     return true;
@@ -229,14 +201,6 @@ export const createAudio = () => {
       dry.connect(out);
       wet = new GainNode(ctx, { gain: cfg.chime.reverb });
       wet.connect(room(ctx, 1.4)).connect(out);
-      // one shared 20 ms burst for every knock, instead of a new buffer per note
-      knockNoise = ctx.createBuffer(
-        1,
-        Math.floor(ctx.sampleRate * 0.02),
-        ctx.sampleRate,
-      );
-      const data = knockNoise.getChannelData(0);
-      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
     }
     if (wet) wet.gain.value = cfg.chime.reverb;
     await ctx.resume();

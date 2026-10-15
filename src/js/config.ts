@@ -1,7 +1,7 @@
 /** Settled settings and color defaults. */
 import type { Material, Scale } from "./chime.ts";
 
-export const defaults = {
+export const config = {
   view: {
     /** degrees */
     yaw: 35,
@@ -91,8 +91,6 @@ export const defaults = {
     ring: 2.5,
     /** level of the overtones, 0 = pure tone */
     brightness: 0.8,
-    /** level of the strike's wooden knock, 0 = none; played densely it reads as crackle */
-    knock: 0,
     /** random detune per partial, cents */
     detune: 6,
     /** reverb send level */
@@ -125,6 +123,4 @@ export const defaults = {
   },
 };
 
-export type Config = typeof defaults;
-
-export const config: Config = structuredClone(defaults);
+export type Config = typeof config;

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test, type TestContext } from "node:test";
 import { createAudio } from "./audio.ts";
-import { defaults } from "./config.ts";
+import { config } from "./config.ts";
 import { MATERIALS } from "./chime.ts";
 import { createRustle, step } from "./rustle.ts";
 
@@ -63,10 +63,6 @@ const setup = (t: TestContext) => {
       gains.push(gain.gain.record);
       return gain;
     },
-    BiquadFilterNode: node,
-    AudioBufferSourceNode: function () {
-      return { ...node(), start: () => {}, stop: () => {} };
-    },
     WaveShaperNode: node,
     OscillatorNode: function (
       _context: unknown,
@@ -92,18 +88,17 @@ const setup = (t: TestContext) => {
       else Reflect.deleteProperty(globalThis, name);
     });
   }
-  // knock is off by default, so every Chime adds exactly one source per partial, fundamental first
-  const partials = MATERIALS[defaults.chime.material].ratios.length;
+  // every Chime adds exactly one source per partial, fundamental first
+  const partials = MATERIALS[config.chime.material].ratios.length;
   const fundamentals = () => sources.filter((_, i) => i % partials === 0);
   return { audio: createAudio(), ctx, sources, ramps, gains, fundamentals };
 };
 
 void test("crossings choose Panel pitches, clamp and smooth strikes, and spread Chimes across a frame", async (t) => {
   const { audio, ramps, fundamentals } = setup(t);
-  const cfg = structuredClone(defaults);
+  const cfg = structuredClone(config);
   Object.assign(cfg.chime, {
     root: 440,
-    scale: "majorPentatonic",
     notes: 5,
     detune: 0,
     minSpeed: 0,
@@ -127,7 +122,7 @@ void test("crossings choose Panel pitches, clamp and smooth strikes, and spread 
   // 30 ms ahead of the clock, so no Chime is scheduled in the past
   for (const [i, start] of [0.03, 0.05, 0.07].entries())
     assert.ok(Math.abs(played[i].starts[0] - start) < 1e-9);
-  for (const [i, hz] of [440, 554.3652619537442, 739.9888454232688].entries())
+  for (const [i, hz] of [440, 523.2511306011972, 698.4564628660078].entries())
     assert.ok(Math.abs(played[i].frequency - hz) < 1e-9);
   const { volume, voices, dynamics } = cfg.chime;
   for (const [i, s] of [0, 0.125, 0.34375].entries())
@@ -139,22 +134,21 @@ void test("crossings choose Panel pitches, clamp and smooth strikes, and spread 
 
 void test("Chime gains start at their scheduled levels, so a late schedule can't play at full gain", async (t) => {
   const { audio, gains } = setup(t);
-  const cfg = structuredClone(defaults);
-  cfg.chime.knock = 1;
+  const cfg = structuredClone(config);
   audio.setLengths(new Float32Array([1, 0.5]));
   await audio.enable(cfg);
   const before = gains.length;
   assert.equal(audio.play([{ column: 0, speed: 5 }], 0.016, cfg).length, 1);
   const chime = gains.slice(before);
-  // envelope, one per partial, and the knock
-  assert.equal(chime.length, MATERIALS[cfg.chime.material].ratios.length + 2);
+  // envelope, then one per partial
+  assert.equal(chime.length, MATERIALS[cfg.chime.material].ratios.length + 1);
   assert.equal(chime[0].initial, 0);
   for (const g of chime) assert.equal(g.initial, g.scheduled);
 });
 
 void test("one spiked crossing in a steady swipe doesn't jump out", async (t) => {
   const { audio, ctx } = setup(t);
-  const cfg = structuredClone(defaults);
+  const cfg = structuredClone(config);
   Object.assign(cfg.chime, { notes: 5, minSpeed: 0, maxSpeed: 10 });
   audio.setLengths(new Float32Array([1, 0.875, 0.75, 0.625, 0.5]));
   await audio.enable(cfg);
@@ -170,7 +164,7 @@ void test("one spiked crossing in a steady swipe doesn't jump out", async (t) =>
 
 void test("dense crossings return feedback only for admitted Chimes, including across frames", async (t) => {
   const { audio, ctx, sources } = setup(t);
-  const cfg = structuredClone(defaults);
+  const cfg = structuredClone(config);
   cfg.chime.notes = 5;
   audio.setLengths(new Float32Array([1, 0.875, 0.75, 0.625, 0.5]));
   await audio.enable(cfg);
@@ -190,7 +184,7 @@ void test("dense crossings return feedback only for admitted Chimes, including a
 
 void test("Rustle sweeps play in travel order, with longer Panels lower and octaves intact", async (t) => {
   const { audio, ctx, fundamentals: played } = setup(t);
-  const cfg = structuredClone(defaults);
+  const cfg = structuredClone(config);
   Object.assign(cfg.chime, { root: 440, notes: 6, detune: 0 });
   const rustle = createRustle(
     [1, 0.9, 0.8, 0.7, 0.6, 0.5].map((y1, i) => ({ x: i * 0.04, y0: 0, y1 })),
@@ -224,7 +218,7 @@ void test("Rustle sweeps play in travel order, with longer Panels lower and octa
 
 void test("playback replaces repeated and oldest voices, and stays silent when off", async (t) => {
   const { audio, ctx, sources } = setup(t);
-  const cfg = structuredClone(defaults);
+  const cfg = structuredClone(config);
   cfg.chime.voices = 3;
   cfg.chime.notes = 5;
   audio.setLengths(new Float32Array([1, 0.875, 0.75, 0.625, 0.5]));
@@ -268,11 +262,11 @@ void test("an off request silences playback immediately and wins over an earlier
     await pending;
     ctx.state = "running";
   });
-  const starting = audio.enable(defaults);
+  const starting = audio.enable(config);
   await audio.disable();
   // The hardware may still report running while suspension is in flight.
   ctx.state = "running";
-  assert.deepEqual(audio.play([{ column: 0, speed: 10 }], 0.016, defaults), []);
+  assert.deepEqual(audio.play([{ column: 0, speed: 10 }], 0.016, config), []);
   finish();
   await starting;
   assert.equal(ctx.state, "suspended");

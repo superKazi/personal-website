@@ -29,12 +29,9 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.mode === "navigate",
-            handler: "NetworkFirst",
+            handler: "NetworkOnly",
             options: {
-              cacheName: "document-cache",
               fetchOptions: { cache: "no-store" },
-              cacheableResponse: { statuses: [200] },
-              expiration: { maxEntries: 1 },
               precacheFallback: { fallbackURL: "index.html?offline" },
             },
           },

@@ -39,27 +39,40 @@ const setup = (
       connect: (destination: unknown) => destination,
     };
   };
-  const ctx = {
-    currentTime: 0,
-    sampleRate: 100,
-    state: "suspended",
-    destination: node(),
-    createConvolver: node,
-    createBuffer: (_channels: number, length: number) => ({
-      getChannelData: () => new Float32Array(length),
-    }),
-    resume: () => {
-      ctx.state = "running";
-      return Promise.resolve();
-    },
-    suspend: () => {
-      ctx.state = "suspended";
-      return Promise.resolve();
-    },
+  const context = () => {
+    const ctx = {
+      currentTime: 0,
+      sampleRate: 100,
+      state: "suspended",
+      destination: node(),
+      createConvolver: node,
+      createBuffer: (_channels: number, length: number) => ({
+        getChannelData: () => new Float32Array(length),
+      }),
+      resume: () => {
+        if (ctx.state === "closed")
+          return Promise.reject(new Error("Context closed"));
+        ctx.state = "running";
+        return Promise.resolve();
+      },
+      suspend: () => {
+        ctx.state = "suspended";
+        return Promise.resolve();
+      },
+      close: () => {
+        ctx.state = "closed";
+        return Promise.resolve();
+      },
+    };
+    return ctx;
   };
+  const ctx = context();
+  const contexts: ReturnType<typeof context>[] = [];
   const constructors = {
     AudioContext: function () {
-      return ctx;
+      const next = contexts.length ? context() : ctx;
+      contexts.push(next);
+      return next;
     },
     GainNode: function (
       _context: unknown,
@@ -104,6 +117,7 @@ const setup = (
     ),
     cfg,
     ctx,
+    contexts,
     sources,
     ramps,
     gains,
@@ -271,7 +285,23 @@ void test("playback replaces repeated and oldest voices, and stays silent when o
   assert.deepEqual(audio.play([{ panel: 0, speed: 10 }], 0.016), []);
 });
 
-void test("an off request silences playback immediately and wins over an earlier pending resume", async (t) => {
+void test("turning sound off discards ringing notes and resets the next audio session", async (t) => {
+  const { audio, ctx, contexts, sources } = setup(t, [1]);
+  await audio.enable();
+  ctx.currentTime = 5;
+  assert.equal(audio.play([{ panel: 0, speed: 10 }], 0.016).length, 1);
+  await audio.disable();
+  assert.equal(ctx.state, "closed");
+  assert.deepEqual(audio.play([{ panel: 0, speed: 10 }], 0.016), []);
+  await audio.enable();
+  assert.equal(contexts.length, 2);
+  assert.equal(contexts[1].state, "running");
+  assert.equal(sources.length, BAMBOO.ratios.length);
+  assert.equal(audio.play([{ panel: 0, speed: 10 }], 0.016)[0]?.strength, 0.25);
+  assert.ok(sources.every((s) => s.stops.length === 1));
+});
+
+void test("an off request silences playback immediately and closes an earlier pending resume", async (t) => {
   const { audio, ctx } = setup(t, [1]);
   // eslint-disable-next-line functional/no-let
   let finish = () => {};
@@ -280,14 +310,33 @@ void test("an off request silences playback immediately and wins over an earlier
   });
   t.mock.method(ctx, "resume", async () => {
     await pending;
-    ctx.state = "running";
+    if (ctx.state !== "closed") ctx.state = "running";
   });
   const starting = audio.enable();
   await audio.disable();
-  // The hardware may still report running while suspension is in flight.
-  ctx.state = "running";
   assert.deepEqual(audio.play([{ panel: 0, speed: 10 }], 0.016), []);
   finish();
   await starting;
-  assert.equal(ctx.state, "suspended");
+  assert.equal(ctx.state, "closed");
+});
+
+void test("an old pending resume cannot change a newer audio session", async (t) => {
+  const { audio, ctx, contexts } = setup(t, [1]);
+  // eslint-disable-next-line functional/no-let
+  let finish = () => {};
+  const pending = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  t.mock.method(ctx, "resume", async () => {
+    await pending;
+    if (ctx.state !== "closed") ctx.state = "running";
+  });
+  const starting = audio.enable();
+  await audio.disable();
+  const newer = audio.enable();
+  finish();
+  await Promise.all([starting, newer]);
+  assert.equal(ctx.state, "closed");
+  assert.equal(contexts[1].state, "running");
+  assert.equal(audio.play([{ panel: 0, speed: 10 }], 0.016).length, 1);
 });

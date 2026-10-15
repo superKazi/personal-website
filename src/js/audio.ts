@@ -158,11 +158,6 @@ export const createAudio = () => {
     return true;
   };
 
-  /** Apply settings that live on the shared mix. */
-  const mix = ({ chime: c }: Readonly<Config>) => {
-    if (wet) wet.gain.value = c.reverb;
-  };
-
   const enable = async (cfg: Readonly<Config>) => {
     if (!ctx) {
       ctx = new AudioContext();
@@ -182,11 +177,11 @@ export const createAudio = () => {
       const data = knockNoise.getChannelData(0);
       for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
     }
-    mix(cfg);
+    if (wet) wet.gain.value = cfg.chime.reverb;
     await ctx.resume();
   };
 
   const disable = () => void ctx?.suspend();
 
-  return { enable, disable, chime, mix };
+  return { enable, disable, chime };
 };

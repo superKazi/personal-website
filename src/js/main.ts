@@ -55,19 +55,9 @@ if (canvas && button && byline) {
       max: Math.max(...rustle.length),
     };
   };
-  const update = () => {
-    scene.update(config);
-    toggle.layout(scene.axes());
-  };
   const resize = () => {
     scene.resize(config);
     toggle.layout(scene.axes());
-  };
-  const replay = () => {
-    intro?.kill();
-    if (reduced) return;
-    intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
-    void intro.then(showToggle);
   };
 
   const track = (self: Observer) => {
@@ -158,7 +148,10 @@ if (canvas && button && byline) {
         showToggle();
       };
     });
-    replay();
+    if (!reduced) {
+      intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
+      void intro.then(showToggle);
+    }
 
     observer = Observer.create({
       target: canvas,
@@ -174,11 +167,9 @@ if (canvas && button && byline) {
       void import("./gui.ts").then(({ createGui }) =>
         // lil-gui's stylesheet resets CSS font faces, so reload Degular before re-slicing
         createGui(
-          config,
+          config.color,
           () => void loadFont().then(rebuild),
-          update,
-          replay,
-          () => audio.mix(config),
+          () => scene.update(config),
         ),
       );
     }

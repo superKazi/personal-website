@@ -4,7 +4,8 @@ import { config } from "./config.ts";
 import { createAudio } from "./audio.ts";
 import { playIntro } from "./intro.ts";
 import { buildPanels, loadFont } from "./panels.ts";
-import { createRustle, step, type Pointer } from "./rustle.ts";
+import { createPointer } from "./pointer.ts";
+import { createRustle, step } from "./rustle.ts";
 import { createScene } from "./scene.ts";
 import { createSoundToggle } from "./toggle.ts";
 
@@ -35,27 +36,16 @@ const start = async () => {
   const rustle = createRustle(panels, config);
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
-  // where the pointer is on screen, null when it's away, and the Observer tracking its velocity
-  // eslint-disable-next-line functional/no-let
-  let client: Readonly<{ x: number; y: number }> | null = null;
   // eslint-disable-next-line functional/no-let
   let reduced = false;
-  const keyboardButton =
-    document.querySelector<HTMLButtonElement>(".rustle-keyboard");
-  // eslint-disable-next-line functional/no-let
-  let keyboard: Pointer | null = null;
 
   const resize = () => {
     scene.resize();
     toggle.layout(scene.axes());
   };
 
-  const track = (self: Observer) => {
-    client = reduced ? null : { x: self.x ?? 0, y: self.y ?? 0 };
-  };
-  const leave = () => {
-    client = null;
-  };
+  const track = (self: Observer) => pointer.track(self.x ?? 0, self.y ?? 0);
+  const leave = () => pointer.leave();
   const observer = Observer.create({
     target: canvas,
     type: "pointer,touch",
@@ -65,28 +55,16 @@ const start = async () => {
     onRelease: leave,
     onHoverEnd: leave,
   });
-  /** The pointer ray in word space, with Observer's velocity projected onto the word. */
-  const pointerNow = (): Pointer | null => {
-    if (reduced) return null;
-    if (keyboard) return keyboard;
-    if (!client) return null;
-    const ray = scene.toWord(client.x, client.y);
-    if (!ray) return null;
-    const h = 0.01;
-    const ahead = scene.toWord(
-      client.x + observer.velocityX * h,
-      client.y + observer.velocityY * h,
-    );
-    return {
-      ...ray,
-      vx: ahead ? (ahead.x - ray.x) / h : 0,
-      source: "pointer",
-    };
-  };
+  const pointer = createPointer({
+    button: document.querySelector<HTMLButtonElement>(".rustle-keyboard"),
+    panels,
+    toWord: scene.toWord,
+    velocity: () => [observer.velocityX, observer.velocityY],
+  });
 
   const tick = (_time: number, deltaMs: number) => {
     const dt = deltaMs / 1000;
-    const crossed = step(rustle, pointerNow(), dt);
+    const crossed = step(rustle, pointer.now(), dt);
     if (toggle.isOn() && crossed.length)
       audio
         .play(crossed, dt)
@@ -99,37 +77,11 @@ const start = async () => {
 
   resize();
   document.body.classList.add("ready");
-  keyboardButton?.addEventListener("click", () => {
-    if (reduced || keyboard) return;
-    const first = panels[0].x - 0.04;
-    const last = panels[panels.length - 1].x + 0.04;
-    keyboard = {
-      x: first,
-      y: 0.5,
-      z: config.panels.depth / 2,
-      slopeY: 0,
-      slopeZ: 0,
-      vx: (last - first) / 1.4,
-      source: "keyboard",
-    };
-    rustle.prev = { ...keyboard };
-    void gsap.to(keyboard, {
-      x: last,
-      duration: 1.4,
-      ease: "none",
-      onComplete: () => {
-        keyboard = null;
-      },
-    });
-  });
   addEventListener("resize", resize);
   gsap.ticker.add(tick);
   gsap.matchMedia().add("(prefers-reduced-motion: reduce)", (ctx) => {
     reduced = true;
-    client = null;
-    if (keyboard) gsap.killTweensOf(keyboard);
-    keyboard = null;
-    if (keyboardButton) keyboardButton.hidden = true;
+    pointer.setReduced(true);
     intro?.progress(1).kill();
     // no Rustle means no Chimes, so the Sound toggle has nothing to switch;
     // ignored so leaving reduced motion doesn't revert the toggle's look back to on
@@ -140,7 +92,7 @@ const start = async () => {
     ctx.ignore(() => gsap.set(byline, { autoAlpha: 1, overwrite: true }));
     return () => {
       reduced = false;
-      if (keyboardButton) keyboardButton.hidden = false;
+      pointer.setReduced(false);
       showToggle();
     };
   });

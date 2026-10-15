@@ -121,7 +121,6 @@ const start = async () => {
 
   resize();
   document.body.classList.add("ready");
-  gsap.set(byline, { autoAlpha: 0 });
   keyboardButton?.addEventListener("click", () => {
     if (reduced || keyboard) return;
     const first = rustle.xs[0] - 0.04;
@@ -176,6 +175,7 @@ const start = async () => {
 
 void start().catch((error: unknown) => {
   document.body.classList.remove("ready");
+  document.body.classList.add("failed");
   if (byline) gsap.set(byline, { autoAlpha: 1 });
   if (button) gsap.set(button, { autoAlpha: 0 });
   console.error("Artwork unavailable", error);

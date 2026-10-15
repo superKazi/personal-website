@@ -154,6 +154,23 @@
         opacity: 0;
       }
 
+      .sound-status {
+        position: fixed;
+        inset-block-end: calc(max(1rem, env(safe-area-inset-bottom)) + 3.25rem);
+        inset-inline-end: max(1rem, env(safe-area-inset-right));
+        max-inline-size: min(20rem, calc(100% - 2rem));
+        border-radius: 0.25rem;
+        color: #cecdc3;
+        background: #100f0f;
+        font:
+          500 0.875rem/1.4 Degular,
+          sans-serif;
+      }
+
+      .sound-status:not(:empty) {
+        padding: 0.5rem 0.75rem;
+      }
+
       .sound svg {
         /* clicks always land on the button, never on the animating bars */
         pointer-events: none;

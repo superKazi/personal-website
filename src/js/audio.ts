@@ -11,7 +11,7 @@ interface Voice {
 }
 
 /**
- * The page's one AudioContext. Browsers only let audio start inside a user
+ * The page's active AudioContext. Browsers only let audio start inside a user
  * gesture, so `enable` must be called from the Sound toggle's press.
  * Respects the iOS silent switch: we never override the audio session type.
  */
@@ -190,13 +190,17 @@ export const createAudio = (
       wet.connect(room(ctx, 1.4)).connect(out);
     }
     await ctx.resume();
-    // An off request may arrive while resume is pending; never let that resume win.
-    if (!enabled) await ctx.suspend();
   };
 
   const disable = async () => {
     enabled = false;
-    await ctx?.suspend();
+    const closing = ctx;
+    // Suspending freezes ringing notes and reverb, so a later resume would replay them.
+    ctx = dry = wet = undefined;
+    voices.length = 0;
+    lastStart = -Infinity;
+    strike = 0;
+    await closing?.close();
   };
 
   return { enable, disable, play };

@@ -15,7 +15,11 @@ const MAX_HIGH_DB = -70;
  * Runs in the page before any app code.
  */
 const tap = () => {
-  const s = (window.__audioCheck = { blocks: [], running: false });
+  const s = (window.__audioCheck = {
+    blocks: [],
+    running: false,
+    contexts: [],
+  });
   const code = `registerProcessor("tap", class extends AudioWorkletProcessor {
     buf = new Float32Array(1024);
     n = 0;
@@ -37,6 +41,7 @@ const tap = () => {
       const ctx = this.context;
       const source = this;
       ctx.__tapped = true;
+      s.contexts.push(ctx);
       const url = URL.createObjectURL(
         new Blob([code], { type: "text/javascript" }),
       );
@@ -158,7 +163,35 @@ const check = async (engine, name, url) => {
     if (peak < 0.01)
       return { name, ok: false, reason: "no Chimes reached the output" };
     const high = highDb(x, rate);
+    await page
+      .getByRole("button", { name: "Turn off audio experience" })
+      .click();
+    await page.waitForFunction(
+      () => window.__audioCheck.contexts[0].state === "closed",
+      null,
+      { timeout: 5000 },
+    );
+    await page.evaluate(() => {
+      window.__audioCheck.blocks = [];
+    });
+    await toggle.click();
+    await page.waitForFunction(
+      () => window.__audioCheck.contexts.at(-1).state === "running",
+    );
+    await page.waitForTimeout(300);
+    const replay = await page.evaluate(() =>
+      window.__audioCheck.blocks.reduce(
+        (peak, block) =>
+          block.reduce(
+            (peak, sample) => Math.max(peak, Math.abs(sample)),
+            peak,
+          ),
+        0,
+      ),
+    );
     const failures = [
+      !(replay < 0.001) &&
+        `old Chimes replayed after unmuting: peak ${replay.toFixed(3)}`,
       peak > MAX_PEAK && `loud: peak ${peak.toFixed(3)} > ${MAX_PEAK}`,
       // NaN would slip past a plain comparison
       !(high <= MAX_HIGH_DB) &&

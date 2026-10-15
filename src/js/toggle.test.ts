@@ -17,6 +17,7 @@ const element = () => {
 };
 
 const setup = (t: TestContext, change: (on: boolean) => Promise<void>) => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
   const label = { textContent: "Turn on audio experience" };
   const svg = element();
   const adjacent: Readonly<ReturnType<typeof element>>[] = [];
@@ -81,7 +82,7 @@ void test("synchronous activation errors and rejected shutdown are both handled"
   const { button, toggle, status } = setup(t, (on) => {
     // eslint-disable-next-line functional/no-throw-statements -- simulate a failing AudioContext constructor
     if (on) throw new Error("AudioContext unavailable");
-    return Promise.reject(new Error("suspend failed"));
+    return Promise.reject(new Error("close failed"));
   });
   button.click();
   await setImmediate();
@@ -169,7 +170,6 @@ void test("user clicks count sound-on and sound-off events", (t) => {
 
 void test("the retry status clears after six seconds", async (t) => {
   t.mock.method(console, "error", () => {});
-  t.mock.timers.enable({ apis: ["setTimeout"] });
   const { button, status } = setup(t, (on) =>
     on ? Promise.reject(new Error("blocked")) : Promise.resolve(),
   );

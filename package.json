@@ -7,7 +7,8 @@
     "build": "pnpm run lint && tsc && pnpm test && vite build",
     "serve": "vite preview",
     "test": "node --test src/js/*.test.ts",
-    "audio-check": "node scripts/audio-check.mjs"
+    "audio-check": "node scripts/audio-check.mjs",
+    "offline-check": "node scripts/offline-check.mjs"
   },
   "type": "module",
   "devDependencies": {

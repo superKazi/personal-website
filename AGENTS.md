@@ -6,9 +6,9 @@
 
 ## Branch workflow
 
-- All dev work happens on `new-experience`.
-- When a slice is complete, open a PR from `new-experience` into `develop` for user review.
-- When everything is done, the user will merge `develop` into `main` to ship it to production, then delete `new-experience`.
+- All dev work happens on `develop`.
+- When a slice is complete, open a PR from `develop` into `main` for user review.
+- When everything is done, the user will merge `develop` into `main` to ship it to production.
 
 ## Agent skills
 

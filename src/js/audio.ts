@@ -14,7 +14,7 @@ interface Voice {
  * gesture, so `enable` must be called from the Sound toggle's press.
  * Respects the iOS silent switch: we never override the audio session type.
  */
-export const createAudio = () => {
+export const createAudio = ({ chime: c }: Readonly<Config>) => {
   // eslint-disable-next-line functional/no-let
   let ctx: AudioContext | undefined;
   // eslint-disable-next-line functional/no-let
@@ -100,13 +100,7 @@ export const createAudio = () => {
    * One Chime for `note` at `freq` Hz. `s` (0..1) is how hard it's struck:
    * louder and brighter. Returns false if sound is off.
    */
-  const chime = (
-    note: number,
-    freq: number,
-    s: number,
-    { chime: c }: Readonly<Config>,
-    delay = 0,
-  ) => {
+  const chime = (note: number, freq: number, s: number, delay = 0) => {
     if (!enabled || !ctx || !dry || !wet || ctx.state !== "running")
       return false;
     const t = ctx.currentTime + LOOKAHEAD + delay;
@@ -155,13 +149,8 @@ export const createAudio = () => {
   };
 
   /** Accepted Chimes only: the caller can draw feedback without knowing playback policy. */
-  const play = (
-    crossings: readonly Crossing[],
-    dt: number,
-    cfg: Readonly<Config>,
-  ) => {
+  const play = (crossings: readonly Crossing[], dt: number) => {
     if (!enabled) return [];
-    const { chime: c } = cfg;
     return crossings.flatMap((crossing, i) => {
       const note = noteForLength(
         lengths.values[crossing.column],
@@ -181,7 +170,6 @@ export const createAudio = () => {
         note,
         frequency(note, c.root),
         strength,
-        cfg,
         (i / crossings.length) * dt,
       )
         ? [{ strength, scalePosition: note / Math.max(1, c.notes - 1) }]
@@ -189,7 +177,7 @@ export const createAudio = () => {
     });
   };
 
-  const enable = async (cfg: Readonly<Config>) => {
+  const enable = async () => {
     enabled = true;
     if (!ctx) {
       ctx = new AudioContext();
@@ -198,10 +186,9 @@ export const createAudio = () => {
       const out = clip.input;
       dry = new GainNode(ctx, { gain: 1 });
       dry.connect(out);
-      wet = new GainNode(ctx, { gain: cfg.chime.reverb });
+      wet = new GainNode(ctx, { gain: c.reverb });
       wet.connect(room(ctx, 1.4)).connect(out);
     }
-    if (wet) wet.gain.value = cfg.chime.reverb;
     await ctx.resume();
     // An off request may arrive while resume is pending; never let that resume win.
     if (!enabled) await ctx.suspend();

@@ -10,7 +10,7 @@ import {
   Triangle,
   Vec3,
 } from "ogl";
-import type { Config } from "./config.ts";
+import { config } from "./config.ts";
 import type { Panel } from "./panels.ts";
 
 const vertex = /* glsl */ `#version 300 es
@@ -160,23 +160,24 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   center.setParent(yaw);
 
   const uniforms = {
-    uDepth: { value: 1 },
-    uRiseDistance: { value: 1 },
-    uBendSharpness: { value: 0 },
-    uBendWidth: { value: 0.3 },
+    uDepth: { value: config.panels.depth },
+    uRiseDistance: { value: config.intro.distance },
+    uBendSharpness: { value: config.rustle.bendSharpness },
+    uBendWidth: { value: config.rustle.bendWidth },
     uSwayAmp: { value: 0 },
     uSwayPhase: { value: 0 },
-    uSwayWave: { value: 1 },
-    uFade: { value: 0 },
-    uBackShade: { value: 1 },
+    uSwayWave: { value: config.sway.wave },
+    uFade: { value: config.intro.fade },
+    uBackShade: { value: config.color.backShade },
+    // uEdgeWidth and uGrainSize are in device pixels, so `resize` sets them
     uEdgeWidth: { value: 1 },
-    uEdge: { value: new Color() },
-    uBackground: { value: new Color() },
+    uEdge: { value: new Color(config.color.edge) },
+    uBackground: { value: new Color(config.color.background) },
     uGrainSize: { value: 1 },
     uGrainSeed: { value: 0 },
-    uGrainAmount: { value: 0 },
-    uGrainBlotch: { value: 0 },
-    uGrainGround: { value: 0 },
+    uGrainAmount: { value: config.grain.amount },
+    uGrainBlotch: { value: config.grain.blotch },
+    uGrainGround: { value: config.grain.ground },
   };
   const program = new Program(gl, {
     vertex,
@@ -207,8 +208,8 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   // eslint-disable-next-line functional/no-let
   let bounds = { min: new Vec3(), max: new Vec3() };
 
-  const fit = (cfg: Readonly<Config>) => {
-    const { yaw: y, pitch: p, roll: r, padding } = cfg.view;
+  const fit = () => {
+    const { yaw: y, pitch: p, roll: r, padding } = config.view;
     yaw.rotation.y = rad(y);
     pitch.rotation.x = rad(p);
     roll.rotation.z = rad(r);
@@ -237,7 +238,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     });
   };
 
-  const build = (panels: readonly Panel[], cfg: Readonly<Config>) => {
+  const build = (panels: readonly Panel[]) => {
     const panel = new Float32Array(panels.flatMap((p) => [p.x, p.y0, p.y1]));
     const color = new Float32Array(
       panels.flatMap((p) => [...new Color(p.color)]),
@@ -256,7 +257,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     mesh = new Mesh(gl, { geometry, program });
     mesh.setParent(center);
 
-    const depth = cfg.panels.depth;
+    const depth = config.panels.depth;
     bounds = {
       min: new Vec3(Math.min(...panels.map((p) => p.x)), 0, 0),
       max: new Vec3(
@@ -270,28 +271,16 @@ export const createScene = (canvas: HTMLCanvasElement) => {
       -bounds.max.y / 2,
       -depth / 2,
     );
-    resize(cfg);
+    resize();
   };
 
-  const resize = (cfg: Readonly<Config>) => {
+  const resize = () => {
     // re-read so moving to another screen or zooming stays sharp
     renderer.dpr = Math.min(devicePixelRatio, 3);
     renderer.setSize(innerWidth, innerHeight);
-    uniforms.uDepth.value = cfg.panels.depth;
-    uniforms.uRiseDistance.value = cfg.intro.distance;
-    uniforms.uFade.value = cfg.intro.fade;
-    uniforms.uBendSharpness.value = cfg.rustle.bendSharpness;
-    uniforms.uBendWidth.value = cfg.rustle.bendWidth;
-    uniforms.uSwayWave.value = cfg.sway.wave;
-    uniforms.uBackShade.value = cfg.color.backShade;
-    uniforms.uEdgeWidth.value = cfg.color.edgeWidth * renderer.dpr;
-    uniforms.uEdge.value.set(cfg.color.edge);
-    uniforms.uBackground.value.set(cfg.color.background);
-    uniforms.uGrainSize.value = cfg.grain.size * renderer.dpr;
-    uniforms.uGrainAmount.value = cfg.grain.amount;
-    uniforms.uGrainBlotch.value = cfg.grain.blotch;
-    uniforms.uGrainGround.value = cfg.grain.ground;
-    fit(cfg);
+    uniforms.uEdgeWidth.value = config.color.edgeWidth * renderer.dpr;
+    uniforms.uGrainSize.value = config.grain.size * renderer.dpr;
+    fit();
   };
 
   const render = () => renderer.render({ scene: roll, camera });

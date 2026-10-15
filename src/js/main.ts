@@ -21,9 +21,9 @@ const start = async () => {
   // a lost GPU context never draws again; the piece keeps no state, so reload once it's back
   canvas.addEventListener("webglcontextlost", (e) => e.preventDefault());
   canvas.addEventListener("webglcontextrestored", () => location.reload());
-  const audio = createAudio();
+  const audio = createAudio(config);
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
-    on ? audio.enable(config) : audio.disable(),
+    on ? audio.enable() : audio.disable(),
   );
   const showToggle = () =>
     void gsap.to([button, byline], {
@@ -31,9 +31,9 @@ const start = async () => {
       duration: 0.6,
       ease: "power2.out",
     });
-  const panels = buildPanels(config);
-  scene.build(panels, config);
-  const rustle = createRustle(panels);
+  const panels = buildPanels();
+  scene.build(panels);
+  const rustle = createRustle(panels, config);
   audio.setLengths(rustle.length);
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
@@ -54,7 +54,7 @@ const start = async () => {
   let keyboard: Pointer | null = null;
 
   const resize = () => {
-    scene.resize(config);
+    scene.resize();
     toggle.layout(scene.axes());
   };
 
@@ -105,10 +105,10 @@ const start = async () => {
     scene.setGrain(Math.floor(grainClock * config.grain.fps));
 
     const wasMoving = rustle.moving;
-    const crossed = step(rustle, pointerNow(), dt, config);
+    const crossed = step(rustle, pointerNow(), dt);
     if (toggle.isOn() && crossed.length)
       audio
-        .play(crossed, dt, config)
+        .play(crossed, dt)
         .forEach(({ strength, scalePosition }) =>
           toggle.bump(0.4 + 0.6 * strength, scalePosition),
         );
@@ -171,7 +171,7 @@ const start = async () => {
     };
   });
   if (!reduced) {
-    intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
+    intro = playIntro(panels, scene.getRise(), scene.commitRise);
     void intro.then(showToggle);
   }
 };

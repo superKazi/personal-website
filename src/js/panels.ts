@@ -1,4 +1,4 @@
-import type { Config } from "./config.ts";
+import { config } from "./config.ts";
 
 const WORD = "KAZI";
 const FONT_PX = 256;
@@ -51,7 +51,8 @@ const columnRuns = (
 };
 
 /** Slice the word into Panels and color them in seeded runs. */
-export const buildPanels = ({ panels, color }: Readonly<Config>): Panel[] => {
+export const buildPanels = (): Panel[] => {
+  const { panels, color } = config;
   const ctx = new OffscreenCanvas(1, 1).getContext("2d", {
     willReadFrequently: true,
   });

@@ -30,7 +30,10 @@ const REST = 1e-4;
  * Rustle state. Panels sharing an x form one column and move together,
  * so a letter's floating pieces stay aligned with its stem.
  */
-export const createRustle = (panels: readonly PanelLike[]) => {
+export const createRustle = (
+  panels: readonly PanelLike[],
+  { rustle: cfg, panels: { depth } }: Readonly<Config>,
+) => {
   const xs = [...new Set(panels.map((p) => p.x))].sort((a, b) => a - b);
   const index = new Map(xs.map((x, i) => [x, i]));
   const pieces: PanelLike[][] = xs.map(() => []);
@@ -55,6 +58,8 @@ export const createRustle = (panels: readonly PanelLike[]) => {
     prev: null as Pointer | null,
     speed: 0,
     moving: false,
+    cfg,
+    depth,
   };
 };
 
@@ -170,8 +175,8 @@ export const step = (
   r: Rustle,
   pointer: Pointer | null,
   dt: number,
-  { rustle: cfg, panels: { depth } }: Readonly<Config>,
 ): Crossing[] => {
+  const { cfg, depth } = r;
   const frame = Math.min(Math.max(dt, 0), MAX_DT);
 
   // velocity comes with the pointer (GSAP Observer's), not from frame gaps, so uneven

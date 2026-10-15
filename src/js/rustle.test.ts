@@ -20,18 +20,18 @@ const ray = {
 };
 
 const run = (frameMs: number) => {
-  const rustle = createRustle(panels);
+  const rustle = createRustle(panels, config);
   const dt = frameMs / 1000;
   // a fast swipe across the whole word, then let go
   const swipe = Math.max(1, Math.round(0.4 / dt));
   // the pointer's velocity, as GSAP Observer reports it
   const vx = 4 / (swipe * dt);
   for (let i = 0; i <= swipe; i++)
-    step(rustle, { ...ray, x: (i / swipe) * 4, vx }, dt, config);
+    step(rustle, { ...ray, x: (i / swipe) * 4, vx }, dt);
   const peak = Math.max(...rustle.angle.map(Math.abs));
   // six simulated seconds; steps are capped at 50 ms, so count frames, not wall time
   const settle = Math.ceil(6 / Math.min(dt, 0.05));
-  for (let i = 0; i < settle; i++) step(rustle, null, dt, config);
+  for (let i = 0; i < settle; i++) step(rustle, null, dt);
   return { rustle, peak };
 };
 
@@ -51,15 +51,15 @@ for (const frameMs of [8, 33, 5000]) {
 }
 
 void test("Panels at rest stay at rest without a push", () => {
-  const rustle = createRustle(panels);
-  for (let i = 0; i < 100; i++) step(rustle, null, 0.016, config);
+  const rustle = createRustle(panels, config);
+  for (let i = 0; i < 100; i++) step(rustle, null, 0.016);
   assert.ok(rustle.angle.every((a) => a === 0));
 });
 
 void test("crossing a column reports it once", () => {
-  const rustle = createRustle(panels);
-  step(rustle, { ...ray, x: 0.01, vx: 2.5 }, 0.016, config);
-  const crossed = step(rustle, { ...ray, x: 0.05, vx: 2.5 }, 0.016, config);
+  const rustle = createRustle(panels, config);
+  step(rustle, { ...ray, x: 0.01, vx: 2.5 }, 0.016);
+  const crossed = step(rustle, { ...ray, x: 0.05, vx: 2.5 }, 0.016);
   assert.deepEqual(
     crossed.map((c) => c.column),
     [1],
@@ -68,10 +68,10 @@ void test("crossing a column reports it once", () => {
 
 void test("the same timed swipe bends equally at 30, 60 and 120 FPS", () => {
   const peaks = [30, 60, 120].map((fps) => {
-    const r = createRustle([{ x: 0, y0: 0, y1: 1 }]);
+    const r = createRustle([{ x: 0, y0: 0, y1: 1 }], config);
     const angles: number[] = [];
     for (let f = 0; f < fps * 2; f++) {
-      step(r, { ...ray, x: -0.1 + (0.1 * f) / fps, vx: 0.1 }, 1 / fps, config);
+      step(r, { ...ray, x: -0.1 + (0.1 * f) / fps, vx: 0.1 }, 1 / fps);
       angles.push(Math.abs(r.angle[0]));
     }
     return Math.max(...angles);
@@ -84,49 +84,55 @@ void test("fast oblique sweeps report crossings in travel order", () => {
     [-0.1, 0.6, [0, 1, 2]],
     [0.6, -0.1, [2, 1, 0]],
   ] as const) {
-    const r = createRustle([0, 0.04, 0.08].map((x) => ({ x, y0: 0, y1: 1 })));
+    const r = createRustle(
+      [0, 0.04, 0.08].map((x) => ({ x, y0: 0, y1: 1 })),
+      config,
+    );
     const p = { ...ray, slopeZ: -1.428, vx: 10 };
-    step(r, { ...p, x: from }, 0.05, config);
+    step(r, { ...p, x: from }, 0.05);
     assert.deepEqual(
-      step(r, { ...p, x: to }, 0.05, config).map((c) => c.column),
+      step(r, { ...p, x: to }, 0.05).map((c) => c.column),
       expected,
     );
   }
 });
 
 void test("holes between panel pieces neither bend nor chime", () => {
-  const r = createRustle([
-    { x: 0.04, y0: 0, y1: 0.2 },
-    { x: 0.04, y0: 0.8, y1: 1 },
-  ]);
-  step(r, { ...ray, x: 0.03, vx: 2 }, 0.016, config);
-  assert.deepEqual(step(r, { ...ray, x: 0.05, vx: 2 }, 0.016, config), []);
+  const r = createRustle(
+    [
+      { x: 0.04, y0: 0, y1: 0.2 },
+      { x: 0.04, y0: 0.8, y1: 1 },
+    ],
+    config,
+  );
+  step(r, { ...ray, x: 0.03, vx: 2 }, 0.016);
+  assert.deepEqual(step(r, { ...ray, x: 0.05, vx: 2 }, 0.016), []);
   assert.equal(r.angle[0], 0);
   assert.equal(r.moving, false);
 });
 
 void test("reused pointer objects retain the previous crossing position", () => {
-  const r = createRustle(panels);
+  const r = createRustle(panels, config);
   const p = { ...ray, x: 0.01, vx: 2 };
-  step(r, p, 0.016, config);
+  step(r, p, 0.016);
   p.x = 0.05;
   assert.deepEqual(
-    step(r, p, 0.016, config).map((c) => c.column),
+    step(r, p, 0.016).map((c) => c.column),
     [1],
   );
 });
 
 void test("reversing at a column does not count the same endpoint twice", () => {
-  const r = createRustle(panels);
+  const r = createRustle(panels, config);
   const p = { ...ray, vx: 2 };
-  step(r, { ...p, x: 0.03 }, 0.016, config);
-  assert.equal(step(r, { ...p, x: 0.04 }, 0.016, config).length, 1);
-  assert.equal(step(r, { ...p, x: 0.03 }, 0.016, config).length, 0);
+  step(r, { ...p, x: 0.03 }, 0.016);
+  assert.equal(step(r, { ...p, x: 0.04 }, 0.016).length, 1);
+  assert.equal(step(r, { ...p, x: 0.03 }, 0.016).length, 0);
 });
 
 void test("handing off between the keyboard and a real pointer is a jump, not a sweep", () => {
-  const r = createRustle(panels);
+  const r = createRustle(panels, config);
   // the keyboard Rustle ends past the word while the mouse rests at its start
-  step(r, { ...ray, x: 4.04, vx: 2, source: "keyboard" }, 0.016, config);
-  assert.deepEqual(step(r, { ...ray, x: 0.01, vx: 0 }, 0.016, config), []);
+  step(r, { ...ray, x: 4.04, vx: 2, source: "keyboard" }, 0.016);
+  assert.deepEqual(step(r, { ...ray, x: 0.01, vx: 0 }, 0.016), []);
 });

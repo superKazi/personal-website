@@ -1,5 +1,5 @@
 import { gsap } from "gsap";
-import type { Config } from "./config.ts";
+import { config } from "./config.ts";
 import type { Panel } from "./panels.ts";
 
 /**
@@ -11,8 +11,8 @@ export const playIntro = (
   // the scene's GPU buffer; mutated in place each frame
   rise: Float32Array,
   commit: () => void,
-  { intro }: Readonly<Config>,
 ) => {
+  const { intro } = config;
   const xs = panels.map((p) => p.x);
   const min = Math.min(...xs);
   const span = Math.max(...xs) - min || 1;

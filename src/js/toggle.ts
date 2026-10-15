@@ -161,7 +161,13 @@ export const createSoundToggle = (
       }
     }
   };
-  button.addEventListener("click", () => void setOn(!on));
+  button.addEventListener("click", () => {
+    globalThis.goatcounter?.count({
+      path: `sound-${on ? "off" : "on"}`,
+      event: true,
+    });
+    void setOn(!on);
+  });
 
   return {
     /** Re-slant the bars to match the piece's current view. */

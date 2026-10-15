@@ -127,6 +127,12 @@
       "skillPath": "skills/engineering/pr/SKILL.md",
       "computedHash": "22a15d4d469344b38e03eb0e95772478393975836289393b1bad3c0febcdc679"
     },
+    "preflight": {
+      "source": "preflightsh/preflight",
+      "sourceType": "github",
+      "skillPath": "skills/preflight/SKILL.md",
+      "computedHash": "2e4b031c1ca61220f734df85077b5a2cb96f7f27a907f43f3722852c4c6c3e96"
+    },
     "prototype": {
       "source": "mattpocock/skills",
       "sourceType": "github",

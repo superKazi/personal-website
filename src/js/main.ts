@@ -2,7 +2,6 @@ import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import { config } from "./config.ts";
 import { createAudio } from "./audio.ts";
-import { frequency, noteForLength } from "./chime.ts";
 import { playIntro } from "./intro.ts";
 import { buildPanels, loadFont, type Panel } from "./panels.ts";
 import { createRustle, step, type Pointer } from "./rustle.ts";
@@ -21,7 +20,7 @@ const start = async () => {
   const scene = createScene(canvas);
   const audio = createAudio();
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
-    on ? void audio.enable(config) : audio.disable(),
+    on ? audio.enable(config) : audio.disable(),
   );
   const showToggle = () =>
     void gsap.to([button, byline], {
@@ -38,8 +37,6 @@ const start = async () => {
   // where the pointer is on screen, null when it's away, and the Observer tracking its velocity
   // eslint-disable-next-line functional/no-let
   let client: Readonly<{ x: number; y: number }> | null = null;
-  // eslint-disable-next-line functional/no-let
-  let lengths = { min: 0, max: 0 };
   // eslint-disable-next-line functional/no-let
   let reduced = false;
   // eslint-disable-next-line functional/no-let
@@ -58,10 +55,7 @@ const start = async () => {
     panels = buildPanels(config);
     scene.build(panels, config);
     rustle = createRustle(panels);
-    lengths = {
-      min: Math.min(...rustle.length),
-      max: Math.max(...rustle.length),
-    };
+    audio.setLengths(rustle.length);
   };
   const resize = () => {
     scene.resize(config);
@@ -112,29 +106,12 @@ const start = async () => {
 
     const wasMoving = rustle.moving;
     const crossed = step(rustle, pointerNow(), dt, config);
-    if (toggle.isOn() && crossed.length) {
-      const { chime } = config;
-      // every Panel is a chime: each one crossed plays its own note, set by its length
-      crossed.forEach((c, i) => {
-        const note = noteForLength(
-          rustle.length[c.column],
-          lengths.min,
-          lengths.max,
-          chime.notes,
+    if (toggle.isOn() && crossed.length)
+      audio
+        .play(crossed, dt, config)
+        .forEach(({ strength, pitch }) =>
+          toggle.bump(0.4 + 0.6 * strength, pitch),
         );
-        const s = Math.min(
-          1,
-          Math.max(
-            0,
-            (c.speed - chime.minSpeed) / (chime.maxSpeed - chime.minSpeed),
-          ),
-        );
-        const freq = frequency(note, chime.root, chime.scale);
-        // spread a frame's Chimes across the frame so a fast swipe plays a run, not a chord
-        if (audio.chime(note, freq, s, config, (i / crossed.length) * dt))
-          toggle.bump(0.4 + 0.6 * s, note / Math.max(1, chime.notes - 1));
-      });
-    }
     if (rustle.moving || wasMoving) {
       const bend = scene.getBend();
       rustle.column.forEach((c, i) => {

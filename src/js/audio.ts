@@ -1,5 +1,6 @@
-import { MATERIALS } from "./chime.ts";
+import { frequency, MATERIALS, noteForLength } from "./chime.ts";
 import type { Config } from "./config.ts";
+import type { Crossing } from "./rustle.ts";
 
 interface Voice {
   readonly note: number;
@@ -17,6 +18,8 @@ export const createAudio = () => {
   // eslint-disable-next-line functional/no-let
   let ctx: AudioContext | undefined;
   // eslint-disable-next-line functional/no-let
+  let enabled = false;
+  // eslint-disable-next-line functional/no-let
   let dry: GainNode | undefined;
   // eslint-disable-next-line functional/no-let
   let wet: GainNode | undefined;
@@ -28,6 +31,13 @@ export const createAudio = () => {
   let lastStart = -Infinity;
   // closer than this, separate Chimes blur together anyway; skipping them keeps the audio thread light
   const MIN_GAP = 0.012;
+  const lengths = { values: [] as readonly number[], min: 0, max: 0 };
+
+  const setLengths = (values: Readonly<Float32Array>) => {
+    lengths.values = Array.from(values);
+    lengths.min = Math.min(...values);
+    lengths.max = Math.max(...values);
+  };
 
   /** A soft room: decaying stereo noise as a reverb impulse, no audio files. */
   const room = (c: AudioContext, seconds: number) => {
@@ -94,7 +104,14 @@ export const createAudio = () => {
     { chime: c }: Readonly<Config>,
     delay = 0,
   ) => {
-    if (!ctx || !dry || !wet || !knockNoise || ctx.state !== "running")
+    if (
+      !enabled ||
+      !ctx ||
+      !dry ||
+      !wet ||
+      !knockNoise ||
+      ctx.state !== "running"
+    )
       return false;
     const t = ctx.currentTime + delay;
 
@@ -158,7 +175,39 @@ export const createAudio = () => {
     return true;
   };
 
+  /** Accepted Chimes only: the caller can draw feedback without knowing playback policy. */
+  const play = (
+    crossings: readonly Crossing[],
+    dt: number,
+    cfg: Readonly<Config>,
+  ) => {
+    const { chime: c } = cfg;
+    return crossings.flatMap((crossing, i) => {
+      const note = noteForLength(
+        lengths.values[crossing.column],
+        lengths.min,
+        lengths.max,
+        c.notes,
+      );
+      const strength = Math.min(
+        1,
+        Math.max(0, (crossing.speed - c.minSpeed) / (c.maxSpeed - c.minSpeed)),
+      );
+      // Spread a frame's Chimes into a run, preserving Rustle's travel order.
+      return chime(
+        note,
+        frequency(note, c.root, c.scale),
+        strength,
+        cfg,
+        (i / crossings.length) * dt,
+      )
+        ? [{ strength, pitch: note / Math.max(1, c.notes - 1) }]
+        : [];
+    });
+  };
+
   const enable = async (cfg: Readonly<Config>) => {
+    enabled = true;
     if (!ctx) {
       ctx = new AudioContext();
       const clip = softClip(ctx);
@@ -179,9 +228,14 @@ export const createAudio = () => {
     }
     if (wet) wet.gain.value = cfg.chime.reverb;
     await ctx.resume();
+    // An off request may arrive while resume is pending; never let that resume win.
+    if (!enabled) await ctx.suspend();
   };
 
-  const disable = () => void ctx?.suspend();
+  const disable = async () => {
+    enabled = false;
+    await ctx?.suspend();
+  };
 
-  return { enable, disable, chime };
+  return { enable, disable, setLengths, play };
 };

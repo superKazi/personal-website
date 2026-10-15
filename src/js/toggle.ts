@@ -13,8 +13,13 @@ const OFF = "#6F6E69"; // Flexoki base-600
 export const createSoundToggle = (
   button: HTMLButtonElement,
   palette: readonly string[],
-  onChange: (on: boolean) => void,
+  onChange: (on: boolean) => Promise<void>,
 ) => {
+  const status = document.createElement("p");
+  status.className = "sound-status";
+  status.setAttribute("role", "status");
+  button.after(status);
+  const label = button.querySelector(".visually-hidden");
   const svg =
     button.querySelector("svg") ??
     button.appendChild(
@@ -83,6 +88,10 @@ export const createSoundToggle = (
 
   // eslint-disable-next-line functional/no-let
   let on = false;
+  // eslint-disable-next-line functional/no-let
+  let request = 0;
+  // eslint-disable-next-line functional/no-let
+  let errorTimer: ReturnType<typeof setTimeout> | undefined;
   gsap.ticker.add((_t, deltaMs) => {
     const dt = deltaMs / 1000;
     // eslint-disable-next-line functional/no-let
@@ -126,14 +135,37 @@ export const createSoundToggle = (
     if (!on) ease(0);
   });
 
-  button.addEventListener("click", () => {
-    on = !on;
-    // the label states the action, so there's no aria-pressed to announce the state twice
-    const label = button.querySelector(".visually-hidden");
+  const showState = (next: boolean) => {
+    on = next;
+    // The label states the action, so aria-pressed would announce the state twice.
     if (label) label.textContent = `Turn ${on ? "off" : "on"} audio experience`;
     ease(on ? 1 : 0);
-    onChange(on);
-  });
+  };
+  const setOn = async (next: boolean) => {
+    const current = ++request;
+    clearTimeout(errorTimer);
+    status.textContent = "";
+    showState(next);
+    try {
+      // Invoke before awaiting so AudioContext.resume stays inside the user gesture.
+      await onChange(next);
+    } catch (error) {
+      if (current !== request) return;
+      showState(false);
+      console.error("Audio unavailable", error);
+      if (!next) return;
+      status.textContent = "Audio couldn’t start. Try again.";
+      errorTimer = setTimeout(() => {
+        status.textContent = "";
+      }, 6000);
+      try {
+        await onChange(false);
+      } catch (error) {
+        console.error("Audio unavailable", error);
+      }
+    }
+  };
+  button.addEventListener("click", () => void setOn(!on));
 
   return {
     /** Re-slant the bars to match the piece's current view. */
@@ -147,8 +179,6 @@ export const createSoundToggle = (
     },
     bump,
     isOn: () => on,
-    turnOff: () => {
-      if (on) button.click();
-    },
+    turnOff: () => void setOn(false),
   };
 };

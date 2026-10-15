@@ -12,6 +12,8 @@ export interface Pointer {
   readonly slopeZ: number;
   /** velocity along the word, cap heights per second, from GSAP Observer */
   readonly vx: number;
+  /** what drives it; a hand-off between the two jumps, so it crosses nothing */
+  readonly source: "pointer" | "keyboard";
 }
 
 interface PanelLike {
@@ -178,7 +180,9 @@ export const step = (
   r.speed = pointer?.vx ?? 0;
   r.prev = pointer ? { ...pointer } : null;
   const crossings =
-    pointer && prev ? crossed(r, prev, pointer, cfg, depth) : [];
+    pointer && prev?.source === pointer.source
+      ? crossed(r, prev, pointer, cfg, depth)
+      : [];
 
   const steps = Math.ceil(frame / SUBSTEP);
   const h = steps ? frame / steps : 0;

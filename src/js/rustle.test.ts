@@ -11,7 +11,13 @@ const panels = Array.from({ length: 100 }, (_, i) => ({
 }));
 
 // a pointer straight through the middle of every sheet
-const ray = { y: 0.5, z: config.panels.depth / 2, slopeY: 0, slopeZ: 0 };
+const ray = {
+  y: 0.5,
+  z: config.panels.depth / 2,
+  slopeY: 0,
+  slopeZ: 0,
+  source: "pointer" as const,
+};
 
 const run = (frameMs: number) => {
   const rustle = createRustle(panels);
@@ -116,4 +122,11 @@ void test("reversing at a column does not count the same endpoint twice", () => 
   step(r, { ...p, x: 0.03 }, 0.016, config);
   assert.equal(step(r, { ...p, x: 0.04 }, 0.016, config).length, 1);
   assert.equal(step(r, { ...p, x: 0.03 }, 0.016, config).length, 0);
+});
+
+void test("handing off between the keyboard and a real pointer is a jump, not a sweep", () => {
+  const r = createRustle(panels);
+  // the keyboard Rustle ends past the word while the mouse rests at its start
+  step(r, { ...ray, x: 4.04, vx: 2, source: "keyboard" }, 0.016, config);
+  assert.deepEqual(step(r, { ...ray, x: 0.01, vx: 0 }, 0.016, config), []);
 });

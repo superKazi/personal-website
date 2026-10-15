@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test, type TestContext } from "node:test";
 import { createAudio } from "./audio.ts";
 import { config } from "./config.ts";
-import { MATERIALS } from "./chime.ts";
+import { BAMBOO } from "./chime.ts";
 import { createRustle, step } from "./rustle.ts";
 
 const setup = (t: TestContext) => {
@@ -89,7 +89,7 @@ const setup = (t: TestContext) => {
     });
   }
   // every Chime adds exactly one source per partial, fundamental first
-  const partials = MATERIALS[config.chime.material].ratios.length;
+  const partials = BAMBOO.ratios.length;
   const fundamentals = () => sources.filter((_, i) => i % partials === 0);
   return { audio: createAudio(), ctx, sources, ramps, gains, fundamentals };
 };
@@ -141,7 +141,7 @@ void test("Chime gains start at their scheduled levels, so a late schedule can't
   assert.equal(audio.play([{ column: 0, speed: 5 }], 0.016, cfg).length, 1);
   const chime = gains.slice(before);
   // envelope, then one per partial
-  assert.equal(chime.length, MATERIALS[cfg.chime.material].ratios.length + 1);
+  assert.equal(chime.length, BAMBOO.ratios.length + 1);
   assert.equal(chime[0].initial, 0);
   for (const g of chime) assert.equal(g.initial, g.scheduled);
 });
@@ -191,7 +191,14 @@ void test("Rustle sweeps play in travel order, with longer Panels lower and octa
   );
   audio.setLengths(rustle.length);
   await audio.enable(cfg);
-  const ray = { y: 0.25, z: 0.45, slopeY: 0, slopeZ: 0, vx: 10 };
+  const ray = {
+    y: 0.25,
+    z: 0.45,
+    slopeY: 0,
+    slopeZ: 0,
+    vx: 10,
+    source: "pointer" as const,
+  };
   step(rustle, { ...ray, x: -0.01 }, 0.05, cfg);
   const forward = step(rustle, { ...ray, x: 0.21 }, 0.05, cfg);
   assert.equal(audio.play(forward, 0.12, cfg).length, 6);
@@ -231,7 +238,7 @@ void test("playback replaces repeated and oldest voices, and stays silent when o
     ).length,
     4,
   );
-  const partials = MATERIALS[cfg.chime.material].ratios.length;
+  const partials = BAMBOO.ratios.length;
   assert.ok(sources.slice(0, partials).every((s) => s.stops.length === 2));
   assert.equal(
     sources.filter((s) => s.stops.length === 1).length,

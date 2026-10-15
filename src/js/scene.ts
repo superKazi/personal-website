@@ -130,7 +130,10 @@ void main() {
 
 const rad = (deg: number) => (deg * Math.PI) / 180;
 
-export const createScene = (canvas: HTMLCanvasElement) => {
+export const createScene = (
+  canvas: HTMLCanvasElement,
+  panels: readonly Panel[],
+) => {
   if (
     !canvas.getContext("webgl2", {
       alpha: false,
@@ -199,14 +202,48 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   });
   ground.setParent(roll);
 
-  // eslint-disable-next-line functional/no-let
-  let mesh: Mesh | undefined;
-  // eslint-disable-next-line functional/no-let
-  let rise = new Float32Array();
-  // eslint-disable-next-line functional/no-let
-  let bend = new Float32Array();
-  // eslint-disable-next-line functional/no-let
-  let bounds = { min: new Vec3(), max: new Vec3() };
+  // one instance per piece; a Panel's pieces share its x, color and motion
+  const owner = panels.flatMap((p, i) => p.pieces.map(() => i));
+  const pieces = panels.flatMap((p) => p.pieces);
+  const rise = new Float32Array(pieces.length).fill(1);
+  const bend = new Float32Array(pieces.length * 2);
+  const geometry = new Plane(gl, {
+    widthSegments: 24,
+    attributes: {
+      aPanel: {
+        instanced: 1,
+        size: 3,
+        data: new Float32Array(
+          pieces.flatMap((p, j) => [panels[owner[j]].x, p.y0, p.y1]),
+        ),
+      },
+      aColor: {
+        instanced: 1,
+        size: 3,
+        data: new Float32Array(
+          owner.flatMap((i) => [...new Color(panels[i].color)]),
+        ),
+      },
+      aRise: { instanced: 1, size: 1, data: rise },
+      aBend: { instanced: 1, size: 2, data: bend },
+    },
+  });
+  new Mesh(gl, { geometry, program }).setParent(center);
+
+  const depth = config.panels.depth;
+  const bounds = {
+    min: new Vec3(Math.min(...panels.map((p) => p.x)), 0, 0),
+    max: new Vec3(
+      Math.max(...panels.map((p) => p.x)),
+      Math.max(...pieces.map((p) => p.y1)),
+      depth,
+    ),
+  };
+  center.position.set(
+    -(bounds.min.x + bounds.max.x) / 2,
+    -bounds.max.y / 2,
+    -depth / 2,
+  );
 
   const fit = () => {
     const { yaw: y, pitch: p, roll: r, padding } = config.view;
@@ -238,46 +275,6 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     });
   };
 
-  const build = (panels: readonly Panel[]) => {
-    // one instance per piece; a Panel's pieces share its x and color
-    const pieces = panels.flatMap((p) =>
-      p.pieces.map((piece) => ({ ...piece, x: p.x, color: p.color })),
-    );
-    const panel = new Float32Array(pieces.flatMap((p) => [p.x, p.y0, p.y1]));
-    const color = new Float32Array(
-      pieces.flatMap((p) => [...new Color(p.color)]),
-    );
-    rise = new Float32Array(pieces.length).fill(1);
-    bend = new Float32Array(pieces.length * 2);
-    const geometry = new Plane(gl, {
-      widthSegments: 24,
-      attributes: {
-        aPanel: { instanced: 1, size: 3, data: panel },
-        aColor: { instanced: 1, size: 3, data: color },
-        aRise: { instanced: 1, size: 1, data: rise },
-        aBend: { instanced: 1, size: 2, data: bend },
-      },
-    });
-    mesh = new Mesh(gl, { geometry, program });
-    mesh.setParent(center);
-
-    const depth = config.panels.depth;
-    bounds = {
-      min: new Vec3(Math.min(...panels.map((p) => p.x)), 0, 0),
-      max: new Vec3(
-        Math.max(...panels.map((p) => p.x)),
-        Math.max(...pieces.map((p) => p.y1)),
-        depth,
-      ),
-    };
-    center.position.set(
-      -(bounds.min.x + bounds.max.x) / 2,
-      -bounds.max.y / 2,
-      -depth / 2,
-    );
-    resize();
-  };
-
   const resize = () => {
     // re-read so moving to another screen or zooming stays sharp
     renderer.dpr = Math.min(devicePixelRatio, 3);
@@ -289,10 +286,10 @@ export const createScene = (canvas: HTMLCanvasElement) => {
 
   const render = () => renderer.render({ scene: roll, camera });
 
-  /** Per-Panel intro progress; write into it, then call `commitRise`. */
-  const getRise = () => rise;
-  const commitRise = () => {
-    if (mesh) mesh.geometry.attributes.aRise.needsUpdate = true;
+  /** Intro progress per Panel: 0 = hidden below, 1 = at rest. */
+  const setRise = (values: ArrayLike<number>) => {
+    owner.forEach((i, j) => (rise[j] = values[i]));
+    geometry.attributes.aRise.needsUpdate = true;
   };
 
   /** Sway size (radians) and phase (radians) for this frame. */
@@ -304,10 +301,13 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   const setGrain = (seed: number) => {
     uniforms.uGrainSeed.value = seed;
   };
-  /** Per-Panel Rustle as [tilt, bend position]; write into it, then call `commitBend`. */
-  const getBend = () => bend;
-  const commitBend = () => {
-    if (mesh) mesh.geometry.attributes.aBend.needsUpdate = true;
+  /** Rustle per Panel: tilt (radians) and where the bend sits (0 = Spine, 1 = free edge). */
+  const setRustle = (angle: ArrayLike<number>, at: ArrayLike<number>) => {
+    owner.forEach((i, j) => {
+      bend[j * 2] = angle[i];
+      bend[j * 2 + 1] = at[i];
+    });
+    geometry.attributes.aBend.needsUpdate = true;
   };
 
   /** The word's x (along), y (up) and z (depth) axes as they appear on screen: [right, down, toward viewer]. */
@@ -341,14 +341,13 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     };
   };
 
+  resize();
+
   return {
-    build,
     resize,
     render,
-    getRise,
-    commitRise,
-    getBend,
-    commitBend,
+    setRise,
+    setRustle,
     setSway,
     setGrain,
     toWord,

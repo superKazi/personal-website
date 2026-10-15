@@ -17,11 +17,11 @@ const byline = document.querySelector(".byline");
 const start = async () => {
   if (!canvas || !button || !byline) return;
   await loadFont();
-  const scene = createScene(canvas);
+  const panels = buildPanels();
+  const scene = createScene(canvas, panels);
   // a lost GPU context never draws again; the piece keeps no state, so reload once it's back
   canvas.addEventListener("webglcontextlost", (e) => e.preventDefault());
   canvas.addEventListener("webglcontextrestored", () => location.reload());
-  const panels = buildPanels();
   const audio = createAudio(panels, config);
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
     on ? audio.enable() : audio.disable(),
@@ -32,10 +32,7 @@ const start = async () => {
       duration: 0.6,
       ease: "power2.out",
     });
-  scene.build(panels);
   const rustle = createRustle(panels, config);
-  // Panel of each scene instance, one per piece
-  const owner = panels.flatMap((p, i) => p.pieces.map(() => i));
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
   // where the pointer is on screen, null when it's away, and the Observer tracking its velocity
@@ -105,7 +102,6 @@ const start = async () => {
     if (!reduced) grainClock += dt;
     scene.setGrain(Math.floor(grainClock * config.grain.fps));
 
-    const wasMoving = rustle.moving;
     const crossed = step(rustle, pointerNow(), dt);
     if (toggle.isOn() && crossed.length)
       audio
@@ -113,14 +109,7 @@ const start = async () => {
         .forEach(({ strength, scalePosition }) =>
           toggle.bump(0.4 + 0.6 * strength, scalePosition),
         );
-    if (rustle.moving || wasMoving) {
-      const bend = scene.getBend();
-      owner.forEach((c, i) => {
-        bend[i * 2] = rustle.angle[c];
-        bend[i * 2 + 1] = rustle.bend[c];
-      });
-      scene.commitBend();
-    }
+    scene.setRustle(rustle.angle, rustle.bend);
     scene.render();
   };
 
@@ -172,7 +161,7 @@ const start = async () => {
     };
   });
   if (!reduced) {
-    intro = playIntro(panels, scene.getRise(), scene.commitRise);
+    intro = playIntro(panels, scene.setRise);
     void intro.then(showToggle);
   }
 };

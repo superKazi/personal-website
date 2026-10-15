@@ -40,12 +40,6 @@ const start = async () => {
   let client: Readonly<{ x: number; y: number }> | null = null;
   // eslint-disable-next-line functional/no-let
   let reduced = false;
-  // eslint-disable-next-line functional/no-let
-  let swayPhase = 0;
-  // eslint-disable-next-line functional/no-let
-  let swayAmp = 0;
-  // eslint-disable-next-line functional/no-let
-  let grainClock = 0;
   const keyboardButton =
     document.querySelector<HTMLButtonElement>(".rustle-keyboard");
   // eslint-disable-next-line functional/no-let
@@ -92,16 +86,6 @@ const start = async () => {
 
   const tick = (_time: number, deltaMs: number) => {
     const dt = deltaMs / 1000;
-    const { sway } = config;
-    // ease between normal and reduced Sway so switching modes never jumps
-    const amp = reduced ? sway.reducedAmplitude : sway.amplitude;
-    swayAmp += (amp - swayAmp) * Math.min(1, dt * 2);
-    swayPhase += dt * (reduced ? sway.reducedSpeed : sway.speed) * Math.PI * 2;
-    scene.setSway(swayAmp, swayPhase);
-    // Grain re-rolls in steps, like a hand-made print, and holds still under reduced motion
-    if (!reduced) grainClock += dt;
-    scene.setGrain(Math.floor(grainClock * config.grain.fps));
-
     const crossed = step(rustle, pointerNow(), dt);
     if (toggle.isOn() && crossed.length)
       audio
@@ -110,7 +94,7 @@ const start = async () => {
           toggle.bump(0.4 + 0.6 * strength, scalePosition),
         );
     scene.setRustle(rustle.angle, rustle.bend);
-    scene.render();
+    scene.render(dt, reduced);
   };
 
   resize();

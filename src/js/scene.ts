@@ -284,7 +284,22 @@ export const createScene = (
     fit();
   };
 
-  const render = () => renderer.render({ scene: roll, camera });
+  // eslint-disable-next-line functional/no-let
+  let grainClock = 0;
+  /** Advance Sway and Grain by `dt` seconds, then draw. */
+  const render = (dt: number, reduced: boolean) => {
+    const { sway } = config;
+    // ease between normal and reduced Sway so switching modes never jumps
+    const amp = reduced ? sway.reducedAmplitude : sway.amplitude;
+    uniforms.uSwayAmp.value +=
+      (amp - uniforms.uSwayAmp.value) * Math.min(1, dt * 2);
+    uniforms.uSwayPhase.value +=
+      dt * (reduced ? sway.reducedSpeed : sway.speed) * Math.PI * 2;
+    // Grain re-rolls in steps, like a hand-made print, and holds still under reduced motion
+    if (!reduced) grainClock += dt;
+    uniforms.uGrainSeed.value = Math.floor(grainClock * config.grain.fps);
+    renderer.render({ scene: roll, camera });
+  };
 
   /** Intro progress per Panel: 0 = hidden below, 1 = at rest. */
   const setRise = (values: ArrayLike<number>) => {
@@ -292,15 +307,6 @@ export const createScene = (
     geometry.attributes.aRise.needsUpdate = true;
   };
 
-  /** Sway size (radians) and phase (radians) for this frame. */
-  const setSway = (amplitude: number, phase: number) => {
-    uniforms.uSwayAmp.value = amplitude;
-    uniforms.uSwayPhase.value = phase;
-  };
-  /** Grain re-roll step; a new value re-rolls every speckle. */
-  const setGrain = (seed: number) => {
-    uniforms.uGrainSeed.value = seed;
-  };
   /** Rustle per Panel: tilt (radians) and where the bend sits (0 = Spine, 1 = free edge). */
   const setRustle = (angle: ArrayLike<number>, at: ArrayLike<number>) => {
     owner.forEach((i, j) => {
@@ -348,8 +354,6 @@ export const createScene = (
     render,
     setRise,
     setRustle,
-    setSway,
-    setGrain,
     toWord,
     axes,
   };

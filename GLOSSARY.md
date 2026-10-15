@@ -5,7 +5,7 @@ A single-screen interactive piece after Takenobu Igarashi's _Design News_ 113 co
 ## Language
 
 **Panel**:
-One thin upright sheet; a vertical slice of a letter.
+One thin upright sheet; a vertical slice of a letter. Where the slice crosses a counter it has gaps, but it still moves and Chimes as one.
 _Avoid_: Page, card, slice, sheet
 
 **Spine**:

@@ -4,7 +4,8 @@ import { config } from "./config.ts";
 import { createAudio } from "./audio.ts";
 import { playIntro } from "./intro.ts";
 import { buildPanels, loadFont } from "./panels.ts";
-import { createRustle, step, type Pointer } from "./rustle.ts";
+import { createPointer } from "./pointer.ts";
+import { createRustle, step } from "./rustle.ts";
 import { createScene } from "./scene.ts";
 import { createSoundToggle } from "./toggle.ts";
 
@@ -17,13 +18,14 @@ const byline = document.querySelector(".byline");
 const start = async () => {
   if (!canvas || !button || !byline) return;
   await loadFont();
-  const scene = createScene(canvas);
+  const panels = buildPanels();
+  const scene = createScene(canvas, panels);
   // a lost GPU context never draws again; the piece keeps no state, so reload once it's back
   canvas.addEventListener("webglcontextlost", (e) => e.preventDefault());
   canvas.addEventListener("webglcontextrestored", () => location.reload());
-  const audio = createAudio();
+  const audio = createAudio(panels, config);
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
-    on ? audio.enable(config) : audio.disable(),
+    on ? audio.enable() : audio.disable(),
   );
   const showToggle = () =>
     void gsap.to([button, byline], {
@@ -31,39 +33,19 @@ const start = async () => {
       duration: 0.6,
       ease: "power2.out",
     });
-  const panels = buildPanels(config);
-  scene.build(panels, config);
-  const rustle = createRustle(panels);
-  audio.setLengths(rustle.length);
+  const rustle = createRustle(panels, config);
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
-  // where the pointer is on screen, null when it's away, and the Observer tracking its velocity
-  // eslint-disable-next-line functional/no-let
-  let client: Readonly<{ x: number; y: number }> | null = null;
   // eslint-disable-next-line functional/no-let
   let reduced = false;
-  // eslint-disable-next-line functional/no-let
-  let swayPhase = 0;
-  // eslint-disable-next-line functional/no-let
-  let swayAmp = 0;
-  // eslint-disable-next-line functional/no-let
-  let grainClock = 0;
-  const keyboardButton =
-    document.querySelector<HTMLButtonElement>(".rustle-keyboard");
-  // eslint-disable-next-line functional/no-let
-  let keyboard: Pointer | null = null;
 
   const resize = () => {
-    scene.resize(config);
+    scene.resize();
     toggle.layout(scene.axes());
   };
 
-  const track = (self: Observer) => {
-    client = reduced ? null : { x: self.x ?? 0, y: self.y ?? 0 };
-  };
-  const leave = () => {
-    client = null;
-  };
+  const track = (self: Observer) => pointer.track(self.x ?? 0, self.y ?? 0);
+  const leave = () => pointer.leave();
   const observer = Observer.create({
     target: canvas,
     type: "pointer,touch",
@@ -73,89 +55,33 @@ const start = async () => {
     onRelease: leave,
     onHoverEnd: leave,
   });
-  /** The pointer ray in word space, with Observer's velocity projected onto the word. */
-  const pointerNow = (): Pointer | null => {
-    if (reduced) return null;
-    if (keyboard) return keyboard;
-    if (!client) return null;
-    const ray = scene.toWord(client.x, client.y);
-    if (!ray) return null;
-    const h = 0.01;
-    const ahead = scene.toWord(
-      client.x + observer.velocityX * h,
-      client.y + observer.velocityY * h,
-    );
-    return {
-      ...ray,
-      vx: ahead ? (ahead.x - ray.x) / h : 0,
-      source: "pointer",
-    };
-  };
+  const pointer = createPointer({
+    button: document.querySelector<HTMLButtonElement>(".rustle-keyboard"),
+    panels,
+    toWord: scene.toWord,
+    velocity: () => [observer.velocityX, observer.velocityY],
+  });
 
   const tick = (_time: number, deltaMs: number) => {
     const dt = deltaMs / 1000;
-    const { sway } = config;
-    // ease between normal and reduced Sway so switching modes never jumps
-    const amp = reduced ? sway.reducedAmplitude : sway.amplitude;
-    swayAmp += (amp - swayAmp) * Math.min(1, dt * 2);
-    swayPhase += dt * (reduced ? sway.reducedSpeed : sway.speed) * Math.PI * 2;
-    scene.setSway(swayAmp, swayPhase);
-    // Grain re-rolls in steps, like a hand-made print, and holds still under reduced motion
-    if (!reduced) grainClock += dt;
-    scene.setGrain(Math.floor(grainClock * config.grain.fps));
-
-    const wasMoving = rustle.moving;
-    const crossed = step(rustle, pointerNow(), dt, config);
+    const crossed = step(rustle, pointer.now(), dt);
     if (toggle.isOn() && crossed.length)
       audio
-        .play(crossed, dt, config)
+        .play(crossed, dt)
         .forEach(({ strength, scalePosition }) =>
           toggle.bump(0.4 + 0.6 * strength, scalePosition),
         );
-    if (rustle.moving || wasMoving) {
-      const bend = scene.getBend();
-      rustle.column.forEach((c, i) => {
-        bend[i * 2] = rustle.angle[c];
-        bend[i * 2 + 1] = rustle.bend[c];
-      });
-      scene.commitBend();
-    }
-    scene.render();
+    scene.setRustle(rustle.angle, rustle.bend);
+    scene.render(dt, reduced);
   };
 
   resize();
   document.body.classList.add("ready");
-  keyboardButton?.addEventListener("click", () => {
-    if (reduced || keyboard) return;
-    const first = rustle.xs[0] - 0.04;
-    const last = rustle.xs[rustle.xs.length - 1] + 0.04;
-    keyboard = {
-      x: first,
-      y: 0.5,
-      z: config.panels.depth / 2,
-      slopeY: 0,
-      slopeZ: 0,
-      vx: (last - first) / 1.4,
-      source: "keyboard",
-    };
-    rustle.prev = { ...keyboard };
-    void gsap.to(keyboard, {
-      x: last,
-      duration: 1.4,
-      ease: "none",
-      onComplete: () => {
-        keyboard = null;
-      },
-    });
-  });
   addEventListener("resize", resize);
   gsap.ticker.add(tick);
   gsap.matchMedia().add("(prefers-reduced-motion: reduce)", (ctx) => {
     reduced = true;
-    client = null;
-    if (keyboard) gsap.killTweensOf(keyboard);
-    keyboard = null;
-    if (keyboardButton) keyboardButton.hidden = true;
+    pointer.setReduced(true);
     intro?.progress(1).kill();
     // no Rustle means no Chimes, so the Sound toggle has nothing to switch;
     // ignored so leaving reduced motion doesn't revert the toggle's look back to on
@@ -166,12 +92,12 @@ const start = async () => {
     ctx.ignore(() => gsap.set(byline, { autoAlpha: 1, overwrite: true }));
     return () => {
       reduced = false;
-      if (keyboardButton) keyboardButton.hidden = false;
+      pointer.setReduced(false);
       showToggle();
     };
   });
   if (!reduced) {
-    intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
+    intro = playIntro(panels, scene.setRise);
     void intro.then(showToggle);
   }
 };

@@ -10,7 +10,7 @@ import {
   Triangle,
   Vec3,
 } from "ogl";
-import type { Config } from "./config.ts";
+import { config } from "./config.ts";
 import type { Panel } from "./panels.ts";
 
 const vertex = /* glsl */ `#version 300 es
@@ -130,7 +130,10 @@ void main() {
 
 const rad = (deg: number) => (deg * Math.PI) / 180;
 
-export const createScene = (canvas: HTMLCanvasElement) => {
+export const createScene = (
+  canvas: HTMLCanvasElement,
+  panels: readonly Panel[],
+) => {
   if (
     !canvas.getContext("webgl2", {
       alpha: false,
@@ -160,23 +163,24 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   center.setParent(yaw);
 
   const uniforms = {
-    uDepth: { value: 1 },
-    uRiseDistance: { value: 1 },
-    uBendSharpness: { value: 0 },
-    uBendWidth: { value: 0.3 },
+    uDepth: { value: config.panels.depth },
+    uRiseDistance: { value: config.intro.distance },
+    uBendSharpness: { value: config.rustle.bendSharpness },
+    uBendWidth: { value: config.rustle.bendWidth },
     uSwayAmp: { value: 0 },
     uSwayPhase: { value: 0 },
-    uSwayWave: { value: 1 },
-    uFade: { value: 0 },
-    uBackShade: { value: 1 },
+    uSwayWave: { value: config.sway.wave },
+    uFade: { value: config.intro.fade },
+    uBackShade: { value: config.color.backShade },
+    // uEdgeWidth and uGrainSize are in device pixels, so `resize` sets them
     uEdgeWidth: { value: 1 },
-    uEdge: { value: new Color() },
-    uBackground: { value: new Color() },
+    uEdge: { value: new Color(config.color.edge) },
+    uBackground: { value: new Color(config.color.background) },
     uGrainSize: { value: 1 },
     uGrainSeed: { value: 0 },
-    uGrainAmount: { value: 0 },
-    uGrainBlotch: { value: 0 },
-    uGrainGround: { value: 0 },
+    uGrainAmount: { value: config.grain.amount },
+    uGrainBlotch: { value: config.grain.blotch },
+    uGrainGround: { value: config.grain.ground },
   };
   const program = new Program(gl, {
     vertex,
@@ -198,17 +202,51 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   });
   ground.setParent(roll);
 
-  // eslint-disable-next-line functional/no-let
-  let mesh: Mesh | undefined;
-  // eslint-disable-next-line functional/no-let
-  let rise = new Float32Array();
-  // eslint-disable-next-line functional/no-let
-  let bend = new Float32Array();
-  // eslint-disable-next-line functional/no-let
-  let bounds = { min: new Vec3(), max: new Vec3() };
+  // one instance per piece; a Panel's pieces share its x, color and motion
+  const owner = panels.flatMap((p, i) => p.pieces.map(() => i));
+  const pieces = panels.flatMap((p) => p.pieces);
+  const rise = new Float32Array(pieces.length).fill(1);
+  const bend = new Float32Array(pieces.length * 2);
+  const geometry = new Plane(gl, {
+    widthSegments: 24,
+    attributes: {
+      aPanel: {
+        instanced: 1,
+        size: 3,
+        data: new Float32Array(
+          pieces.flatMap((p, j) => [panels[owner[j]].x, p.y0, p.y1]),
+        ),
+      },
+      aColor: {
+        instanced: 1,
+        size: 3,
+        data: new Float32Array(
+          owner.flatMap((i) => [...new Color(panels[i].color)]),
+        ),
+      },
+      aRise: { instanced: 1, size: 1, data: rise },
+      aBend: { instanced: 1, size: 2, data: bend },
+    },
+  });
+  new Mesh(gl, { geometry, program }).setParent(center);
 
-  const fit = (cfg: Readonly<Config>) => {
-    const { yaw: y, pitch: p, roll: r, padding } = cfg.view;
+  const depth = config.panels.depth;
+  const bounds = {
+    min: new Vec3(Math.min(...panels.map((p) => p.x)), 0, 0),
+    max: new Vec3(
+      Math.max(...panels.map((p) => p.x)),
+      Math.max(...pieces.map((p) => p.y1)),
+      depth,
+    ),
+  };
+  center.position.set(
+    -(bounds.min.x + bounds.max.x) / 2,
+    -bounds.max.y / 2,
+    -depth / 2,
+  );
+
+  const fit = () => {
+    const { yaw: y, pitch: p, roll: r, padding } = config.view;
     yaw.rotation.y = rad(y);
     pitch.rotation.x = rad(p);
     roll.rotation.z = rad(r);
@@ -237,84 +275,45 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     });
   };
 
-  const build = (panels: readonly Panel[], cfg: Readonly<Config>) => {
-    const panel = new Float32Array(panels.flatMap((p) => [p.x, p.y0, p.y1]));
-    const color = new Float32Array(
-      panels.flatMap((p) => [...new Color(p.color)]),
-    );
-    rise = new Float32Array(panels.length).fill(1);
-    bend = new Float32Array(panels.length * 2);
-    const geometry = new Plane(gl, {
-      widthSegments: 24,
-      attributes: {
-        aPanel: { instanced: 1, size: 3, data: panel },
-        aColor: { instanced: 1, size: 3, data: color },
-        aRise: { instanced: 1, size: 1, data: rise },
-        aBend: { instanced: 1, size: 2, data: bend },
-      },
-    });
-    mesh = new Mesh(gl, { geometry, program });
-    mesh.setParent(center);
-
-    const depth = cfg.panels.depth;
-    bounds = {
-      min: new Vec3(Math.min(...panels.map((p) => p.x)), 0, 0),
-      max: new Vec3(
-        Math.max(...panels.map((p) => p.x)),
-        Math.max(...panels.map((p) => p.y1)),
-        depth,
-      ),
-    };
-    center.position.set(
-      -(bounds.min.x + bounds.max.x) / 2,
-      -bounds.max.y / 2,
-      -depth / 2,
-    );
-    resize(cfg);
-  };
-
-  const resize = (cfg: Readonly<Config>) => {
+  const resize = () => {
     // re-read so moving to another screen or zooming stays sharp
     renderer.dpr = Math.min(devicePixelRatio, 3);
     renderer.setSize(innerWidth, innerHeight);
-    uniforms.uDepth.value = cfg.panels.depth;
-    uniforms.uRiseDistance.value = cfg.intro.distance;
-    uniforms.uFade.value = cfg.intro.fade;
-    uniforms.uBendSharpness.value = cfg.rustle.bendSharpness;
-    uniforms.uBendWidth.value = cfg.rustle.bendWidth;
-    uniforms.uSwayWave.value = cfg.sway.wave;
-    uniforms.uBackShade.value = cfg.color.backShade;
-    uniforms.uEdgeWidth.value = cfg.color.edgeWidth * renderer.dpr;
-    uniforms.uEdge.value.set(cfg.color.edge);
-    uniforms.uBackground.value.set(cfg.color.background);
-    uniforms.uGrainSize.value = cfg.grain.size * renderer.dpr;
-    uniforms.uGrainAmount.value = cfg.grain.amount;
-    uniforms.uGrainBlotch.value = cfg.grain.blotch;
-    uniforms.uGrainGround.value = cfg.grain.ground;
-    fit(cfg);
+    uniforms.uEdgeWidth.value = config.color.edgeWidth * renderer.dpr;
+    uniforms.uGrainSize.value = config.grain.size * renderer.dpr;
+    fit();
   };
 
-  const render = () => renderer.render({ scene: roll, camera });
-
-  /** Per-Panel intro progress; write into it, then call `commitRise`. */
-  const getRise = () => rise;
-  const commitRise = () => {
-    if (mesh) mesh.geometry.attributes.aRise.needsUpdate = true;
+  // eslint-disable-next-line functional/no-let
+  let grainClock = 0;
+  /** Advance Sway and Grain by `dt` seconds, then draw. */
+  const render = (dt: number, reduced: boolean) => {
+    const { sway } = config;
+    // ease between normal and reduced Sway so switching modes never jumps
+    const amp = reduced ? sway.reducedAmplitude : sway.amplitude;
+    uniforms.uSwayAmp.value +=
+      (amp - uniforms.uSwayAmp.value) * Math.min(1, dt * 2);
+    uniforms.uSwayPhase.value +=
+      dt * (reduced ? sway.reducedSpeed : sway.speed) * Math.PI * 2;
+    // Grain re-rolls in steps, like a hand-made print, and holds still under reduced motion
+    if (!reduced) grainClock += dt;
+    uniforms.uGrainSeed.value = Math.floor(grainClock * config.grain.fps);
+    renderer.render({ scene: roll, camera });
   };
 
-  /** Sway size (radians) and phase (radians) for this frame. */
-  const setSway = (amplitude: number, phase: number) => {
-    uniforms.uSwayAmp.value = amplitude;
-    uniforms.uSwayPhase.value = phase;
+  /** Intro progress per Panel: 0 = hidden below, 1 = at rest. */
+  const setRise = (values: ArrayLike<number>) => {
+    owner.forEach((i, j) => (rise[j] = values[i]));
+    geometry.attributes.aRise.needsUpdate = true;
   };
-  /** Grain re-roll step; a new value re-rolls every speckle. */
-  const setGrain = (seed: number) => {
-    uniforms.uGrainSeed.value = seed;
-  };
-  /** Per-Panel Rustle as [tilt, bend position]; write into it, then call `commitBend`. */
-  const getBend = () => bend;
-  const commitBend = () => {
-    if (mesh) mesh.geometry.attributes.aBend.needsUpdate = true;
+
+  /** Rustle per Panel: tilt (radians) and where the bend sits (0 = Spine, 1 = free edge). */
+  const setRustle = (angle: ArrayLike<number>, at: ArrayLike<number>) => {
+    owner.forEach((i, j) => {
+      bend[j * 2] = angle[i];
+      bend[j * 2 + 1] = at[i];
+    });
+    geometry.attributes.aBend.needsUpdate = true;
   };
 
   /** The word's x (along), y (up) and z (depth) axes as they appear on screen: [right, down, toward viewer]. */
@@ -348,16 +347,13 @@ export const createScene = (canvas: HTMLCanvasElement) => {
     };
   };
 
+  resize();
+
   return {
-    build,
     resize,
     render,
-    getRise,
-    commitRise,
-    getBend,
-    commitBend,
-    setSway,
-    setGrain,
+    setRise,
+    setRustle,
     toWord,
     axes,
   };

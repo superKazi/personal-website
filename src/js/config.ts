@@ -28,10 +28,10 @@ export const config = {
     fade: 1,
   },
   rustle: {
-    /** spring pulling each column upright */
+    /** spring pulling each Panel upright */
     stiffness: 120,
     damping: 5,
-    /** pull toward neighbouring columns, 0 = independent */
+    /** pull toward neighbouring Panels, 0 = independent */
     coupling: 15,
     /** tilt acceleration per unit of pointer speed; preserves the original 60 FPS feel */
     strength: 60,

@@ -114,7 +114,7 @@ void start().catch((error: unknown) => {
  * polite console
  */
 console.log(
-  "%cThanks for visiting!",
+  "%cThanks for visiting! If you like the design you'll dig Igarashi Takenobu!",
   `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
   "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
 );

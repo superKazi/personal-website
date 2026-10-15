@@ -4,7 +4,6 @@ import tseslint from "typescript-eslint";
 import globals from "globals";
 import prettier from "eslint-config-prettier";
 import functional from "eslint-plugin-functional";
-import css from "@eslint/css";
 import html from "@html-eslint/eslint-plugin";
 
 export default defineConfig([
@@ -38,17 +37,6 @@ export default defineConfig([
       // OGL, lil-gui and the per-frame loop are mutation-based; allocating per frame would jank
       "functional/immutable-data": "off",
       "functional/no-loop-statements": "off",
-    },
-  },
-  {
-    files: ["src/**/*.css"],
-    plugins: {
-      css,
-    },
-    language: "css/css",
-    rules: {
-      "css/no-duplicate-imports": "error",
-      "css/use-baseline": ["warn", { available: "widely" }],
     },
   },
   {

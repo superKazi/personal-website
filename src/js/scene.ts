@@ -131,6 +131,16 @@ void main() {
 const rad = (deg: number) => (deg * Math.PI) / 180;
 
 export const createScene = (canvas: HTMLCanvasElement) => {
+  if (
+    !canvas.getContext("webgl2", {
+      alpha: false,
+      antialias: true,
+      premultipliedAlpha: false,
+    })
+  ) {
+    // eslint-disable-next-line functional/no-throw-statements -- leave the static page intact without WebGL 2
+    throw new Error("WebGL 2 unavailable");
+  }
   const renderer = new Renderer({
     canvas,
     dpr: Math.min(devicePixelRatio, 2),
@@ -230,16 +240,14 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   const build = (panels: readonly Panel[], cfg: Readonly<Config>) => {
     mesh?.setParent(null);
     mesh?.geometry.remove();
-    const panel = new Float32Array(
-      panels.flatMap((p) => [p.x, p.y0, p.y1]),
-    );
+    const panel = new Float32Array(panels.flatMap((p) => [p.x, p.y0, p.y1]));
     const color = new Float32Array(
       panels.flatMap((p) => [...new Color(p.color)]),
     );
     rise = new Float32Array(panels.length).fill(1);
     bend = new Float32Array(panels.length * 2);
     const geometry = new Plane(gl, {
-      heightSegments: 24,
+      widthSegments: 24,
       attributes: {
         aPanel: { instanced: 1, size: 3, data: panel },
         aColor: { instanced: 1, size: 3, data: color },

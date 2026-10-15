@@ -38,8 +38,8 @@ export const defaults = {
     damping: 5,
     /** pull toward neighbouring columns, 0 = independent */
     coupling: 15,
-    /** tilt velocity per unit of pointer speed */
-    strength: 1,
+    /** tilt acceleration per unit of pointer speed; preserves the original 60 FPS feel */
+    strength: 60,
     /** pointer reach along the word, in cap heights */
     radius: 0.2,
     /** how far past a sheet's edges the pointer still reaches, in cap heights */

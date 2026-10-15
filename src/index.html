@@ -103,6 +103,16 @@
         overscroll-behavior: none;
       }
 
+      h1 {
+        position: fixed;
+        inset: 40% 1rem auto;
+        text-align: center;
+        font: 700 2rem sans-serif;
+        color: #cecdc3;
+      }
+
+      .ready h1,
+      .rustle-keyboard:not(:focus-visible),
       .visually-hidden {
         position: absolute;
         inline-size: 1px;
@@ -110,6 +120,22 @@
         overflow: hidden;
         clip-path: inset(50%);
         white-space: nowrap;
+      }
+
+      .rustle-keyboard {
+        position: fixed;
+        inset: 1rem auto auto 1rem;
+        z-index: 1;
+        padding: 0.75rem;
+        color: #cecdc3;
+        background: #100f0f;
+      }
+
+      body:not(.ready) .rustle-keyboard {
+        display: none;
+      }
+      .rustle-keyboard:focus-visible {
+        outline: 2px solid #cecdc3;
       }
 
       .sound {
@@ -146,9 +172,6 @@
           500 0.875rem/2.75rem Degular,
           sans-serif;
         color: #878580;
-        /* revealed by script once the intro ends */
-        visibility: hidden;
-        opacity: 0;
         translate: 0 0.333rem;
       }
 
@@ -202,7 +225,12 @@
         outline-offset: 2px;
       }
 
+      .ready canvas {
+        visibility: visible;
+      }
+
       canvas {
+        visibility: hidden;
         /* every touch on the piece is a Rustle, never a scroll or zoom */
         touch-action: none;
         position: fixed;
@@ -244,11 +272,12 @@
     <link rel="manifest" href="./manifest.webmanifest" />
   </head>
   <body>
-    <h1 class="visually-hidden">Kazi Elman Awal</h1>
+    <h1>Kazi Elman Awal</h1>
     <canvas
       role="img"
       aria-label="The word KAZI built from stacks of colored paper panels"
     ></canvas>
+    <button class="rustle-keyboard" type="button">Rustle panels</button>
     <button class="sound" type="button">
       <span class="visually-hidden">Turn on audio experience</span>
       <svg viewBox="0 0 24 24" aria-hidden="true"></svg>

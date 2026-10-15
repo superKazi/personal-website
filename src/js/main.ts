@@ -15,14 +15,20 @@ const canvas = document.querySelector("canvas");
 const button = document.querySelector<HTMLButtonElement>("button.sound");
 const byline = document.querySelector(".byline");
 
-if (canvas && button && byline) {
+const start = async () => {
+  if (!canvas || !button || !byline) return;
+  await loadFont();
   const scene = createScene(canvas);
   const audio = createAudio();
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
     on ? void audio.enable(config) : audio.disable(),
   );
   const showToggle = () =>
-    void gsap.to([button, byline], { autoAlpha: 1, duration: 0.6, ease: "power2.out" });
+    void gsap.to([button, byline], {
+      autoAlpha: 1,
+      duration: 0.6,
+      ease: "power2.out",
+    });
   // eslint-disable-next-line functional/no-let
   let panels: readonly Panel[] = [];
   // eslint-disable-next-line functional/no-let
@@ -33,8 +39,6 @@ if (canvas && button && byline) {
   // eslint-disable-next-line functional/no-let
   let client: Readonly<{ x: number; y: number }> | null = null;
   // eslint-disable-next-line functional/no-let
-  let observer: Observer | undefined;
-  // eslint-disable-next-line functional/no-let
   let lengths = { min: 0, max: 0 };
   // eslint-disable-next-line functional/no-let
   let reduced = false;
@@ -44,6 +48,10 @@ if (canvas && button && byline) {
   let swayAmp = 0;
   // eslint-disable-next-line functional/no-let
   let grainClock = 0;
+  const keyboardButton =
+    document.querySelector<HTMLButtonElement>(".rustle-keyboard");
+  // eslint-disable-next-line functional/no-let
+  let keyboard: Pointer | null = null;
 
   const rebuild = () => {
     intro?.progress(1).kill();
@@ -66,9 +74,20 @@ if (canvas && button && byline) {
   const leave = () => {
     client = null;
   };
+  const observer = Observer.create({
+    target: canvas,
+    type: "pointer,touch",
+    onMove: track,
+    onPress: track,
+    onDrag: track,
+    onRelease: leave,
+    onHoverEnd: leave,
+  });
   /** The pointer ray in word space, with Observer's velocity projected onto the word. */
   const pointerNow = (): Pointer | null => {
-    if (!client || !observer) return null;
+    if (reduced) return null;
+    if (keyboard) return keyboard;
+    if (!client) return null;
     const ray = scene.toWord(client.x, client.y);
     if (!ray) return null;
     const h = 0.01;
@@ -127,54 +146,77 @@ if (canvas && button && byline) {
     scene.render();
   };
 
-  void loadFont().then(() => {
-    rebuild();
-    resize();
-    addEventListener("resize", resize);
-    gsap.ticker.add(tick);
-    gsap.matchMedia().add("(prefers-reduced-motion: reduce)", (ctx) => {
-      reduced = true;
-      client = null;
-      intro?.progress(1).kill();
-      // no Rustle means no Chimes, so the Sound toggle has nothing to switch;
-      // ignored so leaving reduced motion doesn't revert the toggle's look back to on
-      ctx.ignore(() => toggle.turnOff());
-      // overwrite stops the intro's just-fired fade-in from revealing the button again
-      gsap.set(button, { autoAlpha: 0, overwrite: true });
-      // the Byline still shows without the intro; ignored so leaving reduced motion keeps it
-      ctx.ignore(() => gsap.set(byline, { autoAlpha: 1, overwrite: true }));
-      return () => {
-        reduced = false;
-        showToggle();
-      };
+  rebuild();
+  resize();
+  document.body.classList.add("ready");
+  gsap.set(byline, { autoAlpha: 0 });
+  keyboardButton?.addEventListener("click", () => {
+    if (reduced || keyboard) return;
+    const first = rustle.xs[0] - 0.04;
+    const last = rustle.xs[rustle.xs.length - 1] + 0.04;
+    keyboard = {
+      x: first,
+      y: 0.5,
+      z: config.panels.depth / 2,
+      slopeY: 0,
+      slopeZ: 0,
+      vx: (last - first) / 1.4,
+    };
+    rustle.prev = { ...keyboard };
+    void gsap.to(keyboard, {
+      x: last,
+      duration: 1.4,
+      ease: "none",
+      onComplete: () => {
+        keyboard = null;
+      },
     });
-    if (!reduced) {
-      intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
-      void intro.then(showToggle);
-    }
-
-    observer = Observer.create({
-      target: canvas,
-      type: "pointer,touch",
-      onMove: track,
-      onPress: track,
-      onDrag: track,
-      onRelease: leave,
-      onHoverEnd: leave,
-    });
-
-    if (import.meta.env.DEV) {
-      void import("./gui.ts").then(({ createGui }) =>
-        // lil-gui's stylesheet resets CSS font faces, so reload Degular before re-slicing
-        createGui(
-          config.color,
-          () => void loadFont().then(rebuild),
-          () => scene.update(config),
-        ),
-      );
-    }
   });
-}
+  addEventListener("resize", resize);
+  gsap.ticker.add(tick);
+  gsap.matchMedia().add("(prefers-reduced-motion: reduce)", (ctx) => {
+    reduced = true;
+    client = null;
+    if (keyboard) gsap.killTweensOf(keyboard);
+    keyboard = null;
+    if (keyboardButton) keyboardButton.hidden = true;
+    intro?.progress(1).kill();
+    // no Rustle means no Chimes, so the Sound toggle has nothing to switch;
+    // ignored so leaving reduced motion doesn't revert the toggle's look back to on
+    ctx.ignore(() => toggle.turnOff());
+    // overwrite stops the intro's just-fired fade-in from revealing the button again
+    gsap.set(button, { autoAlpha: 0, overwrite: true });
+    // the Byline still shows without the intro; ignored so leaving reduced motion keeps it
+    ctx.ignore(() => gsap.set(byline, { autoAlpha: 1, overwrite: true }));
+    return () => {
+      reduced = false;
+      if (keyboardButton) keyboardButton.hidden = false;
+      showToggle();
+    };
+  });
+  if (!reduced) {
+    intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
+    void intro.then(showToggle);
+  }
+
+  if (import.meta.env.DEV) {
+    void import("./gui.ts").then(({ createGui }) =>
+      // lil-gui's stylesheet resets CSS font faces, so reload Degular before re-slicing
+      createGui(
+        config.color,
+        () => void loadFont().then(rebuild),
+        () => scene.update(config),
+      ),
+    );
+  }
+};
+
+void start().catch((error: unknown) => {
+  document.body.classList.remove("ready");
+  if (byline) gsap.set(byline, { autoAlpha: 1 });
+  if (button) gsap.set(button, { autoAlpha: 0 });
+  console.error("Artwork unavailable", error);
+});
 
 /**
  * polite console

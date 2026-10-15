@@ -101,6 +101,10 @@
       body {
         overflow: hidden;
         overscroll-behavior: none;
+        font-family:
+          Degular, Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
+          Arial, sans-serif;
+        font-weight: normal;
       }
 
       h1 {
@@ -162,9 +166,9 @@
         border-radius: 0.25rem;
         color: #cecdc3;
         background: #100f0f;
-        font:
-          500 0.875rem/1.4 Degular,
-          sans-serif;
+        font-size: 0.875rem;
+        line-height: 1.4;
+        font-weight: 500;
       }
 
       .sound-status:not(:empty) {
@@ -186,11 +190,11 @@
         inset-block-end: max(1rem, env(safe-area-inset-bottom));
         inset-inline-start: max(1rem, env(safe-area-inset-left));
         /* centered on the Sound toggle's box so both corners share a line */
-        font:
-          500 0.875rem/2.75rem Degular,
-          sans-serif;
+        font-size: 0.875rem;
+        line-height: 1;
+        font-weight: 500;
         color: #878580;
-        translate: 0 0.333rem;
+        translate: 0 -0.666rem;
       }
 
       .byline a {
@@ -216,15 +220,15 @@
 
       /* hovered, the bars take Panel colors, like the Sound toggle turning on */
       .byline a:is(:hover, :focus-visible) polygon:nth-child(1) {
-        fill: #a2dece;
+        fill: #92bfdb;
       }
 
       .byline a:is(:hover, :focus-visible) polygon:nth-child(2) {
-        fill: #f6e2a0;
+        fill: #dfb431;
       }
 
       .byline a:is(:hover, :focus-visible) polygon:nth-child(3) {
-        fill: #fed3af;
+        fill: #ffe7ce;
       }
 
       .byline a:focus-visible {

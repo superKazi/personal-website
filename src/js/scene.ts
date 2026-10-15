@@ -357,7 +357,6 @@ export const createScene = (canvas: HTMLCanvasElement) => {
 
   return {
     build,
-    update,
     resize,
     render,
     getRise,

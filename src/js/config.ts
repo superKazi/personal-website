@@ -1,7 +1,4 @@
-/**
- * Settled settings and color defaults. In dev, lil-gui edits the color copy
- * and exports JSON to paste over the color block below.
- */
+/** Settled settings and color defaults. */
 import type { Material, Scale } from "./chime.ts";
 
 export const defaults = {
@@ -104,26 +101,26 @@ export const defaults = {
     voices: 12,
   },
   color: {
-    seed: 475,
+    seed: 517,
     runMin: 2,
-    runMax: 5,
+    runMax: 4,
     /** chance a run uses the deep accent */
-    accentChance: 0.08,
+    accentChance: 0.05,
     /** back face brightness multiplier */
-    backShade: 0.8,
+    backShade: 0.55,
     /** edge line width in px, 0 = off */
     edgeWidth: 0.5,
     edge: "#100F0F",
     background: "#100F0F",
-    accent: "#9D4310",
+    accent: "#71320D",
     palette: [
-      "#FED3AF",
-      "#F6E2A0",
+      "#FFE7CE",
+      "#DFB431",
       "#CDD597",
-      "#A2DECE",
-      "#ABCFE2",
-      "#FCCFDA",
-      "#C6DDE8",
+      "#92BFDB",
+      "#BFE8D9",
+      "#FFE1D5",
+      "#E1ECEB",
     ],
   },
 };

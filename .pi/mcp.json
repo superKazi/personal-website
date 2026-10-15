@@ -15,6 +15,10 @@
     "xcode": {
       "command": "xcrun",
       "args": ["mcpbridge"]
+    },
+    "affinity": {
+      "command": "npx",
+      "args": ["-y", "affinity-mcp-bridge"]
     }
   }
 }

@@ -37,6 +37,21 @@ export default defineConfig([
       // OGL, lil-gui and the per-frame loop are mutation-based; allocating per frame would jank
       "functional/immutable-data": "off",
       "functional/no-loop-statements": "off",
+      // a gain left at Web Audio's default 1 played Safari Chimes ~16x too loud
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "CallExpression[callee.property.name='createGain']",
+          message:
+            "Use new GainNode(ctx, { gain }) so the gain never starts at the default 1.",
+        },
+        {
+          selector:
+            "NewExpression[callee.name='GainNode']:not(:has(Property[key.name='gain']))",
+          message:
+            "Give every GainNode an explicit starting gain: new GainNode(ctx, { gain }).",
+        },
+      ],
     },
   },
   {

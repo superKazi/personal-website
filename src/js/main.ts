@@ -109,8 +109,8 @@ const start = async () => {
     if (toggle.isOn() && crossed.length)
       audio
         .play(crossed, dt, config)
-        .forEach(({ strength, pitch }) =>
-          toggle.bump(0.4 + 0.6 * strength, pitch),
+        .forEach(({ strength, scalePosition }) =>
+          toggle.bump(0.4 + 0.6 * strength, scalePosition),
         );
     if (rustle.moving || wasMoving) {
       const bend = scene.getBend();

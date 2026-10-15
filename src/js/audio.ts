@@ -31,6 +31,8 @@ export const createAudio = () => {
   let lastStart = -Infinity;
   // closer than this, separate Chimes blur together anyway; skipping them keeps the audio thread light
   const MIN_GAP = 0.012;
+  // eslint-disable-next-line functional/no-let
+  let strike = 0;
   const lengths = { values: [] as readonly number[], min: 0, max: 0 };
 
   const setLengths = (values: Readonly<Float32Array>) => {
@@ -181,6 +183,7 @@ export const createAudio = () => {
     dt: number,
     cfg: Readonly<Config>,
   ) => {
+    if (!enabled) return [];
     const { chime: c } = cfg;
     return crossings.flatMap((crossing, i) => {
       const note = noteForLength(
@@ -189,10 +192,13 @@ export const createAudio = () => {
         lengths.max,
         c.notes,
       );
-      const strength = Math.min(
+      const target = Math.min(
         1,
         Math.max(0, (crossing.speed - c.minSpeed) / (c.maxSpeed - c.minSpeed)),
       );
+      // Uneven pointer events can spike one crossing's speed; follow it over a few Chimes so no note jumps out.
+      strike += (target - strike) * 0.25;
+      const strength = strike;
       // Spread a frame's Chimes into a run, preserving Rustle's travel order.
       return chime(
         note,
@@ -201,7 +207,7 @@ export const createAudio = () => {
         cfg,
         (i / crossings.length) * dt,
       )
-        ? [{ strength, pitch: note / Math.max(1, c.notes - 1) }]
+        ? [{ strength, scalePosition: note / Math.max(1, c.notes - 1) }]
         : [];
     });
   };

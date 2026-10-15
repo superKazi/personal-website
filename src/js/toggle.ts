@@ -179,6 +179,8 @@ export const createSoundToggle = (
     },
     bump,
     isOn: () => on,
-    turnOff: () => void setOn(false),
+    turnOff: () => {
+      if (on) void setOn(false);
+    },
   };
 };

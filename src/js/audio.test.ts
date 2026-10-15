@@ -71,11 +71,14 @@ const setup = (t: TestContext) => {
       else Reflect.deleteProperty(globalThis, name);
     });
   }
-  return { audio: createAudio(), ctx, sources, ramps };
+  // knock is off by default, so every Chime adds exactly one source per partial, fundamental first
+  const partials = MATERIALS[defaults.chime.material].ratios.length;
+  const fundamentals = () => sources.filter((_, i) => i % partials === 0);
+  return { audio: createAudio(), ctx, sources, ramps, fundamentals };
 };
 
-void test("crossings choose Panel pitches, clamp strikes, and spread Chimes across a frame", async (t) => {
-  const { audio, sources, ramps } = setup(t);
+void test("crossings choose Panel pitches, clamp and smooth strikes, and spread Chimes across a frame", async (t) => {
+  const { audio, ramps, fundamentals } = setup(t);
   const cfg = structuredClone(defaults);
   Object.assign(cfg.chime, {
     root: 440,
@@ -93,20 +96,39 @@ void test("crossings choose Panel pitches, clamp strikes, and spread Chimes acro
   ];
   assert.deepEqual(audio.play(crossings, 0.06, cfg), []);
   await audio.enable(cfg);
+  // targets clamp to 0, 0.5 and 1; the strike follows them a quarter of the way per Chime
   assert.deepEqual(audio.play(crossings, 0.06, cfg), [
-    { strength: 0, pitch: 0 },
-    { strength: 0.5, pitch: 0.5 },
-    { strength: 1, pitch: 1 },
+    { strength: 0, scalePosition: 0 },
+    { strength: 0.125, scalePosition: 0.5 },
+    { strength: 0.34375, scalePosition: 1 },
   ]);
-  const fundamentals = sources.filter((_, i) => i % 3 === 0);
+  const played = fundamentals();
   for (const [i, start] of [0, 0.02, 0.04].entries())
-    assert.ok(Math.abs(fundamentals[i].starts[0] - start) < 1e-9);
+    assert.ok(Math.abs(played[i].starts[0] - start) < 1e-9);
   for (const [i, hz] of [440, 554.3652619537442, 739.9888454232688].entries())
-    assert.ok(Math.abs(fundamentals[i].frequency - hz) < 1e-9);
-  for (const [i, gain] of [
-    0.05, 0.058333333333333334, 0.06666666666666667,
-  ].entries())
-    assert.ok(Math.abs(ramps[i] - gain) < 1e-9);
+    assert.ok(Math.abs(played[i].frequency - hz) < 1e-9);
+  const { volume, voices, dynamics } = cfg.chime;
+  for (const [i, s] of [0, 0.125, 0.34375].entries())
+    assert.ok(
+      Math.abs(ramps[i] - (volume / voices) * (1 - dynamics + dynamics * s)) <
+        1e-9,
+    );
+});
+
+void test("one spiked crossing in a steady swipe doesn't jump out", async (t) => {
+  const { audio, ctx } = setup(t);
+  const cfg = structuredClone(defaults);
+  Object.assign(cfg.chime, { notes: 5, minSpeed: 0, maxSpeed: 10 });
+  audio.setLengths(new Float32Array([1, 0.875, 0.75, 0.625, 0.5]));
+  await audio.enable(cfg);
+  const strengths = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 40, 5].map((speed, i) => {
+    ctx.currentTime = i * 0.05;
+    return audio.play([{ column: i % 5, speed }], 0.016, cfg)[0].strength;
+  });
+  const steady = strengths[9];
+  assert.ok(Math.abs(steady - 0.5) < 0.05);
+  assert.ok(strengths[10] - steady < 0.15);
+  assert.ok(strengths[11] < strengths[10]);
 });
 
 void test("dense crossings return feedback only for admitted Chimes, including across frames", async (t) => {
@@ -116,10 +138,10 @@ void test("dense crossings return feedback only for admitted Chimes, including a
   audio.setLengths(new Float32Array([1, 0.875, 0.75, 0.625, 0.5]));
   await audio.enable(cfg);
   const crossings = [0, 1, 2, 3, 4].map((column) => ({ column, speed: 10 }));
-  assert.deepEqual(audio.play(crossings, 0.02, cfg), [
-    { strength: 1, pitch: 0 },
-    { strength: 1, pitch: 0.75 },
-  ]);
+  assert.deepEqual(
+    audio.play(crossings, 0.02, cfg).map((f) => f.scalePosition),
+    [0, 0.75],
+  );
   assert.equal(sources.length, 6);
   ctx.currentTime = 0.023;
   assert.deepEqual(audio.play(crossings.slice(0, 1), 0.016, cfg), []);
@@ -129,7 +151,7 @@ void test("dense crossings return feedback only for admitted Chimes, including a
 });
 
 void test("Rustle sweeps play in travel order, with longer Panels lower and octaves intact", async (t) => {
-  const { audio, ctx, sources } = setup(t);
+  const { audio, ctx, fundamentals: played } = setup(t);
   const cfg = structuredClone(defaults);
   Object.assign(cfg.chime, { root: 440, notes: 6, detune: 0 });
   const rustle = createRustle(
@@ -141,8 +163,7 @@ void test("Rustle sweeps play in travel order, with longer Panels lower and octa
   step(rustle, { ...ray, x: -0.01 }, 0.05, cfg);
   const forward = step(rustle, { ...ray, x: 0.21 }, 0.05, cfg);
   assert.equal(audio.play(forward, 0.12, cfg).length, 6);
-  const fundamentals = () =>
-    sources.filter((_, i) => i % 3 === 0).map((s) => s.frequency);
+  const fundamentals = () => played().map((s) => s.frequency);
   const ascending = fundamentals();
   assert.equal(ascending[0], 440);
   assert.equal(ascending[5], 880);
@@ -154,9 +175,12 @@ void test("Rustle sweeps play in travel order, with longer Panels lower and octa
   assert.deepEqual(fundamentals().slice(6), [...ascending].reverse());
   ctx.currentTime = 0.4;
   audio.setLengths(new Float32Array([0.75, 0.75]));
-  assert.deepEqual(audio.play([{ column: 1, speed: 10 }], 0.016, cfg), [
-    { strength: 1, pitch: 0 },
-  ]);
+  assert.deepEqual(
+    audio
+      .play([{ column: 1, speed: 10 }], 0.016, cfg)
+      .map((f) => f.scalePosition),
+    [0],
+  );
   assert.equal(fundamentals().at(-1), 440);
 });
 

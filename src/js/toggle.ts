@@ -20,14 +20,10 @@ export const createSoundToggle = (
   status.setAttribute("role", "status");
   button.after(status);
   const label = button.querySelector(".visually-hidden");
-  const svg =
-    button.querySelector("svg") ??
-    button.appendChild(
-      document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-    );
+  const svg = button.querySelector("svg");
   const bars = Array.from({ length: BARS }, () => {
     const p = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    svg.append(p);
+    svg?.append(p);
     return p;
   });
   const fills = bars.map((_, i) =>
@@ -173,7 +169,7 @@ export const createSoundToggle = (
       axes = next;
       // draw the bar nearest the viewer last; only here, since moving nodes mid-click drops the click
       (axes[0][2] >= 0 ? bars : [...bars].reverse()).forEach((bar) =>
-        svg.append(bar),
+        svg?.append(bar),
       );
       draw();
     },

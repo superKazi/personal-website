@@ -1,5 +1,5 @@
 /** Pentatonic scales as semitones above the root: no two notes clash, in any order. */
-export const SCALES = {
+const SCALES = {
   yo: [0, 2, 5, 7, 9],
   in: [0, 1, 5, 7, 8],
   hirajoshi: [0, 2, 3, 7, 8],

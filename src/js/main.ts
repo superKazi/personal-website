@@ -18,6 +18,9 @@ const start = async () => {
   if (!canvas || !button || !byline) return;
   await loadFont();
   const scene = createScene(canvas);
+  // a lost GPU context never draws again; the piece keeps no state, so reload once it's back
+  canvas.addEventListener("webglcontextlost", (e) => e.preventDefault());
+  canvas.addEventListener("webglcontextrestored", () => location.reload());
   const audio = createAudio();
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
     on ? audio.enable(config) : audio.disable(),
@@ -146,6 +149,8 @@ const start = async () => {
       ease: "none",
       onComplete: () => {
         keyboard = null;
+        // else the next real pointer frame counts as a jump from the word's end and Chimes every Panel between
+        rustle.prev = null;
       },
     });
   });

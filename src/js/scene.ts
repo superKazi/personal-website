@@ -143,7 +143,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   }
   const renderer = new Renderer({
     canvas,
-    dpr: Math.min(devicePixelRatio, 2),
+    dpr: Math.min(devicePixelRatio, 3),
     antialias: true,
   });
   const { gl } = renderer;
@@ -296,7 +296,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
 
   const resize = (cfg: Readonly<Config>) => {
     // re-read so moving to another screen or zooming stays sharp
-    renderer.dpr = Math.min(devicePixelRatio, 2);
+    renderer.dpr = Math.min(devicePixelRatio, 3);
     renderer.setSize(innerWidth, innerHeight);
     update(cfg);
   };

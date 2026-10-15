@@ -54,8 +54,10 @@ const hit = (
   const dx = r.panels[i].x - p.x;
   const y = p.y + p.slopeY * dx;
   const z = p.z + p.slopeZ * dx;
+  // the keyboard sweep runs at one height, so it reaches every Panel, counters or not
   const inside =
-    r.panels[i].pieces.some((p) => y > p.y0 - margin && y < p.y1 + margin) &&
+    (p.source === "keyboard" ||
+      r.panels[i].pieces.some((q) => y > q.y0 - margin && y < q.y1 + margin)) &&
     z > -margin &&
     z < depth + margin;
   return inside ? z / depth : null;

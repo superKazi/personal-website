@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
@@ -11,7 +10,6 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "sourceMap": true,
 
     /* Linting */
     "strict": true,

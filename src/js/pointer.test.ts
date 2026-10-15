@@ -5,9 +5,16 @@ import { config } from "./config.ts";
 import { createPointer } from "./pointer.ts";
 import { createRustle, step, type Crossing } from "./rustle.ts";
 
+// every other Panel has a counter at half height, where the sweep runs, like the real K, A and Z
 const panels = Array.from({ length: 100 }, (_, i) => ({
   x: i * 0.04,
-  pieces: [{ y0: 0, y1: 1 }],
+  pieces:
+    i % 2
+      ? [
+          { y0: 0, y1: 0.3 },
+          { y0: 0.7, y1: 1 },
+        ]
+      : [{ y0: 0, y1: 1 }],
 }));
 
 // 100 screen px per cap height, straight through the middle of every Panel

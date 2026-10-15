@@ -180,17 +180,6 @@ const start = async () => {
     intro = playIntro(panels, scene.getRise(), scene.commitRise, config);
     void intro.then(showToggle);
   }
-
-  if (import.meta.env.DEV) {
-    void import("./gui.ts").then(({ createGui }) =>
-      // lil-gui's stylesheet resets CSS font faces, so reload Degular before re-slicing
-      createGui(
-        config.color,
-        () => void loadFont().then(rebuild),
-        () => scene.update(config),
-      ),
-    );
-  }
 };
 
 void start().catch((error: unknown) => {

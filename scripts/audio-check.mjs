@@ -119,10 +119,6 @@ const check = async (engine, name, url) => {
       name: "Turn on audio experience",
     });
     await toggle.waitFor({ timeout: 20000 });
-    // the dev gui covers the Sound toggle
-    await page.evaluate(() =>
-      document.querySelector(".lil-gui")?.style.setProperty("display", "none"),
-    );
     await toggle.click();
     // a jittery hand Rustling back and forth along the word for ~12 s, seeded so every run is the same
     let seed = 5;

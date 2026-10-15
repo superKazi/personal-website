@@ -7,9 +7,8 @@ Check the piece with Playwright scripts, in WebKit, Firefox and Chromium. Bugs h
 1. Put throwaway scripts in `scripts/` as `.scratch-*.mjs` (gitignored), so they resolve the repo's `playwright` and `vite`. Delete them when done.
 2. Start Vite from the script with `createServer({ logLevel: "error", server: { port } })` and `await server.listen()`, then read the URL from `server.resolvedUrls.local[0]`; close it in a `finally`. Leave the user's own `vite --host` server running.
 3. Open the page at a 1280×800 viewport. The intro takes about 4 s: wait for `page.getByRole("button", { name: "Turn on audio experience" })`, which stays out of the accessibility tree until the intro ends.
-4. Hide the dev gui before clicking anything; it covers the Sound toggle: `document.querySelector(".lil-gui")?.style.setProperty("display", "none")`.
-5. Playwright's clicks are real user gestures, so clicking the Sound toggle starts audio in every engine.
-6. Keep files untouched while a check runs: any save reloads the page through HMR, mid-test.
+4. Playwright's clicks are real user gestures, so clicking the Sound toggle starts audio in every engine.
+5. Keep files untouched while a check runs: any save reloads the page through HMR, mid-test.
 
 Rustle with `page.mouse.move`, which sends real pointer events. The word's diagonal at 1280×800 is `(300 + k * 650, 620 - k * 440)` for `k` from 0 to 1. `audio-check` adds seeded jitter and random reversals to imitate a hand.
 
@@ -33,7 +32,7 @@ Recording gotchas:
 
 Synthetic pointer events don't reproduce real hand input: hands jiggle, move slowly, and retrigger the same Panels. When the user hears a problem your measurements miss, trust the ear. Two ways to turn it into a loop:
 
-- Have the user bisect one setting at a time in `src/js/config.ts`; lil-gui tunes colors only. That found the crackle (the Chime `knock`) in one round.
+- Have the user bisect one setting at a time in `src/js/config.ts`. That found the crackle (the Chime `knock`) in one round.
 - Save the recording as a WAV for the user to listen to, confirming the measurement and the sound they hear are the same thing. That's how the Firefox buzz check was validated.
 
 ## Beyond Playwright

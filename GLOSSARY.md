@@ -32,6 +32,10 @@ _Avoid_: Flick, click, tick, note
 The corner button, drawn as a tiny Stack, that turns Chimes on or off.
 _Avoid_: Mute button, speaker icon
 
+**Loading mark**:
+The tiny Stack that rises in place while the piece loads on a slow connection, before the Panels take over.
+_Avoid_: Spinner, loader, preloader
+
 **Byline**:
 The small corner line saying where Kazi works.
 _Avoid_: Footer, caption, tagline

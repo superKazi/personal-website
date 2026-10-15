@@ -40,21 +40,22 @@ export const createSoundToggle = (
     [0, 0, 1],
   ];
 
-  const draw = () => {
+  const corners = (i: number, h: number) => {
     const [x, y, z] = axes;
     const gap = 1.1;
     const depth = 3;
-    const corners = (i: number, h: number) => {
-      const ox = x[0] * i * gap;
-      const oy = x[1] * i * gap;
-      return [
-        [ox, oy],
-        [ox + z[0] * depth, oy + z[1] * depth],
-        [ox + z[0] * depth + y[0] * h, oy + z[1] * depth + y[1] * h],
-        [ox + y[0] * h, oy + y[1] * h],
-      ];
-    };
-    // centre a mid-height Stack in the box; taller ripples overflow visibly
+    const ox = x[0] * i * gap;
+    const oy = x[1] * i * gap;
+    return [
+      [ox, oy],
+      [ox + z[0] * depth, oy + z[1] * depth],
+      [ox + z[0] * depth + y[0] * h, oy + z[1] * depth + y[1] * h],
+      [ox + y[0] * h, oy + y[1] * h],
+    ];
+  };
+  // centre a mid-height Stack in the box; taller ripples overflow visibly.
+  // Depends only on `axes`, so it's worked out once per layout, not every frame.
+  const fit = () => {
     const extent = Array.from({ length: BARS }, (_, i) => corners(i, 4)).flat();
     const xs = extent.map((c) => c[0]);
     const ys = extent.map((c) => c[1]);
@@ -64,7 +65,13 @@ export const createSoundToggle = (
       SIZE / Math.max(Math.max(...xs) - minX, Math.max(...ys) - minY);
     const offX = (SIZE - (Math.max(...xs) - minX) * scale) / 2;
     const offY = (SIZE - (Math.max(...ys) - minY) * scale) / 2;
+    return { minX, minY, scale, offX, offY };
+  };
+  // eslint-disable-next-line functional/no-let
+  let box = fit();
 
+  const draw = () => {
+    const { minX, minY, scale, offX, offY } = box;
     bars.forEach((bar, i) => {
       const wave = 0.5 + 0.5 * Math.sin(state.phase + i * 0.9);
       const level = 0.35 + 0.65 * (state.on * (0.25 + 0.6 * wave) + bumps[i]);
@@ -173,6 +180,7 @@ export const createSoundToggle = (
     /** Re-slant the bars to match the piece's current view. */
     layout: (next: readonly Axis[]) => {
       axes = next;
+      box = fit();
       // draw the bar nearest the viewer last; only here, since moving nodes mid-click drops the click
       (axes[0][2] >= 0 ? bars : [...bars].reverse()).forEach((bar) =>
         svg?.append(bar),

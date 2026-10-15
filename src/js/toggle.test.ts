@@ -153,6 +153,20 @@ void test("failed activation can be retried and clears its status on the next re
   assert.equal(status().textContent, "");
 });
 
+void test("user clicks count sound-on and sound-off events", (t) => {
+  const paths: string[] = [];
+  Object.assign(globalThis, {
+    goatcounter: {
+      count: ({ path }: Readonly<{ path: string }>) => paths.push(path),
+    },
+  });
+  t.after(() => Reflect.deleteProperty(globalThis, "goatcounter"));
+  const { button } = setup(t, () => Promise.resolve());
+  button.click();
+  button.click();
+  assert.deepEqual(paths, ["sound-on", "sound-off"]);
+});
+
 void test("the retry status clears after six seconds", async (t) => {
   t.mock.method(console, "error", () => {});
   t.mock.timers.enable({ apis: ["setTimeout"] });

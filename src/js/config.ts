@@ -1,6 +1,6 @@
 /**
- * Every tunable in one place. In dev, lil-gui edits a copy and its export
- * button produces JSON to paste over these defaults.
+ * Settled settings and color defaults. In dev, lil-gui edits the color copy
+ * and exports JSON to paste over the color block below.
  */
 import type { Material, Scale } from "./chime.ts";
 

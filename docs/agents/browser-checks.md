@@ -72,4 +72,4 @@ Reduced motion: the MCP can't emulate it. Use an `initScript` that replaces `win
 
 ## When the user's ear disagrees
 
-Synthetic pointer events don't reproduce real hand input: hands jiggle, move slowly, and retrigger the same Panels. When the user hears a problem your measurements miss, trust the ear. Before changing code, have the user bisect with the existing lil-gui sliders, one setting at a time. That found the crackle (the Chime `knock`) in one round, after three misleading measurements.
+Synthetic pointer events don't reproduce real hand input: hands jiggle, move slowly, and retrigger the same Panels. When the user hears a problem your measurements miss, trust the ear. Have the user bisect one setting at a time in `src/js/config.ts`; lil-gui now tunes colors only. That found the crackle (the Chime `knock`) in one round, after three misleading measurements.

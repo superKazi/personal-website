@@ -1,6 +1,6 @@
 {
   "name": "kazi-website",
-  "version": "8.6.5",
+  "version": "9.0.0",
   "scripts": {
     "dev": "vite --host",
     "lint": "eslint .",

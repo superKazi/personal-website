@@ -31,6 +31,9 @@ export const createAudio = () => {
   let lastStart = -Infinity;
   // closer than this, separate Chimes blur together anyway; skipping them keeps the audio thread light
   const MIN_GAP = 0.012;
+  // Firefox's clock runs in coarse steps, so "now" can already be past on the audio thread;
+  // a Chime scheduled there skips its attack and clicks, and dense clicks buzz
+  const LOOKAHEAD = 0.03;
   // eslint-disable-next-line functional/no-let
   let strike = 0;
   const lengths = { values: [] as readonly number[], min: 0, max: 0 };
@@ -115,7 +118,7 @@ export const createAudio = () => {
       ctx.state !== "running"
     )
       return false;
-    const t = ctx.currentTime + delay;
+    const t = ctx.currentTime + LOOKAHEAD + delay;
 
     if (t - lastStart < MIN_GAP) return false;
     lastStart = t;
@@ -125,8 +128,10 @@ export const createAudio = () => {
     const material = MATERIALS[c.material];
     const ring = c.ring * material.ring;
     const end = t + c.strike + ring * 1.6;
-    // each voice gets an equal share of the volume; the soft clipper handles rare pile-ups
-    const gain = ctx.createGain();
+    // each voice gets an equal share of the volume; the soft clipper handles rare pile-ups.
+    // Every gain starts at its scheduled level, not the default 1: if the schedule lands
+    // late (Safari), the voice loses its attack instead of playing ~16x too loud.
+    const gain = new GainNode(ctx, { gain: 0 });
     gain.gain.setValueAtTime(0, t);
     gain.gain.linearRampToValueAtTime(
       (c.volume / c.voices) * (1 - c.dynamics + c.dynamics * s),
@@ -147,8 +152,9 @@ export const createAudio = () => {
         });
         // higher partials fade faster and come in with brightness and a harder strike
         const bright = i === 0 ? 1 : c.brightness * (0.3 + 0.7 * s);
-        const partial = new GainNode(ctx as AudioContext);
-        partial.gain.setValueAtTime((material.levels[i] * bright) / total, t);
+        const level = (material.levels[i] * bright) / total;
+        const partial = new GainNode(ctx as AudioContext, { gain: level });
+        partial.gain.setValueAtTime(level, t);
         partial.gain.setTargetAtTime(0, t, ring / (4 * (1 + i * 1.5)));
         osc.connect(partial).connect(gain);
         osc.start(t);
@@ -165,7 +171,7 @@ export const createAudio = () => {
         frequency: Math.min(freq * 3, 8000),
         Q: 0.6,
       });
-      const env = new GainNode(ctx);
+      const env = new GainNode(ctx, { gain: knock / total });
       env.gain.setValueAtTime(knock / total, t);
       env.gain.setTargetAtTime(0, t, 0.004);
       source.connect(filter).connect(env).connect(gain);

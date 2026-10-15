@@ -9,16 +9,27 @@ const setup = (t: TestContext) => {
   const sources: { frequency: number; starts: number[]; stops: number[] }[] =
     [];
   const ramps: number[] = [];
-  const param = () => ({
-    value: 0,
-    setValueAtTime: () => {},
-    linearRampToValueAtTime: (value: number) => ramps.push(value),
-    setTargetAtTime: () => {},
-    cancelScheduledValues: () => {},
-  });
-  const node = function () {
+  // every GainNode's starting value, and the first value it was scheduled to
+  const gains: { initial: number; scheduled?: number }[] = [];
+  const param = (initial = 1) => {
+    const record: { initial: number; scheduled?: number } = { initial };
     return {
-      gain: param(),
+      record,
+      value: initial,
+      setValueAtTime: (value: number) => {
+        record.scheduled ??= value;
+      },
+      linearRampToValueAtTime: (value: number) => ramps.push(value),
+      setTargetAtTime: () => {},
+      cancelScheduledValues: () => {},
+    };
+  };
+  const node = function (
+    _context?: unknown,
+    options?: Readonly<{ gain?: number }>,
+  ) {
+    return {
+      gain: param(options?.gain),
       connect: (destination: unknown) => destination,
     };
   };
@@ -27,7 +38,6 @@ const setup = (t: TestContext) => {
     sampleRate: 100,
     state: "suspended",
     destination: node(),
-    createGain: node,
     createConvolver: node,
     createBuffer: (_channels: number, length: number) => ({
       getChannelData: () => new Float32Array(length),
@@ -45,7 +55,18 @@ const setup = (t: TestContext) => {
     AudioContext: function () {
       return ctx;
     },
-    GainNode: node,
+    GainNode: function (
+      _context: unknown,
+      options?: Readonly<{ gain?: number }>,
+    ) {
+      const gain = node(_context, options);
+      gains.push(gain.gain.record);
+      return gain;
+    },
+    BiquadFilterNode: node,
+    AudioBufferSourceNode: function () {
+      return { ...node(), start: () => {}, stop: () => {} };
+    },
     WaveShaperNode: node,
     OscillatorNode: function (
       _context: unknown,
@@ -74,7 +95,7 @@ const setup = (t: TestContext) => {
   // knock is off by default, so every Chime adds exactly one source per partial, fundamental first
   const partials = MATERIALS[defaults.chime.material].ratios.length;
   const fundamentals = () => sources.filter((_, i) => i % partials === 0);
-  return { audio: createAudio(), ctx, sources, ramps, fundamentals };
+  return { audio: createAudio(), ctx, sources, ramps, gains, fundamentals };
 };
 
 void test("crossings choose Panel pitches, clamp and smooth strikes, and spread Chimes across a frame", async (t) => {
@@ -103,7 +124,8 @@ void test("crossings choose Panel pitches, clamp and smooth strikes, and spread 
     { strength: 0.34375, scalePosition: 1 },
   ]);
   const played = fundamentals();
-  for (const [i, start] of [0, 0.02, 0.04].entries())
+  // 30 ms ahead of the clock, so no Chime is scheduled in the past
+  for (const [i, start] of [0.03, 0.05, 0.07].entries())
     assert.ok(Math.abs(played[i].starts[0] - start) < 1e-9);
   for (const [i, hz] of [440, 554.3652619537442, 739.9888454232688].entries())
     assert.ok(Math.abs(played[i].frequency - hz) < 1e-9);
@@ -113,6 +135,21 @@ void test("crossings choose Panel pitches, clamp and smooth strikes, and spread 
       Math.abs(ramps[i] - (volume / voices) * (1 - dynamics + dynamics * s)) <
         1e-9,
     );
+});
+
+void test("Chime gains start at their scheduled levels, so a late schedule can't play at full gain", async (t) => {
+  const { audio, gains } = setup(t);
+  const cfg = structuredClone(defaults);
+  cfg.chime.knock = 1;
+  audio.setLengths(new Float32Array([1, 0.5]));
+  await audio.enable(cfg);
+  const before = gains.length;
+  assert.equal(audio.play([{ column: 0, speed: 5 }], 0.016, cfg).length, 1);
+  const chime = gains.slice(before);
+  // envelope, one per partial, and the knock
+  assert.equal(chime.length, MATERIALS[cfg.chime.material].ratios.length + 2);
+  assert.equal(chime[0].initial, 0);
+  for (const g of chime) assert.equal(g.initial, g.scheduled);
 });
 
 void test("one spiked crossing in a steady swipe doesn't jump out", async (t) => {
@@ -139,13 +176,14 @@ void test("dense crossings return feedback only for admitted Chimes, including a
   await audio.enable(cfg);
   const crossings = [0, 1, 2, 3, 4].map((column) => ({ column, speed: 10 }));
   assert.deepEqual(
-    audio.play(crossings, 0.02, cfg).map((f) => f.scalePosition),
+    // spread 4.2 ms apart: only the first and fourth clear the 12 ms gap
+    audio.play(crossings, 0.021, cfg).map((f) => f.scalePosition),
     [0, 0.75],
   );
   assert.equal(sources.length, 6);
-  ctx.currentTime = 0.023;
-  assert.deepEqual(audio.play(crossings.slice(0, 1), 0.016, cfg), []);
   ctx.currentTime = 0.024;
+  assert.deepEqual(audio.play(crossings.slice(0, 1), 0.016, cfg), []);
+  ctx.currentTime = 0.025;
   assert.equal(audio.play(crossings.slice(0, 1), 0.016, cfg).length, 1);
   assert.deepEqual(audio.play([], 0.016, cfg), []);
 });

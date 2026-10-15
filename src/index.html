@@ -6,16 +6,15 @@
       name="viewport"
       content="width=device-width,initial-scale=1,shrink-to-fit=no,viewport-fit=cover"
     />
-    <title>Kazi&#8216;s website</title>
-    <link rel="preconnect" href="https://superkazi.goatcounter.com" />
+    <title>Kazi&#8217;s website</title>
     <link
       rel="preload"
+      href="/DegularVariable.woff2"
       as="font"
       type="font/woff2"
-      crossorigin="anonymous"
-      href="./DegularVariable.woff2"
-      fetchpriority="high"
+      crossorigin
     />
+    <link rel="preconnect" href="https://superkazi.goatcounter.com" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -36,7 +35,7 @@
             "@type": "ProfilePage",
             "@id": "https://kazielmanawal.me/#webpage",
             "url": "https://kazielmanawal.me/",
-            "name": "Kazi Elman Awal — Dev, Design, Data Viz",
+            "name": "Kazi Elman Awal",
             "isPartOf": {
               "@id": "https://kazielmanawal.me/#website"
             },
@@ -88,52 +87,14 @@
       @font-face {
         font-family: "Degular";
         src: url("/DegularVariable.woff2") format("woff2-variations");
-        font-optical-sizing: none;
         font-weight: 200 800;
-        font-stretch: normal;
         font-style: normal;
-        font-display: auto;
-        font-synthesis: none;
+        font-display: block;
       }
 
       :root {
-        --step-0: clamp(1.125rem, 1.0714rem + 0.2679vw, 1.5rem);
-
-        --sand-2: #f9f9f8;
-        --sand-11: #63635e;
-        --sand-12: #21201c;
-      }
-
-      @supports (color: color(display-p3 1 1 1)) {
-        @media (color-gamut: p3) {
-          :root {
-            --sand-2: color(display-p3 0.977 0.977 0.973);
-            --sand-11: color(display-p3 0.388 0.388 0.37);
-            --sand-12: color(display-p3 0.129 0.126 0.111);
-          }
-        }
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --sand-2: #191918;
-          --sand-11: #b5b3ad;
-          --sand-12: #eeeeec;
-        }
-      }
-
-      @supports (color: color(display-p3 1 1 1)) {
-        @media (color-gamut: p3) and (prefers-color-scheme: dark) {
-          :root {
-            --sand-2: color(display-p3 0.098 0.098 0.094);
-            --sand-11: color(display-p3 0.707 0.703 0.68);
-            --sand-12: color(display-p3 0.933 0.933 0.926);
-          }
-        }
-      }
-
-      @view-transition {
-        navigation: auto;
+        color-scheme: dark;
+        background-color: #100f0f;
       }
 
       *,
@@ -141,167 +102,328 @@
       *::after {
         box-sizing: border-box;
         margin: 0;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
       }
 
       html,
       body {
-        background-color: var(--sand-2);
-      }
-
-      html {
-        -moz-text-size-adjust: none;
-        -webkit-text-size-adjust: none;
-        text-size-adjust: none;
+        overflow: hidden;
         overscroll-behavior: none;
-        scroll-behavior: smooth;
-      }
-
-      body {
-        -webkit-font-smoothing: antialiased;
         font-family:
-          "Degular", Inter, Roboto, "Helvetica Neue", "Arial Nova",
-          "Nimbus Sans", Arial, sans-serif;
-        font-kerning: none;
-        text-rendering: optimizeSpeed;
-        color: var(--sand-12);
-        padding-left: env(safe-area-inset-left);
-        padding-right: env(safe-area-inset-right);
-        min-block-size: 100svh;
-      }
-
-      main {
-        text-transform: uppercase;
-        line-height: 1;
-        padding: 1rem;
-      }
-
-      header,
-      ul[role="list"] {
-        opacity: 0;
-      }
-
-      h1,
-      h2 {
-        line-height: 1;
-        font-variation-settings:
-          "opsz" 6,
-          "wght" 700;
-      }
-
-      h1,
-      h2,
-      ul[role="list"] {
-        font-size: var(--step-0);
+          Degular, Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
+          Arial, sans-serif;
+        font-weight: normal;
       }
 
       h1 {
-        margin-block-start: 1rem;
+        position: fixed;
+        inset: 40% 1rem auto;
+        text-align: center;
+        font-weight: 700;
+        font-size: 2rem;
+        color: #cecdc3;
       }
 
-      h2 {
-        color: var(--sand-11);
-        margin-block-start: 0.05rem;
-        margin-block-start: 0.05lh;
+      .rustle-keyboard:not(:focus-visible),
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
       }
 
-      ul[role="list"] {
-        list-style: none;
-        padding: 0;
-        margin-block-start: 3rem;
-        font-variation-settings:
-          "opsz" 6,
-          "wght" 500;
+      /* the name shows only without the piece: no JS, or the script failed */
+      @media (scripting: enabled) {
+        body:not(.failed) h1 {
+          position: absolute;
+          inline-size: 1px;
+          block-size: 1px;
+          overflow: hidden;
+          clip-path: inset(50%);
+          white-space: nowrap;
+        }
       }
 
-      a {
-        color: var(--sand-12);
+      .no-js {
+        position: fixed;
+        inset: calc(40% + 3rem) 1rem auto;
+        text-align: center;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #878580;
+      }
+
+      /* the Loading mark: shown only on slow loads, gone once the intro starts */
+      /* shortcut: if the bundle never runs, nothing adds .ready/.failed and the mark loops forever; add a CSS timeout if that's ever reported */
+      .loading {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+        transition:
+          opacity 0.3s,
+          display 0.3s allow-discrete;
+      }
+
+      .ready .loading,
+      .failed .loading {
+        opacity: 0;
+        display: none;
+      }
+
+      @media (scripting: none) {
+        .loading {
+          display: none;
+        }
+      }
+
+      .loading-mark {
+        position: relative;
+        block-size: 2rem;
+        aspect-ratio: 5.02 / 8.9;
+        perspective: 6rem;
+        /* a delay so fast loads never see it */
+        animation: loading-in 0.3s 0.4s backwards;
+      }
+
+      /* one svg per panel: browsers flatten 3D transforms on shapes inside an svg */
+      .loading svg {
+        position: absolute;
+        inset: 0;
+        overflow: visible;
+        /* panels swing in on their left edge, left to right, overlapping like the Panels in the intro */
+        --loop: 2s;
+        animation:
+          loading-hinge var(--loop) infinite backwards,
+          loading-pop var(--loop) infinite backwards;
+      }
+
+      .loading polygon {
+        stroke: #100f0f;
+        stroke-width: 0.3;
+        stroke-linejoin: round;
+      }
+
+      /* origins are each panel's left edge, as a share of the 5.02 viewBox width */
+      .loading svg:nth-child(1) {
+        fill: #92bfdb;
+        transform-origin: 55% 50%;
+        animation-delay: calc(var(--loop) * 0.18);
+      }
+
+      .loading svg:nth-child(2) {
+        fill: #dfb431;
+        transform-origin: 28% 50%;
+        animation-delay: calc(var(--loop) * 0.09);
+      }
+
+      .loading svg:nth-child(3) {
+        fill: #ffe7ce;
+        transform-origin: 0 50%;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        /* slowed, not stopped, so it still reads as a loader */
+        .loading svg {
+          --loop: 6s;
+        }
+      }
+
+      @keyframes loading-in {
+        from {
+          opacity: 0;
+        }
+      }
+
+      /* `scale` runs apart from the hinge's `transform`: it pops ahead of the swing and shrinks before the fold */
+      @keyframes loading-pop {
+        0% {
+          scale: 0.5;
+          animation-timing-function: cubic-bezier(0.34, 1.8, 0.5, 1);
+        }
+        28% {
+          scale: 1.12;
+          animation-timing-function: ease-in-out;
+        }
+        48%,
+        58% {
+          scale: 1;
+          animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0);
+        }
+        100% {
+          scale: 0.7;
+        }
+      }
+
+      @keyframes loading-hinge {
+        0% {
+          opacity: 0;
+          transform: rotateY(-80deg) translateZ(0.5rem);
+          /* overshoot so the panel snaps open and settles */
+          animation-timing-function: cubic-bezier(0.22, 1.6, 0.36, 1);
+        }
+        12% {
+          opacity: 1;
+        }
+        40%,
+        68% {
+          opacity: 1;
+          transform: none;
+          /* anticipate, then fold away fast */
+          animation-timing-function: cubic-bezier(0.6, -0.4, 0.74, 0.05);
+        }
+        100% {
+          opacity: 0;
+          transform: rotateY(80deg) translateZ(-0.5rem);
+        }
+      }
+
+      .rustle-keyboard {
+        position: fixed;
+        inset: 1rem auto auto 1rem;
+        z-index: 1;
+        padding: 0.75rem;
+        color: #cecdc3;
+        background: #100f0f;
+      }
+
+      body:not(.ready) .rustle-keyboard {
+        display: none;
+      }
+      .rustle-keyboard:focus-visible {
+        outline: 2px solid #cecdc3;
+      }
+
+      .sound {
+        position: fixed;
+        inset-block-end: max(1rem, env(safe-area-inset-bottom));
+        inset-inline-end: max(1rem, env(safe-area-inset-right));
+        inline-size: 2.75rem;
+        block-size: 2.75rem;
+        padding: 0.625rem;
+        border: 0;
+        border-radius: 0.5rem;
+        background: none;
+        cursor: pointer;
+        /* revealed by script once the intro ends */
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .sound-status {
+        position: fixed;
+        inset-block-end: calc(max(1rem, env(safe-area-inset-bottom)) + 3.25rem);
+        inset-inline-end: max(1rem, env(safe-area-inset-right));
+        max-inline-size: min(20rem, calc(100% - 2rem));
+        border-radius: 0.25rem;
+        color: #cecdc3;
+        background: #100f0f;
+        font-size: 0.875rem;
+        line-height: 1.4;
+        font-weight: 500;
+      }
+
+      .sound-status:not(:empty) {
+        padding: 0.5rem 0.75rem;
+      }
+
+      .sound svg {
+        /* clicks always land on the button, never on the animating bars */
+        pointer-events: none;
+        display: block;
+        inline-size: 100%;
+        block-size: 100%;
+        overflow: visible;
+        translate: -2px -1px;
+      }
+
+      .byline {
+        position: fixed;
+        inset-block-end: max(1rem, env(safe-area-inset-bottom));
+        inset-inline-start: max(1rem, env(safe-area-inset-left));
+        /* centered on the Sound toggle's box so both corners share a line */
+        font-size: 0.875rem;
+        line-height: 1;
+        font-weight: 500;
+        color: #878580;
+        translate: 0 -0.666rem;
+        /* revealed by script once the intro ends */
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      @media (scripting: none) {
+        .byline {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+
+      .byline a {
+        color: #cecdc3;
         text-decoration: none;
       }
 
-      a:focus-visible {
-        border-radius: 4px;
-        outline-width: 1px;
-        outline-offset: 1px;
-        outline-style: solid;
-        outline-color: var(--sand-11);
+      /* a tiny rising Stack: the link's cue instead of an underline */
+      .byline svg {
+        display: inline-block;
+        block-size: 0.9em;
+        margin-inline-start: 0.3em;
+        vertical-align: -0.05em;
+        overflow: visible;
       }
 
-      a:visited {
-        color: var(--sand-12);
+      .byline polygon {
+        fill: #6f6e69;
+        stroke: #100f0f;
+        stroke-width: 0.3;
+        stroke-linejoin: round;
       }
 
-      a:focus:not(:focus-visible) {
-        outline: none;
+      /* hovered, the bars take Panel colors, like the Sound toggle turning on */
+      .byline a:is(:hover, :focus-visible) polygon:nth-child(1) {
+        fill: #92bfdb;
       }
 
-      span {
-        color: var(--sand-11);
+      .byline a:is(:hover, :focus-visible) polygon:nth-child(2) {
+        fill: #dfb431;
       }
 
-      b {
-        display: block;
-        border: 1px solid var(--sand-11);
-        block-size: 1px;
+      .byline a:is(:hover, :focus-visible) polygon:nth-child(3) {
+        fill: #ffe7ce;
+      }
+
+      .byline a:focus-visible {
+        outline: 1px solid #878580;
+        outline-offset: 2px;
+      }
+
+      .sound polygon {
+        stroke: #100f0f;
+        stroke-width: 0.5;
+        stroke-linejoin: round;
+      }
+
+      .sound:focus-visible {
+        outline: 1px solid #878580;
+        outline-offset: 2px;
+      }
+
+      .ready canvas {
+        visibility: visible;
+      }
+
+      canvas {
+        visibility: hidden;
+        /* every touch on the piece is a Rustle, never a scroll or zoom */
+        touch-action: none;
+        position: fixed;
+        inset: 0;
         inline-size: 100%;
-        transform: scaleX(0);
-        transform-origin: center;
-      }
-
-      @media (min-width: 80rem) {
-        main {
-          display: grid;
-          min-block-size: 100svh;
-          grid-template-columns: 4fr max-content 4fr max-content 4fr;
-          grid-template-rows: 2fr max-content 4fr;
-          grid-auto-flow: column;
-          gap: 1rem;
-        }
-
-        h1,
-        ul[role="list"] {
-          margin-block-start: 0;
-        }
-
-        header,
-        ul[role="list"] {
-          grid-row: 2/3;
-        }
-
-        header {
-          grid-column: 2/3;
-        }
-
-        ul[role="list"] {
-          grid-column: 4/5;
-        }
-
-        b {
-          grid-column: 1/-1;
-          grid-row: 1 / 2;
-          align-self: end;
-        }
-      }
-
-      ::selection {
-        background-color: var(--sand-12);
-        color: var(--sand-2);
-      }
-
-      @media (prefers-reduced-motion: reduce) or (scripting: none) {
-        header,
-        ul[role="list"] {
-          opacity: 1;
-        }
-
-        a:hover {
-          text-decoration: underline;
-        }
-
-        b {
-          transform: revert;
-          transform-origin: revert;
-        }
+        block-size: 100%;
+        display: block;
       }
     </style>
     <meta
@@ -314,14 +436,13 @@
     />
     <meta name="robots" content="index,follow" />
     <meta name="googlebot" content="index,follow" />
-    <meta name="referrer" content="no-referrer" />
-    <meta name="theme-color" content="#0d0d0d" />
+    <meta name="theme-color" content="#100F0F" />
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Kazi’s website" />
     <meta property="og:url" content="https://kazielmanawal.me" />
     <meta
       property="og:description"
-      content="Find some more links about Kazi."
+      content="Design engineer Kazi Elman Awal’s website"
     />
     <meta
       property="og:image:alt"
@@ -330,169 +451,46 @@
     <meta property="og:image" content="https://kazielmanawal.me/og.jpg" />
     <meta property="profile:first_name" content="Kazi" />
     <meta property="profile:last_name" content="Awal" />
-    <link rel="icon" href="./favicon.ico" sizes="any" />
-    <link rel="icon" href="./favicon.svg" />
-    <link rel="apple-touch-icon" href="./apple.png" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href="https://kazielmanawal.me" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <script type="speculationrules">
-      {
-        "prefetch": [
-          {
-            "where": { "selector_matches": "ul[role='list'] a[href]" },
-            "eagerness": "moderate"
-          }
-        ]
-      }
-    </script>
   </head>
   <body>
-    <main>
-      <b aria-hidden="true"></b>
-      <header>
-        <h1>Kazi Elman Awal</h1>
-        <h2>Dev, Design, Data Viz</h2>
-      </header>
-      <ul role="list">
-        <li>
-          <a
-            data-goatcounter-click="df-mckinsey-primary-care"
-            rel="noreferrer"
-            href="https://www.mckinsey.com/mhi/our-insights/primary-care-reimagined-workforce-and-care-model-innovation-in-a-modern-age"
-            ><span>Dataface:</span> Workforce and Care Model Innovation
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="df-eggs"
-            rel="noreferrer"
-            href="https://eggs.thedataface.com"
-            ><span>Dataface:</span> Data&Eggs
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="cdc-activity-levels"
-            rel="noreferrer"
-            href="https://www.cdc.gov/respiratory-viruses/data/activity-levels.html"
-            ><span>CDC:</span> Respiratory Virus Activity Levels
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="cdc-data-channel"
-            rel="noreferrer"
-            href="https://www.cdc.gov/respiratory-viruses/data/index.html"
-            ><span>CDC:</span> Respiratory Illness Data Channel
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="espn-quiz"
-            rel="noreferrer"
-            href="https://www.espn.com/espn/feature/story/_/id/43781608/30th-anniversary-quiz"
-            ><span>ESPN:</span> 30th Anniversary Quiz
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="espn-invisible"
-            rel="noreferrer"
-            href="https://www.espn.com/espn/feature/story/_/id/40276381/how-stadiums-help-fans-invisible-disabilities"
-            ><span>ESPN:</span> Invisible
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="bi-ai-lover"
-            rel="noreferrer"
-            href="https://www.businessinsider.com/when-your-ai-says-she-loves-you-2023-10"
-            ><span>Business Insider:</span> App, Lover, Muse
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="bi-king-charles"
-            rel="noreferrer"
-            href="https://www.businessinsider.com/king-charles-coronation-schedule-guide-timeline-2023-5"
-            ><span>Business Insider:</span> King Charles&#8217; Coronation
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="bi-albertina"
-            rel="noreferrer"
-            href="https://www.businessinsider.com/artificial-intelligence-albertina-geller-deepfake-gan-images-online-scams-2022-10"
-            ><span>Business Insider:</span> Who in the world is Albertina
-            Geller?
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="row-collection"
-            rel="noreferrer"
-            href="https://restofworld.org/collection/english-as-a-second-language/"
-            ><span>Rest of World:</span> Collection Page
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="row-home"
-            rel="noreferrer"
-            href="https://restofworld.org"
-            ><span>Rest of World:</span> Homepage
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="row-social"
-            rel="noreferrer"
-            href="https://restofworld.org/wp-content/projects/card-builder/"
-            ><span>Rest of World:</span> Social Card Tool
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="sfc-covid"
-            rel="noreferrer"
-            href="https://www.sfchronicle.com/projects/coronavirus-map/"
-            ><span>San Francisco Chronicle:</span> Coronavirus Tracker
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="sfc-fire"
-            rel="noreferrer"
-            href="https://projects.sfchronicle.com/2019/kincade-fire-origin/"
-            ><span>San Francisco Chronicle:</span> A Spark on Burned Mountain
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="sfc-restaurant"
-            rel="noreferrer"
-            href="https://projects.sfchronicle.com/2020/sushi-yoshizumi-review/"
-            ><span>San Francisco Chronicle:</span> Sushi Yoshizumi Review
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="wapo-flip-house"
-            rel="noreferrer"
-            href="https://www.washingtonpost.com/graphics/2018/politics/how-to-flip-the-house-2018/"
-            ><span>Washington Post:</span> How to Flip the House
-          </a>
-        </li>
-        <li>
-          <a
-            data-goatcounter-click="wapo-india-hate"
-            rel="noreferrer"
-            href="https://www.washingtonpost.com/graphics/2018/world/reports-of-hate-crime-cases-have-spiked-in-india/"
-            ><span>Washington Post:</span> Rising Hate in India
-          </a>
-        </li>
-      </ul>
-    </main>
+    <h1>Kazi Elman Awal</h1>
+    <noscript><p class="no-js">This piece needs JavaScript</p></noscript>
+    <div class="loading" aria-hidden="true">
+      <div class="loading-mark">
+        <svg viewBox="0 0 5.02 8.9">
+          <polygon points="2.77,6 5.02,7.3 5.02,1.3 2.77,0" />
+        </svg>
+        <svg viewBox="0 0 5.02 8.9">
+          <polygon points="1.39,6.8 3.64,8.1 3.64,3.6 1.39,2.3" />
+        </svg>
+        <svg viewBox="0 0 5.02 8.9">
+          <polygon points="0,7.6 2.25,8.9 2.25,5.9 0,4.6" />
+        </svg>
+      </div>
+    </div>
+    <canvas
+      role="img"
+      aria-label="The word KAZI built from stacks of colored paper panels"
+    ></canvas>
+    <button class="rustle-keyboard" type="button">Rustle panels</button>
+    <button class="sound" type="button">
+      <span class="visually-hidden">Turn on audio experience</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"></svg>
+    </button>
+    <p class="byline">
+      Design engineering at
+      <a href="https://thedataface.com" data-goatcounter-click="dataface"
+        >The Dataface<svg viewBox="0 0 5.02 8.9" aria-hidden="true">
+          <polygon points="2.77,6 5.02,7.3 5.02,1.3 2.77,0" />
+          <polygon points="1.39,6.8 3.64,8.1 3.64,3.6 1.39,2.3" />
+          <polygon points="0,7.6 2.25,8.9 2.25,5.9 0,4.6" /></svg
+      ></a>
+    </p>
     <script type="module" src="./js/main.ts"></script>
     <script
       data-goatcounter="https://superkazi.goatcounter.com/count"
@@ -502,9 +500,7 @@
       integrity="sha384-nRw6qfbWyJha9LhsOtSb2YJDyZdKvvCFh0fJYlkquSFjUxp9FVNugbfy8q1jdxI+"
     ></script>
     <noscript
-      ><img
-        alt="analytics pixel"
-        src="https://superkazi.goatcounter.com/count?p=/test-img"
+      ><img alt="" src="https://superkazi.goatcounter.com/count?p=/test-img"
     /></noscript>
   </body>
 </html>

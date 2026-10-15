@@ -1,25 +1,7 @@
 # REDIRECTS
 
 [[redirects]]
-  from = "https://kazielmanawal.netlify.com/*"
-  to = "https://kazielmanawal.me/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://www.kazielmanawal.netlify.com/*"
-  to = "https://kazielmanawal.me/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
   from = "https://kazielmanawal.netlify.app/*"
-  to = "https://kazielmanawal.me/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://www.kazielmanawal.netlify.app/*"
   to = "https://kazielmanawal.me/:splat"
   status = 301
   force = true
@@ -30,40 +12,34 @@
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'inline-speculation-rules' gc.zgo.at app.netlify.com netlify-cdp-loader.netlify.app; style-src 'self' 'unsafe-inline'; child-src 'self' app.netlify.com; connect-src 'self' superkazi.goatcounter.com *.washingtonpost.com *.sfchronicle.com restofworld.org *.businessinsider.com *.espn.com *.cdc.gov; img-src 'self' superkazi.goatcounter.com;"
+    Referrer-Policy = "no-referrer"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' gc.zgo.at app.netlify.com netlify-cdp-loader.netlify.app; style-src 'self' 'unsafe-inline'; child-src 'self' app.netlify.com; connect-src 'self' superkazi.goatcounter.com; img-src 'self' superkazi.goatcounter.com;"
+
+# Explicit even though it's Netlify's default, so the service worker always sees fresh copies
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "max-age=0, must-revalidate, public"
 
 [[headers]]
   for = "/index.html"
   [headers.values]
-		Cache-Control = '''
-			max-age=0,
-      must-revalidate,
-      public'''
+    Cache-Control = "max-age=0, must-revalidate, public"
 
 [[headers]]
   for = "/sw.js"
   [headers.values]
-		Cache-Control = '''
-			max-age=0,
-			must-revalidate,
-			public'''
+    Cache-Control = "max-age=0, must-revalidate, public"
 
 [[headers]]
   for = "/registerSW.js"
   [headers.values]
-		Cache-Control = '''
-			max-age=0,
-			must-revalidate,
-			public'''
+    Cache-Control = "max-age=0, must-revalidate, public"
 
 [[headers]]
   for = "/manifest.webmanifest"
   [headers.values]
-		Cache-Control = '''
-			max-age=0,
-			must-revalidate,
-      public'''
+    Cache-Control = "max-age=0, must-revalidate, public"
     Content-Type = "application/manifest+json"
 
 [[headers]]

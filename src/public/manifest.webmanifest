@@ -1,17 +1,13 @@
 {
   "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
     {
-      "src": "./favicon-192.png",
-      "sizes": "192x192",
+      "src": "/icon-mask.png",
       "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./favicon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+      "purpose": "maskable"
+    },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
   ],
   "name": "Kazi Elman Awal",
   "short_name": "Kazi",
@@ -19,6 +15,6 @@
   "display": "standalone",
   "start_url": "/",
   "description": "Design engineer, Brooklyn guy.",
-  "theme_color": "#0d0d0d",
-  "background_color": "#ffffff"
+  "theme_color": "#100F0F",
+  "background_color": "#100F0F"
 }

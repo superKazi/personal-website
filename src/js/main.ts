@@ -1,139 +1,120 @@
 import { gsap } from "gsap";
-import { SplitText } from "gsap/SplitText";
 import { Observer } from "gsap/Observer";
+import { config } from "./config.ts";
+import { createAudio } from "./audio.ts";
+import { playIntro } from "./intro.ts";
+import { buildPanels, loadFont } from "./panels.ts";
+import { createPointer } from "./pointer.ts";
+import { createRustle, step } from "./rustle.ts";
+import { createScene } from "./scene.ts";
+import { createSoundToggle } from "./toggle.ts";
 
-/**
- * accessible animations
- */
-gsap.registerPlugin(SplitText, Observer);
-const mm = gsap.matchMedia();
+gsap.registerPlugin(Observer);
 
-document.fonts.ready.then(() => {
-  mm.add("(prefers-reduced-motion: no-preference)", () => {
-    const opts = {
-      type: "words, chars",
-      mask: "words" as const,
-      wordsClass: "wrd",
-      charsClass: "char",
-    };
-    SplitText.create("h1, h2", opts);
-    const splitLinks = SplitText.create("a", opts);
+const canvas = document.querySelector("canvas");
+const button = document.querySelector<HTMLButtonElement>("button.sound");
+const byline = document.querySelector(".byline");
 
-    gsap.set(".wrd", { pointerEvents: "none", opacity: 0, yPercent: 100 });
-    gsap.set(".wrd-mask, .char", { pointerEvents: "none" });
-    gsap.set("header, ul[role='list']", { opacity: 1 });
-
-    const tl = gsap.timeline({ paused: true });
-
-    let seenAnimation: string | null = null;
-
-    try {
-      seenAnimation = localStorage.getItem("seenAnimation");
-    } catch {
-      console.error(
-        "storage unavailable (privacy mode, blocked storage, etc.)",
-      );
-    }
-
-    tl.to("b", {
-      scaleX: 1,
-      duration: 1,
-      ease: "expo.inOut",
-    })
-      .to(
-        "header .wrd",
-        {
-          opacity: 1,
-          yPercent: 0,
-          duration: 1,
-          ease: "circ.out",
-          stagger: 0.05,
-        },
-        "<40%",
-      )
-      .to(
-        "ul[role='list'] .wrd",
-        {
-          opacity: 1,
-          yPercent: 0,
-          duration: 0.8,
-          ease: "circ.out",
-          stagger: {
-            each: 0.02,
-            ease: "sine",
-          },
-        },
-        "<40%",
-      );
-
-    if (
-      !seenAnimation || Date.now() - Number(seenAnimation) > 86400000
-    ) {
-      try {
-        localStorage.setItem("seenAnimation", String(Date.now()));
-      } catch {
-        console.error(
-          "storage unavailable (privacy mode, blocked storage, etc.)",
-        );
-      }
-      tl.play();
-    } else {
-      tl.progress(1);
-    }
-
-    splitLinks.elements.forEach((elem) => {
-      const q = gsap.utils.selector(elem);
-      const chars = q(".char");
-      const radius = () => gsap.utils.random(1, 4);
-      const tweens = chars.map((char) => {
-        const rx = radius(),
-          ry = radius();
-        return gsap.to(char, {
-          paused: true,
-          x: `+=${Math.PI * 2}`,
-          y: `+=${Math.PI * 2}`,
-          repeat: -1,
-          ease: "none",
-          duration: () => gsap.utils.random(1, 3),
-          modifiers: {
-            x: gsap.utils.unitize((x: number) => Math.cos(x) * rx),
-            y: gsap.utils.unitize((y: number) => Math.sin(y) * ry),
-          },
-        });
-      });
-
-      Observer.create({
-        target: elem,
-        type: "pointer",
-        onHover: () => {
-          if (Observer.isTouch !== 1) {
-            tweens.forEach((tween) => tween.restart());
-          }
-        },
-        onHoverEnd: () => {
-          if (Observer.isTouch !== 1) {
-            tweens.forEach((tween) => tween.pause());
-
-            chars.forEach((char) => {
-              gsap.to(char, {
-                x: 0,
-                y: 0,
-                duration: 0.2,
-                ease: "power2.out",
-              });
-            });
-          }
-        },
-      });
+const start = async () => {
+  if (!canvas || !button || !byline) return;
+  await loadFont();
+  const panels = buildPanels();
+  const scene = createScene(canvas, panels);
+  // a lost GPU context never draws again; the piece keeps no state, so reload once it's back
+  canvas.addEventListener("webglcontextlost", (e) => e.preventDefault());
+  canvas.addEventListener("webglcontextrestored", () => location.reload());
+  const audio = createAudio(panels, config);
+  const toggle = createSoundToggle(button, config.color.palette, (on) =>
+    on ? audio.enable() : audio.disable(),
+  );
+  const showToggle = () =>
+    void gsap.to([button, byline], {
+      autoAlpha: 1,
+      duration: 0.6,
+      ease: "power2.out",
     });
+  const rustle = createRustle(panels, config);
+  // eslint-disable-next-line functional/no-let
+  let intro: gsap.core.Tween | undefined;
+  // eslint-disable-next-line functional/no-let
+  let reduced = false;
+
+  const resize = () => {
+    scene.resize();
+    toggle.layout(scene.axes());
+  };
+
+  const track = (self: Observer) => pointer.track(self.x ?? 0, self.y ?? 0);
+  const leave = () => pointer.leave();
+  const observer = Observer.create({
+    target: canvas,
+    type: "pointer,touch",
+    onMove: track,
+    onPress: track,
+    onDrag: track,
+    onRelease: leave,
+    onHoverEnd: leave,
   });
+  const pointer = createPointer({
+    button: document.querySelector<HTMLButtonElement>(".rustle-keyboard"),
+    panels,
+    toWord: scene.toWord,
+    velocity: () => [observer.velocityX, observer.velocityY],
+  });
+
+  const tick = (_time: number, deltaMs: number) => {
+    const dt = deltaMs / 1000;
+    const crossed = step(rustle, pointer.now(), dt);
+    if (toggle.isOn() && crossed.length)
+      audio
+        .play(crossed, dt)
+        .forEach(({ strength, scalePosition }) =>
+          toggle.bump(0.4 + 0.6 * strength, scalePosition),
+        );
+    scene.setRustle(rustle.angle, rustle.bend);
+    scene.render(dt, reduced);
+  };
+
+  resize();
+  document.body.classList.add("ready");
+  addEventListener("resize", resize);
+  gsap.ticker.add(tick);
+  gsap.matchMedia().add("(prefers-reduced-motion: reduce)", (ctx) => {
+    reduced = true;
+    pointer.setReduced(true);
+    intro?.progress(1).kill();
+    // no Rustle means no Chimes, so the Sound toggle has nothing to switch;
+    // ignored so leaving reduced motion doesn't revert the toggle's look back to on
+    ctx.ignore(() => toggle.turnOff());
+    // overwrite stops the intro's just-fired fade-in from revealing the button again
+    gsap.set(button, { autoAlpha: 0, overwrite: true });
+    // the Byline still shows without the intro; ignored so leaving reduced motion keeps it
+    ctx.ignore(() => gsap.set(byline, { autoAlpha: 1, overwrite: true }));
+    return () => {
+      reduced = false;
+      pointer.setReduced(false);
+      showToggle();
+    };
+  });
+  if (!reduced) {
+    intro = playIntro(panels, scene.setRise);
+    void intro.then(showToggle);
+  }
+};
+
+void start().catch((error: unknown) => {
+  document.body.classList.remove("ready");
+  document.body.classList.add("failed");
+  if (byline) gsap.set(byline, { autoAlpha: 1 });
+  if (button) gsap.set(button, { autoAlpha: 0 });
+  console.error("Artwork unavailable", error);
 });
 
 /**
  * polite console
  */
 console.log(
-  "%cThanks for visiting!",
+  "%cThanks for visiting! If you like the design you'll dig Igarashi Takenobu!",
   `font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova",
   "Nimbus Sans", Arial, sans-serif; text-transform: uppercase; font-weight:     bold; letter-spacing: .12em; font-size: 3rem; color: black;`,
 );

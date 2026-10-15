@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "mdn": {
+      "type": "http",
+      "url": "https://mcp.mdn.mozilla.net/"
+    },
+    "fallow": {
+      "command": "npx",
+      "args": ["--yes", "--package", "fallow", "fallow-mcp"]
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    },
+    "xcode": {
+      "command": "xcrun",
+      "args": ["mcpbridge"]
+    },
+    "affinity": {
+      "command": "npx",
+      "args": ["-y", "affinity-mcp-bridge"]
+    }
+  }
+}

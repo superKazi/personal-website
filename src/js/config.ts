@@ -1,6 +1,4 @@
 /** Settled settings and color defaults. */
-import type { Material, Scale } from "./chime.ts";
-
 export const config = {
   view: {
     /** degrees */
@@ -72,8 +70,6 @@ export const config = {
     fps: 4,
   },
   chime: {
-    material: "bamboo" as Material,
-    scale: "hirajoshi" as Scale,
     /** frequency of the lowest note, Hz (D4) */
     root: 293.66,
     /** how many scale steps Panel lengths span: longest Panel rings the root */

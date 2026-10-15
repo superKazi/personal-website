@@ -1,25 +1,7 @@
 # REDIRECTS
 
 [[redirects]]
-  from = "https://kazielmanawal.netlify.com/*"
-  to = "https://kazielmanawal.me/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://www.kazielmanawal.netlify.com/*"
-  to = "https://kazielmanawal.me/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
   from = "https://kazielmanawal.netlify.app/*"
-  to = "https://kazielmanawal.me/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://www.kazielmanawal.netlify.app/*"
   to = "https://kazielmanawal.me/:splat"
   status = 301
   force = true

@@ -1,4 +1,4 @@
-import { frequency, MATERIALS, noteForLength } from "./chime.ts";
+import { BAMBOO, frequency, noteForLength } from "./chime.ts";
 import type { Config } from "./config.ts";
 import type { Crossing } from "./rustle.ts";
 
@@ -116,8 +116,7 @@ export const createAudio = () => {
 
     makeRoom(note, t, ctx.currentTime, c.voices);
 
-    const material = MATERIALS[c.material];
-    const ring = c.ring * material.ring;
+    const ring = c.ring * BAMBOO.ring;
     const end = t + c.strike + ring * 1.6;
     // each voice gets an equal share of the volume; the soft clipper handles rare pile-ups.
     // Every gain starts at its scheduled level, not the default 1: Safari sometimes plays a
@@ -132,8 +131,8 @@ export const createAudio = () => {
     gain.connect(dry);
     gain.connect(wet);
 
-    const total = material.levels.reduce((a, b) => a + b, 0);
-    const sources = material.ratios.map((ratio, i) => {
+    const total = BAMBOO.levels.reduce((a, b) => a + b, 0);
+    const sources = BAMBOO.ratios.map((ratio, i) => {
       const osc = new OscillatorNode(ctx as AudioContext, {
         // a few cents of random detune keeps repeated notes alive
         frequency:
@@ -141,7 +140,7 @@ export const createAudio = () => {
       });
       // higher partials fade faster and come in with brightness and a harder strike
       const bright = i === 0 ? 1 : c.brightness * (0.3 + 0.7 * s);
-      const level = (material.levels[i] * bright) / total;
+      const level = (BAMBOO.levels[i] * bright) / total;
       const partial = new GainNode(ctx as AudioContext, { gain: level });
       partial.gain.setValueAtTime(level, t);
       partial.gain.setTargetAtTime(0, t, ring / (4 * (1 + i * 1.5)));
@@ -180,7 +179,7 @@ export const createAudio = () => {
       // Spread a frame's Chimes into a run, preserving Rustle's travel order.
       return chime(
         note,
-        frequency(note, c.root, c.scale),
+        frequency(note, c.root),
         strength,
         cfg,
         (i / crossings.length) * dt,

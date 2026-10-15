@@ -34,7 +34,7 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
-      // OGL, lil-gui and the per-frame loop are mutation-based; allocating per frame would jank
+      // OGL and the per-frame loop are mutation-based; allocating per frame would jank
       "functional/immutable-data": "off",
       "functional/no-loop-statements": "off",
       // a gain left at Web Audio's default 1 played Safari Chimes ~16x too loud

@@ -85,7 +85,11 @@ const start = async () => {
       client.x + observer.velocityX * h,
       client.y + observer.velocityY * h,
     );
-    return { ...ray, vx: ahead ? (ahead.x - ray.x) / h : 0 };
+    return {
+      ...ray,
+      vx: ahead ? (ahead.x - ray.x) / h : 0,
+      source: "pointer",
+    };
   };
 
   const tick = (_time: number, deltaMs: number) => {
@@ -132,6 +136,7 @@ const start = async () => {
       slopeY: 0,
       slopeZ: 0,
       vx: (last - first) / 1.4,
+      source: "keyboard",
     };
     rustle.prev = { ...keyboard };
     void gsap.to(keyboard, {
@@ -140,8 +145,6 @@ const start = async () => {
       ease: "none",
       onComplete: () => {
         keyboard = null;
-        // else the next real pointer frame counts as a jump from the word's end and Chimes every Panel between
-        rustle.prev = null;
       },
     });
   });

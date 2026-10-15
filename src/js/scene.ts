@@ -239,12 +239,16 @@ export const createScene = (canvas: HTMLCanvasElement) => {
   };
 
   const build = (panels: readonly Panel[]) => {
-    const panel = new Float32Array(panels.flatMap((p) => [p.x, p.y0, p.y1]));
-    const color = new Float32Array(
-      panels.flatMap((p) => [...new Color(p.color)]),
+    // one instance per piece; a Panel's pieces share its x and color
+    const pieces = panels.flatMap((p) =>
+      p.pieces.map((piece) => ({ ...piece, x: p.x, color: p.color })),
     );
-    rise = new Float32Array(panels.length).fill(1);
-    bend = new Float32Array(panels.length * 2);
+    const panel = new Float32Array(pieces.flatMap((p) => [p.x, p.y0, p.y1]));
+    const color = new Float32Array(
+      pieces.flatMap((p) => [...new Color(p.color)]),
+    );
+    rise = new Float32Array(pieces.length).fill(1);
+    bend = new Float32Array(pieces.length * 2);
     const geometry = new Plane(gl, {
       widthSegments: 24,
       attributes: {
@@ -262,7 +266,7 @@ export const createScene = (canvas: HTMLCanvasElement) => {
       min: new Vec3(Math.min(...panels.map((p) => p.x)), 0, 0),
       max: new Vec3(
         Math.max(...panels.map((p) => p.x)),
-        Math.max(...panels.map((p) => p.y1)),
+        Math.max(...pieces.map((p) => p.y1)),
         depth,
       ),
     };

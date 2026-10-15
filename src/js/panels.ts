@@ -4,11 +4,20 @@ const WORD = "KAZI";
 const FONT_PX = 256;
 const FONT = `800 ${FONT_PX}px Degular`;
 
-/** One upright sheet, in cap-height units: x along the word, y0..y1 tall. */
-export interface Panel {
-  readonly x: number;
+/** One filled run of a Panel, y0..y1 tall in cap heights. */
+export interface Piece {
   readonly y0: number;
   readonly y1: number;
+}
+
+/**
+ * One upright sheet at `x` along the word, in cap heights. Its pieces are split by a
+ * letter's counters but move, color and Chime as one; `length` is how much paper it holds.
+ */
+export interface Panel {
+  readonly x: number;
+  readonly pieces: readonly Piece[];
+  readonly length: number;
   readonly color: string;
 }
 
@@ -50,7 +59,7 @@ const columnRuns = (
   return runs;
 };
 
-/** Slice the word into Panels and color them in seeded runs. */
+/** Slice the word into Panels, in order along the word, and color them in seeded runs. */
 export const buildPanels = (): Panel[] => {
   const { panels, color } = config;
   const ctx = new OffscreenCanvas(1, 1).getContext("2d", {
@@ -99,17 +108,26 @@ export const buildPanels = (): Panel[] => {
   // eslint-disable-next-line functional/no-let
   let current = "",
     left = 0;
-  return columns.flatMap((x) => {
-    if (left-- <= 0) {
-      current = pick(current);
-      left = color.runMin + Math.floor(random() * span) - 1;
-    }
-    const px = Math.min(width - 1, Math.round(x));
-    return columnRuns(data, width, height, px).map(([top, bottom]) => ({
-      x: (x - pad) / cap,
-      y0: (pad + cap - bottom) / cap,
-      y1: (pad + cap - top) / cap,
-      color: current,
-    }));
-  });
+  return columns
+    .map((x) => {
+      // every column draws its color, even an empty one, so a seed always gives the same colors
+      if (left-- <= 0) {
+        current = pick(current);
+        left = color.runMin + Math.floor(random() * span) - 1;
+      }
+      const px = Math.min(width - 1, Math.round(x));
+      const pieces = columnRuns(data, width, height, px).map(
+        ([top, bottom]) => ({
+          y0: (pad + cap - bottom) / cap,
+          y1: (pad + cap - top) / cap,
+        }),
+      );
+      return {
+        x: (x - pad) / cap,
+        pieces,
+        length: pieces.reduce((sum, p) => sum + p.y1 - p.y0, 0),
+        color: current,
+      };
+    })
+    .filter((p) => p.pieces.length);
 };

@@ -1,4 +1,5 @@
 import type { Config } from "./config.ts";
+import type { Panel } from "./panels.ts";
 
 /**
  * The pointer as a ray through word space (cap heights): a point on the word's
@@ -16,56 +17,33 @@ export interface Pointer {
   readonly source: "pointer" | "keyboard";
 }
 
-interface PanelLike {
-  readonly x: number;
-  readonly y0: number;
-  readonly y1: number;
-}
+type PanelLike = Pick<Panel, "x" | "pieces">;
 
 const MAX_DT = 0.05;
 const SUBSTEP = 1 / 120;
 const REST = 1e-4;
 
-/**
- * Rustle state. Panels sharing an x form one column and move together,
- * so a letter's floating pieces stay aligned with its stem.
- */
+/** Rustle state, one entry per Panel; `panels` must be in order along the word. */
 export const createRustle = (
   panels: readonly PanelLike[],
   { rustle: cfg, panels: { depth } }: Readonly<Config>,
-) => {
-  const xs = [...new Set(panels.map((p) => p.x))].sort((a, b) => a - b);
-  const index = new Map(xs.map((x, i) => [x, i]));
-  const pieces: PanelLike[][] = xs.map(() => []);
-  // how much paper a column holds, summed across its pieces; sets its Chime's pitch
-  const length = new Float32Array(xs.length);
-  panels.forEach((p) => {
-    const i = index.get(p.x) ?? 0;
-    pieces[i].push(p);
-    length[i] += p.y1 - p.y0;
-  });
-  return {
-    xs,
-    pieces,
-    length,
-    /** column of each Panel */
-    column: panels.map((p) => index.get(p.x) ?? 0),
-    /** tilt toward +x, radians */
-    angle: new Float32Array(xs.length),
-    velocity: new Float32Array(xs.length),
-    /** where the bend sits, 0 = Spine, 1 = free edge */
-    bend: new Float32Array(xs.length).fill(0.5),
-    prev: null as Pointer | null,
-    speed: 0,
-    moving: false,
-    cfg,
-    depth,
-  };
-};
+) => ({
+  panels,
+  /** tilt toward +x, radians */
+  angle: new Float32Array(panels.length),
+  velocity: new Float32Array(panels.length),
+  /** where the bend sits, 0 = Spine, 1 = free edge */
+  bend: new Float32Array(panels.length).fill(0.5),
+  prev: null as Pointer | null,
+  speed: 0,
+  moving: false,
+  cfg,
+  depth,
+});
 
 export type Rustle = ReturnType<typeof createRustle>;
 
-/** Where the pointer ray meets a column's sheet, as a fraction of depth from the Spine, or null if it misses. */
+/** Where the pointer ray meets Panel `i`, as a fraction of depth from the Spine, or null if it misses. */
 const hit = (
   r: Readonly<Rustle>,
   p: Pointer,
@@ -73,25 +51,25 @@ const hit = (
   margin: number,
   depth: number,
 ) => {
-  const dx = r.xs[i] - p.x;
+  const dx = r.panels[i].x - p.x;
   const y = p.y + p.slopeY * dx;
   const z = p.z + p.slopeZ * dx;
   const inside =
-    r.pieces[i].some((p) => y > p.y0 - margin && y < p.y1 + margin) &&
+    r.panels[i].pieces.some((p) => y > p.y0 - margin && y < p.y1 + margin) &&
     z > -margin &&
     z < depth + margin;
   return inside ? z / depth : null;
 };
 
-/** Columns the pointer passed this step, with the pointer's speed along the word. */
+/** A Panel the pointer passed this step, with the pointer's speed along the word. */
 export interface Crossing {
-  readonly column: number;
+  readonly panel: number;
   readonly speed: number;
 }
 
 type Cfg = Readonly<Config["rustle"]>;
 
-/** Columns the pointer reached and passed between the last event and this one. */
+/** Panels the pointer reached and passed between the last event and this one. */
 const crossed = (
   r: Readonly<Rustle>,
   prev: Pointer,
@@ -101,7 +79,7 @@ const crossed = (
 ): Crossing[] => {
   const dx = pointer.x - prev.x;
   if (dx === 0) return [];
-  const crossings = r.xs.flatMap((x, i) => {
+  const crossings = r.panels.flatMap(({ x }, i) => {
     const t = (x - prev.x) / dx;
     if (t <= 0 || t > 1) return [];
     const ray = {
@@ -111,13 +89,13 @@ const crossed = (
       z: prev.z + (pointer.z - prev.z) * t,
     };
     return hit(r, ray, i, cfg.margin, depth) !== null
-      ? [{ column: i, speed: Math.abs(r.speed) }]
+      ? [{ panel: i, speed: Math.abs(r.speed) }]
       : [];
   });
   return dx > 0 ? crossings : crossings.reverse();
 };
 
-/** The pointer's push on column `i` for one substep; also slides the bend toward where it hit. */
+/** The pointer's push on Panel `i` for one substep; also slides the bend toward where it hit. */
 const push = (
   // eslint-disable-next-line functional/prefer-immutable-types
   r: Rustle,
@@ -129,7 +107,7 @@ const push = (
 ) => {
   const at = hit(r, pointer, i, cfg.margin, depth);
   if (at === null) return 0;
-  const d = (pointer.x - r.xs[i]) / cfg.radius;
+  const d = (pointer.x - r.panels[i].x) / cfg.radius;
   const w = Math.exp(-d * d);
   if (w <= 1e-3) return 0;
   const target = Math.min(0.95, Math.max(0.1, at));
@@ -146,7 +124,7 @@ const substep = (
   depth: number,
   h: number,
 ) => {
-  const n = r.xs.length;
+  const n = r.panels.length;
   for (let i = 0; i < n; i++) {
     const a = r.angle[i];
     const left = i > 0 ? r.angle[i - 1] : a;

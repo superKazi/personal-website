@@ -3,12 +3,11 @@ import { test } from "node:test";
 import { config } from "./config.ts";
 import { createRustle, step } from "./rustle.ts";
 
-// 100 columns spaced like the real word, all one cap height tall
-const panels = Array.from({ length: 100 }, (_, i) => ({
-  x: i * 0.04,
-  y0: 0,
-  y1: 1,
-}));
+// a Panel one cap height tall
+const panel = (x: number) => ({ x, pieces: [{ y0: 0, y1: 1 }] });
+
+// 100 Panels spaced like the real word
+const panels = Array.from({ length: 100 }, (_, i) => panel(i * 0.04));
 
 // a pointer straight through the middle of every sheet
 const ray = {
@@ -56,19 +55,19 @@ void test("Panels at rest stay at rest without a push", () => {
   assert.ok(rustle.angle.every((a) => a === 0));
 });
 
-void test("crossing a column reports it once", () => {
+void test("crossing a Panel reports it once", () => {
   const rustle = createRustle(panels, config);
   step(rustle, { ...ray, x: 0.01, vx: 2.5 }, 0.016);
   const crossed = step(rustle, { ...ray, x: 0.05, vx: 2.5 }, 0.016);
   assert.deepEqual(
-    crossed.map((c) => c.column),
+    crossed.map((c) => c.panel),
     [1],
   );
 });
 
 void test("the same timed swipe bends equally at 30, 60 and 120 FPS", () => {
   const peaks = [30, 60, 120].map((fps) => {
-    const r = createRustle([{ x: 0, y0: 0, y1: 1 }], config);
+    const r = createRustle([panel(0)], config);
     const angles: number[] = [];
     for (let f = 0; f < fps * 2; f++) {
       step(r, { ...ray, x: -0.1 + (0.1 * f) / fps, vx: 0.1 }, 1 / fps);
@@ -84,14 +83,11 @@ void test("fast oblique sweeps report crossings in travel order", () => {
     [-0.1, 0.6, [0, 1, 2]],
     [0.6, -0.1, [2, 1, 0]],
   ] as const) {
-    const r = createRustle(
-      [0, 0.04, 0.08].map((x) => ({ x, y0: 0, y1: 1 })),
-      config,
-    );
+    const r = createRustle([0, 0.04, 0.08].map(panel), config);
     const p = { ...ray, slopeZ: -1.428, vx: 10 };
     step(r, { ...p, x: from }, 0.05);
     assert.deepEqual(
-      step(r, { ...p, x: to }, 0.05).map((c) => c.column),
+      step(r, { ...p, x: to }, 0.05).map((c) => c.panel),
       expected,
     );
   }
@@ -100,8 +96,13 @@ void test("fast oblique sweeps report crossings in travel order", () => {
 void test("holes between panel pieces neither bend nor chime", () => {
   const r = createRustle(
     [
-      { x: 0.04, y0: 0, y1: 0.2 },
-      { x: 0.04, y0: 0.8, y1: 1 },
+      {
+        x: 0.04,
+        pieces: [
+          { y0: 0, y1: 0.2 },
+          { y0: 0.8, y1: 1 },
+        ],
+      },
     ],
     config,
   );
@@ -117,7 +118,7 @@ void test("reused pointer objects retain the previous crossing position", () => 
   step(r, p, 0.016);
   p.x = 0.05;
   assert.deepEqual(
-    step(r, p, 0.016).map((c) => c.column),
+    step(r, p, 0.016).map((c) => c.panel),
     [1],
   );
 });

@@ -13,10 +13,11 @@ export const playIntro = (
   commit: () => void,
 ) => {
   const { intro } = config;
-  const xs = panels.map((p) => p.x);
+  // the scene draws one instance per piece
+  const xs = panels.flatMap((p) => p.pieces.map(() => p.x));
   const min = Math.min(...xs);
   const span = Math.max(...xs) - min || 1;
-  const progress = panels.map(() => ({ value: 0 }));
+  const progress = xs.map(() => ({ value: 0 }));
   rise.fill(0);
   commit();
   return gsap.to(progress, {

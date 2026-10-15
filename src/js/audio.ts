@@ -1,5 +1,6 @@
 import { BAMBOO, frequency, noteForLength } from "./chime.ts";
 import type { Config } from "./config.ts";
+import type { Panel } from "./panels.ts";
 import type { Crossing } from "./rustle.ts";
 
 interface Voice {
@@ -14,7 +15,10 @@ interface Voice {
  * gesture, so `enable` must be called from the Sound toggle's press.
  * Respects the iOS silent switch: we never override the audio session type.
  */
-export const createAudio = ({ chime: c }: Readonly<Config>) => {
+export const createAudio = (
+  panels: readonly Pick<Panel, "length">[],
+  { chime: c }: Readonly<Config>,
+) => {
   // eslint-disable-next-line functional/no-let
   let ctx: AudioContext | undefined;
   // eslint-disable-next-line functional/no-let
@@ -34,13 +38,9 @@ export const createAudio = ({ chime: c }: Readonly<Config>) => {
   const LOOKAHEAD = 0.03;
   // eslint-disable-next-line functional/no-let
   let strike = 0;
-  const lengths = { values: [] as readonly number[], min: 0, max: 0 };
-
-  const setLengths = (values: Readonly<Float32Array>) => {
-    lengths.values = Array.from(values);
-    lengths.min = Math.min(...values);
-    lengths.max = Math.max(...values);
-  };
+  const lengths = panels.map((p) => p.length);
+  const shortest = Math.min(...lengths);
+  const longest = Math.max(...lengths);
 
   /** A soft room: decaying stereo noise as a reverb impulse, no audio files. */
   const room = (c: AudioContext, seconds: number) => {
@@ -153,9 +153,9 @@ export const createAudio = ({ chime: c }: Readonly<Config>) => {
     if (!enabled) return [];
     return crossings.flatMap((crossing, i) => {
       const note = noteForLength(
-        lengths.values[crossing.column],
-        lengths.min,
-        lengths.max,
+        lengths[crossing.panel],
+        shortest,
+        longest,
         c.notes,
       );
       const target = Math.min(
@@ -199,5 +199,5 @@ export const createAudio = ({ chime: c }: Readonly<Config>) => {
     await ctx?.suspend();
   };
 
-  return { enable, disable, setLengths, play };
+  return { enable, disable, play };
 };

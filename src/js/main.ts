@@ -21,7 +21,8 @@ const start = async () => {
   // a lost GPU context never draws again; the piece keeps no state, so reload once it's back
   canvas.addEventListener("webglcontextlost", (e) => e.preventDefault());
   canvas.addEventListener("webglcontextrestored", () => location.reload());
-  const audio = createAudio(config);
+  const panels = buildPanels();
+  const audio = createAudio(panels, config);
   const toggle = createSoundToggle(button, config.color.palette, (on) =>
     on ? audio.enable() : audio.disable(),
   );
@@ -31,10 +32,10 @@ const start = async () => {
       duration: 0.6,
       ease: "power2.out",
     });
-  const panels = buildPanels();
   scene.build(panels);
   const rustle = createRustle(panels, config);
-  audio.setLengths(rustle.length);
+  // Panel of each scene instance, one per piece
+  const owner = panels.flatMap((p, i) => p.pieces.map(() => i));
   // eslint-disable-next-line functional/no-let
   let intro: gsap.core.Tween | undefined;
   // where the pointer is on screen, null when it's away, and the Observer tracking its velocity
@@ -114,7 +115,7 @@ const start = async () => {
         );
     if (rustle.moving || wasMoving) {
       const bend = scene.getBend();
-      rustle.column.forEach((c, i) => {
+      owner.forEach((c, i) => {
         bend[i * 2] = rustle.angle[c];
         bend[i * 2 + 1] = rustle.bend[c];
       });
@@ -127,8 +128,8 @@ const start = async () => {
   document.body.classList.add("ready");
   keyboardButton?.addEventListener("click", () => {
     if (reduced || keyboard) return;
-    const first = rustle.xs[0] - 0.04;
-    const last = rustle.xs[rustle.xs.length - 1] + 0.04;
+    const first = panels[0].x - 0.04;
+    const last = panels[panels.length - 1].x + 0.04;
     keyboard = {
       x: first,
       y: 0.5,

@@ -8,3 +8,5 @@ dist-ssr
 preflight.yml
 # design source files, kept locally
 og.psd
+# throwaway Playwright checks, see docs/agents/browser-checks.md
+scripts/.scratch-*

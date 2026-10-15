@@ -129,8 +129,8 @@ export const createAudio = () => {
     const ring = c.ring * material.ring;
     const end = t + c.strike + ring * 1.6;
     // each voice gets an equal share of the volume; the soft clipper handles rare pile-ups.
-    // Every gain starts at its scheduled level, not the default 1: if the schedule lands
-    // late (Safari), the voice loses its attack instead of playing ~16x too loud.
+    // Every gain starts at its scheduled level, not the default 1: Safari sometimes plays a
+    // new voice at that default, ~16x too loud (`pnpm run audio-check webkit` catches it).
     const gain = new GainNode(ctx, { gain: 0 });
     gain.gain.setValueAtTime(0, t);
     gain.gain.linearRampToValueAtTime(
@@ -202,7 +202,7 @@ export const createAudio = () => {
         1,
         Math.max(0, (crossing.speed - c.minSpeed) / (c.maxSpeed - c.minSpeed)),
       );
-      // Uneven pointer events can spike one crossing's speed; follow it over a few Chimes so no note jumps out.
+      // Uneven pointer events can spike one crossing's speed; follow it over a few Chimes to even out loudness and brightness.
       strike += (target - strike) * 0.25;
       const strength = strike;
       // Spread a frame's Chimes into a run, preserving Rustle's travel order.
@@ -225,9 +225,9 @@ export const createAudio = () => {
       const clip = softClip(ctx);
       clip.output.connect(ctx.destination);
       const out = clip.input;
-      dry = new GainNode(ctx);
+      dry = new GainNode(ctx, { gain: 1 });
       dry.connect(out);
-      wet = new GainNode(ctx);
+      wet = new GainNode(ctx, { gain: cfg.chime.reverb });
       wet.connect(room(ctx, 1.4)).connect(out);
       // one shared 20 ms burst for every knock, instead of a new buffer per note
       knockNoise = ctx.createBuffer(

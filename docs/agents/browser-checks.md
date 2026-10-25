@@ -39,6 +39,29 @@ Synthetic pointer events don't reproduce real hand input: hands jiggle, move slo
 
 - **Performance**: traces, Lighthouse and heap snapshots go through the Chrome DevTools MCP, whose insights come pre-digested. It's Chrome-only.
 - **Real Safari**: Playwright's WebKit shares Safari's audio code, not the whole app. `open -a Safari <url>` runs a page in real Safari; post results back to a local server, since there's no console access. `safaridriver` drives it once Develop → Allow Remote Automation is on.
-- **iOS**: `xcrun simctl openurl booted <url>` and `xcrun simctl io booted screenshot <file>`. The Xcode MCP only starts a device session after an `.xcodeproj` has been opened, which this repo doesn't have.
+- **iOS Safari**: use the simulator procedure below for native touch input, UI hierarchy and screenshots.
+
+## iOS simulator
+
+Use Safari, not a native app wrapper. No committed Xcode project or extra website dependency is needed.
+
+1. Start `pnpm dev`, or reuse an existing Vite server. Use its printed localhost URL; the simulator can reach the Mac's loopback interface.
+2. List devices with `xcrun simctl list devices available` and choose a UUID. Boot it with `xcrun simctl boot <uuid>` only if shut down, then wait with `xcrun simctl bootstatus <uuid> -b`. Prefer an explicit UUID over `booted` when several simulators are running.
+3. For the simulator UI in Xcode 27, open Device Hub: `open /Applications/Xcode.app/Contents/Applications/DeviceHub.app`. Looking only for the old `Simulator.app` path incorrectly suggests that the GUI is missing.
+4. If the Xcode MCP asks for agent approval, use `XcodeOpenWorkspace` to open a local-only workspace. An empty `.xcworkspace` directory with `contents.xcworkspacedata` containing `<Workspace version="1.0"></Workspace>` suffices to request approval; keep it outside the repo. Our local workspace is `~/Library/Caches/personal-website-simulator/WebsiteTesting.xcworkspace`. Opening an empty workspace may time out waiting for a run destination even after approval succeeds; retry session creation before treating that as a blocker.
+5. Call `DeviceInteractionStartSession` with the device UUID and a session identifier. Use the returned interaction session key for subsequent calls. Use this workspace-free session, not `DeviceInteractionStartWorkspaceSession`: there is no app to build or install.
+6. Open the site with `xcrun simctl openurl <uuid> <url>`. Call `DeviceInteractionSynthesize` with `activationBundleId: "com.apple.mobilesafari"` and no command to capture the UI hierarchy and screenshots. Wait for the intro to finish: the hierarchy must contain `Turn on audio experience` before interacting.
+7. Derive coordinates from the latest hierarchy's bounds and `hitPoint` values, in points rather than screenshot pixels. Tap with `t <x> <y>`; swipe with `t <x1> <y1> f <x2> <y2> <seconds>`. `drag` is a long-press drag-and-drop, not a swipe; it can open Safari's text-selection loupe. Verify a tap by the Sound toggle changing to `Turn off audio experience`, then turn it off again. Swipe across the word and inspect the Panels bending; the single-screen piece is not expected to scroll. Capture during the gesture with `xcrun simctl io <uuid> screenshot <file>` if the Panels settle before the tool's post-gesture capture.
+8. Call `DeviceInteractionEndSession` when finished, including on failure. Leave the user's Vite server running.
+
+### Recovery: no supported devices
+
+If session creation reports `None of the available devices are supported for Device Interaction` despite an available, supported runtime:
+
+1. Check `xcrun devicectl device info details --device <uuid>` for the device's OS version, connection and HID capabilities. A selection failure is not evidence that taps or swipes are unsupported.
+2. With no active interaction session, find the Xcode background service using `pgrep -fl 'Xcode Service.app/Contents/MacOS/Xcode Service'`. Terminate that specific PID with `kill -TERM <pid>`. This also disconnects the Xcode MCP bridge and interrupts other clients using that service; coordinate before restarting it.
+3. Retry `DeviceInteractionStartSession`. Our MCP connection relaunched the service automatically on the next call; reconnect the Xcode MCP if your client does not. If the error persists, report the exact error instead of repeatedly restarting services.
+
+Verified on Xcode 27.1 / iOS 27.0 / iPhone 18 Pro: the same session-start call failed before the service restart and succeeded afterward; native taps toggled Sound on/off and a swipe visibly Rustled Panels. The service had started before `simctl` repaired a CoreSimulator version mismatch. Restarting fixed the failure; the exact internal stale state was not established. This is an interaction smoke check, not an audio-quality or real-device performance test.
 
 Tool-output redaction rewrites long digit runs, such as the LCG modulus 2³¹ − 1 written out. Write `2 ** 31 - 1`.

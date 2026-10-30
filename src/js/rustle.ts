@@ -34,6 +34,8 @@ export const createRustle = (
   velocity: new Float32Array(panels.length),
   /** where the bend sits, 0 = Spine, 1 = free edge */
   bend: new Float32Array(panels.length).fill(0.5),
+  /** how far each free edge moves sideways per radian of tilt, scratch for `contact` */
+  lever: new Float32Array(panels.length),
   prev: null as Pointer | null,
   speed: 0,
   moving: false,
@@ -117,7 +119,53 @@ const push = (
   return cfg.strength * r.speed * w;
 };
 
-/** One substep of `h` seconds: springs, neighbour coupling and the pointer, then the angle limit. */
+/** Average share of the full tilt along a Panel's depth, matching the shader's bend `profile`. */
+const reach = (h: number, cfg: Cfg) => {
+  // eslint-disable-next-line functional/no-let
+  let sum = 0;
+  for (let i = 0; i < 12; i++) {
+    const u = (i + 0.5) / 12;
+    const t = Math.min(
+      1,
+      Math.max(0, (u - h + cfg.bendWidth) / (2 * cfg.bendWidth)),
+    );
+    sum += u + (t * t * (3 - 2 * t) - u) * cfg.bendSharpness;
+  }
+  return sum / 12;
+};
+
+// share of the spacing kept clear between free edges, so touching sheets never z-fight
+const CLEARANCE = 0.1;
+
+/**
+ * Sheets can't pass through each other: where one's free edge would cross its neighbour's,
+ * split the overlap between them and stop them closing, so a push carries down the row like
+ * thumbing through records. Small-angle, free edge only; tilts stay under 0.25 rad.
+ */
+// eslint-disable-next-line functional/prefer-immutable-types
+const contact = (r: Rustle, cfg: Cfg, depth: number) => {
+  const n = r.panels.length;
+  for (let i = 0; i < n; i++) r.lever[i] = depth * reach(r.bend[i], cfg);
+  for (let pass = 0; pass < 4; pass++)
+    for (let i = 0; i < n - 1; i++) {
+      const l0 = r.lever[i];
+      const l1 = r.lever[i + 1];
+      const gap = (r.panels[i + 1].x - r.panels[i].x) * (1 - CLEARANCE);
+      const over = r.angle[i] * l0 - r.angle[i + 1] * l1 - gap;
+      if (over <= 0) continue;
+      const k = 1 / (l0 * l0 + l1 * l1);
+      r.angle[i] -= over * k * l0;
+      r.angle[i + 1] += over * k * l1;
+      // paper doesn't bounce: drop only the closing speed
+      const closing = r.velocity[i] * l0 - r.velocity[i + 1] * l1;
+      if (closing > 0) {
+        r.velocity[i] -= closing * k * l0;
+        r.velocity[i + 1] += closing * k * l1;
+      }
+    }
+};
+
+/** One substep of `h` seconds: springs, neighbour coupling and the pointer, then contact and the angle limit. */
 const substep = (
   // eslint-disable-next-line functional/prefer-immutable-types
   r: Rustle,
@@ -139,8 +187,10 @@ const substep = (
       pointer && cfg.radius > 0 ? push(r, pointer, i, cfg, depth, h) : 0;
     r.velocity[i] += (spring + pushed) * h;
   }
+  for (let i = 0; i < n; i++) r.angle[i] += r.velocity[i] * h;
+  contact(r, cfg, depth);
   for (let i = 0; i < n; i++) {
-    const a = r.angle[i] + r.velocity[i] * h;
+    const a = r.angle[i];
     const clamped = Math.max(-cfg.maxAngle, Math.min(cfg.maxAngle, a));
     // hitting the limit absorbs the motion instead of bouncing
     if (clamped !== a) r.velocity[i] = 0;

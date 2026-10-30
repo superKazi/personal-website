@@ -1,7 +1,8 @@
 import { config } from "./config.ts";
 
 const WORD = "KAZI";
-const FONT_PX = 256;
+// sliced once at load; this size puts the cap at about one device pixel per row on a 2x screen, so Panel edges along diagonals don't step
+const FONT_PX = 1024;
 const FONT = `800 ${FONT_PX}px Degular`;
 
 /** One filled run of a Panel, y0..y1 tall in cap heights. */

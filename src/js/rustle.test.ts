@@ -137,3 +137,50 @@ void test("handing off between the keyboard and a real pointer is a jump, not a 
   step(r, { ...ray, x: 4.04, vx: 2, source: "keyboard" }, 0.016);
   assert.deepEqual(step(r, { ...ray, x: 0.01, vx: 0 }, 0.016), []);
 });
+
+// sideways offset of a Panel at each of the shader's 12 steps out from the Spine, as drawn
+const drawn = (tilt: number, h: number) => {
+  const { bendSharpness: sharp, bendWidth: w } = config.rustle;
+  const smooth = (u: number) => {
+    const t = Math.min(1, Math.max(0, (u - h + w) / (2 * w)));
+    return t * t * (3 - 2 * t);
+  };
+  return Array.from({ length: 12 }, (_, s) => {
+    const len = (s + 1) / 12;
+    // eslint-disable-next-line functional/no-let
+    let x = 0;
+    for (let i = 0; i < 12; i++) {
+      const u = ((i + 0.5) / 12) * len;
+      x += Math.sin(tilt * (u + (smooth(u) - u) * sharp));
+    }
+    return (x * config.panels.depth * len) / 12;
+  });
+};
+
+// a jittery hand at each depth: near the Spine the bend sits low and the free edge swings furthest
+for (const z of [0.1, 0.5, 0.9])
+  for (const vx of [1, 3, 10, 40])
+    void test(`neighbouring Panels never pass through each other at depth ${z}, ${vx} cap heights/s`, () => {
+      const r = createRustle(panels, config);
+      // eslint-disable-next-line functional/no-let
+      let worst = Infinity;
+      for (let f = 0; f < 360; f++) {
+        const x = (f * vx) / 60 + 0.05 * Math.sin(f * 0.7);
+        const p = {
+          ...ray,
+          x,
+          z: z * config.panels.depth,
+          vx: vx * (1 + 0.6 * Math.sin(f * 1.3)),
+        };
+        step(r, x < 3 ? p : null, 1 / 60);
+        for (let i = 0; i < panels.length - 1; i++) {
+          const a = drawn(r.angle[i], r.bend[i]);
+          const b = drawn(r.angle[i + 1], r.bend[i + 1]);
+          a.forEach((ax, s) => (worst = Math.min(worst, 0.04 + b[s] - ax)));
+        }
+      }
+      assert.ok(
+        worst >= 0,
+        `sheets overlap by ${(-worst / 0.04).toFixed(2)} spacings`,
+      );
+    });
